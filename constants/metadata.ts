@@ -7,4 +7,5 @@ export const META = {
   url: "/",
   favicon: "/" + "/favicon.ico",
   ogImage: "/image/.png",
+  color: "#B72621",
 } as const;
