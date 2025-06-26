@@ -14,7 +14,7 @@ const eslintConfig = [
   ...compat.config({
     rules: {
       "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off", // layout global.Kakao: any 관련
     },
   }),
 ];

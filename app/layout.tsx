@@ -1,6 +1,7 @@
 import SidebarWrapper from "@/components/sidebarWrapper";
 import { META } from "@/constants/metadata";
 import QueryProvider from "@/providers/queryProvider";
+import KakaoScript from "@/script/KakaoScript";
 import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
@@ -50,10 +51,10 @@ export const viewport: Viewport = {
 
 declare global {
   interface Window {
-    Kakao: any;
+    Kakao: any; //Kakao script 관련
   }
   interface WindowEventMap {
-    beforeinstallprompt: BeforeInstallPromptEvent;
+    beforeinstallprompt: BeforeInstallPromptEvent; //PWA 설치 유도 관련
   }
 }
 
@@ -79,6 +80,7 @@ export default function RootLayout({
           <SidebarWrapper>{children}</SidebarWrapper>
         </QueryProvider>
       </body>
+      <KakaoScript />
     </html>
   );
 }
