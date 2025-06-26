@@ -1,3 +1,4 @@
+import SidebarWrapper from "@/components/sidebarWrapper";
 import { META } from "@/constants/metadata";
 import QueryProvider from "@/providers/queryProvider";
 import type { Metadata, Viewport } from "next";
@@ -64,7 +65,9 @@ export default function RootLayout({
       <body
         className={`${notoSansKr.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <SidebarWrapper>{children}</SidebarWrapper>
+        </QueryProvider>
       </body>
     </html>
   );

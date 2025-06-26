@@ -165,5 +165,5 @@
 }
 
 @utility bg-layout {
-  @apply size-full max-w-full max-h-full p-3 flex flex-col;
+  @apply size-full px-2 py-1 flex flex-col;
 }
