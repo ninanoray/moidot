@@ -1,14 +1,23 @@
-import { GalleryVerticalEnd } from "lucide-react"
+"use client";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { GalleryVerticalEnd } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+
+  function gotoHomePage() {
+    router.push("/");
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <form>
@@ -41,7 +50,7 @@ export function LoginForm({
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={gotoHomePage}>
               Login
             </Button>
           </div>
@@ -77,5 +86,5 @@ export function LoginForm({
         and <a href="#">Privacy Policy</a>.
       </div>
     </div>
-  )
+  );
 }

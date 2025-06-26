@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(META.base),
+  //metadataBase: new URL(META.base),
   title: META.title,
   description: META.description,
   keywords: [...META.keywords],
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
     siteName: META.siteName,
     locale: "ko_KR",
     type: "website",
-    url: META.url,
-    images: [{ url: META.ogImage, alt: META.title }],
+    //url: META.url,
+    //images: [{ url: META.ogImage, alt: META.title }],
   },
 };
 

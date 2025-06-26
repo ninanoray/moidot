@@ -14,10 +14,10 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
-import { NavMain } from "@/app/(home)/components/nav-main";
-import { NavProjects } from "@/app/(home)/components/nav-projects";
-import { NavUser } from "@/app/(home)/components/nav-user";
-import { TeamSwitcher } from "@/app/(home)/components/team-switcher";
+import { NavMain } from "@/app/(home)/components/navMain";
+import { NavProjects } from "@/app/(home)/components/navProjects";
+import { NavUser } from "@/app/(home)/components/navUser";
+import { TeamSwitcher } from "@/app/(home)/components/teamSwitcher";
 import {
   Sidebar,
   SidebarContent,
@@ -156,7 +156,9 @@ const data = {
   ],
 };
 
-export function Home({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function HomeSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
