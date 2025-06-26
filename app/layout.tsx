@@ -1,6 +1,7 @@
 import SidebarWrapper from "@/components/sidebarWrapper";
 import { META } from "@/constants/metadata";
 import QueryProvider from "@/providers/queryProvider";
+import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
@@ -46,6 +47,15 @@ export const viewport: Viewport = {
   // interactiveWidget: "resizes-visual",
   themeColor: META.color,
 };
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+  interface WindowEventMap {
+    beforeinstallprompt: BeforeInstallPromptEvent;
+  }
+}
 
 export default function RootLayout({
   children,
