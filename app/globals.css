@@ -112,6 +112,7 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Base Classes */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -119,4 +120,50 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Utility Classes */
+@utility screen {
+  @apply flex items-center justify-center;
+}
+@utility mscreen {
+  @apply w-dvw min-h-dvh;
+  @media all and (display-mode: fullscreen) : {
+    width: 100vw;
+    min-height: 100vh;
+  }
+}
+
+@utility drag-none {
+  -webkit-user-drag: "none";
+  -khtml-user-drag: "none";
+  -moz-user-drag: "none";
+  -o-user-drag: "none";
+  user-drag: "none";
+}
+@utility mobile {
+  -webkit-touch-callout: "none";
+  -webkit-user-select: "none";
+  -webkit-tap-highlight-color: "rgba(0, 0, 0, 0)";
+  touch-callout: "none";
+  user-select: "none";
+  tap-highlight-color: "rgba(0, 0, 0, 0)";
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility trans-100 {
+  @apply transition-all duration-100;
+}
+@utility trans-200 {
+  @apply transition-all duration-200;
+}
+@utility trans-300 {
+  @apply transition-all duration-300;
+}
+
+@utility bg-layout {
+  @apply size-full max-w-full max-h-full p-3 flex flex-col;
 }

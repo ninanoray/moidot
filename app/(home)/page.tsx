@@ -1,3 +1,3 @@
 export default function home() {
-  return <div>Moidot</div>;
+  return <div className="bg-layout">Moidot</div>;
 }
