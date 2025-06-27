@@ -10,7 +10,7 @@ interface Props {
 const NextAuthProvider = ({ children }: Props) => {
   const currentPath = usePathname();
 
-  if (!currentPath.startsWith("login"))
+  if (!currentPath.startsWith("/login"))
     return <SessionProvider>{children}</SessionProvider>;
   else return <>{children}</>;
 };

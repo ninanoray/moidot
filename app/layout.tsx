@@ -1,5 +1,6 @@
 import SidebarWrapper from "@/components/sidebarWrapper";
 import { META } from "@/constants/metadata";
+import NextAuthProvider from "@/providers/nexthAuthProvider";
 import QueryProvider from "@/providers/reactQuery/queryProvider";
 import KakaoScript from "@/script/KakaoScript";
 import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
@@ -77,7 +78,9 @@ export default function RootLayout({
         className={`${notoSansKr.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
-          <SidebarWrapper>{children}</SidebarWrapper>
+          <NextAuthProvider>
+            <SidebarWrapper>{children}</SidebarWrapper>
+          </NextAuthProvider>
         </QueryProvider>
       </body>
       <KakaoScript />
