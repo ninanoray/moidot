@@ -7,7 +7,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 const SidebarWrapper = ({ children }: { children: React.ReactNode }) => {
   const currentPath = usePathname();
 
-  if (currentPath !== "/login")
+  if (currentPath.startsWith("login"))
     return (
       <SidebarProvider className="min-h-dvh">
         <HomeSidebar />
