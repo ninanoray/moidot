@@ -1,12 +1,11 @@
 "use client";
 
+import { KAKAO_API_KEY } from "@/constants/keys";
 import Script from "next/script";
-
-const KEY = `${process.env.NEXT_PUBLIC_KAKAO_API_KEY}`;
 
 function KakaoScript() {
   const kakaoInit = () => {
-    if (!window.Kakao.isInitialized()) window.Kakao.init(KEY);
+    if (!window.Kakao.isInitialized()) window.Kakao.init(KAKAO_API_KEY);
   };
 
   return (

@@ -1,6 +1,6 @@
 import SidebarWrapper from "@/components/sidebarWrapper";
 import { META } from "@/constants/metadata";
-import QueryProvider from "@/providers/queryProvider";
+import QueryProvider from "@/providers/reactQuery/queryProvider";
 import KakaoScript from "@/script/KakaoScript";
 import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
 import type { Metadata, Viewport } from "next";

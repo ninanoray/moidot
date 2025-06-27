@@ -1,3 +1,5 @@
+import Home from "./components/home";
+
 export default function home() {
-  return <div className="bg-layout">Moidot</div>;
+  return <Home />;
 }

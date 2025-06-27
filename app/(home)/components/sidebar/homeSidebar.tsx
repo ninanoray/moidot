@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
-import { NavMain } from "@/app/(home)/components/navMain";
-import { NavProjects } from "@/app/(home)/components/navProjects";
-import { NavUser } from "@/app/(home)/components/navUser";
-import { TeamSwitcher } from "@/app/(home)/components/teamSwitcher";
+import { NavMain } from "@/app/(home)/components/sidebar/navMain";
+import { NavProjects } from "@/app/(home)/components/sidebar/navProjects";
+import { NavUser } from "@/app/(home)/components/sidebar/navUser";
+import { TeamSwitcher } from "@/app/(home)/components/sidebar/teamSwitcher";
 import {
   Sidebar,
   SidebarContent,

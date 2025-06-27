@@ -1,6 +1,6 @@
 "use client";
 
-import { HomeSidebar } from "@/app/(home)/components/homeSidebar";
+import { HomeSidebar } from "@/app/(home)/components/sidebar/homeSidebar";
 import { usePathname } from "next/navigation";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 
