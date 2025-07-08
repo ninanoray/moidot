@@ -16,9 +16,10 @@ export async function SidebarWrapper({
   children: React.ReactNode;
 }) {
   const headersList = await headers();
-  const fullUrl = headersList.get("x-current-path");
+  const pathname = headersList.get("x-current-path");
 
-  if (fullUrl && !fullUrl.startsWith("/login")) {
+  if (pathname && !pathname.startsWith("/login")) {
+    // SSR 환경에서 NextAuth Session 정보 가져오기
     const session = await getServerSession(authOptions);
 
     return (

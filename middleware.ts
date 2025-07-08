@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const headers = new Headers(request.headers);
-  headers.set("x-current-path", request.nextUrl.pathname);
+  headers.set("x-current-path", request.nextUrl.pathname); // SSR 환경에서 pathname 가져오기
+
   return NextResponse.next({ headers });
 }
 
