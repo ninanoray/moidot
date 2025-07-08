@@ -23,10 +23,10 @@ const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   async rewrites() {
     return [
-      // {
-      //   source: "/api/:path*", // api 요청
-      //   destination: `${API_SERVER}/:path*`, // 프록시할 서버의 주소
-      // },
+      {
+        source: "/server/:path*", // api 요청
+        destination: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/:path*`, // 프록시할 서버의 주소
+      },
     ];
   },
 };

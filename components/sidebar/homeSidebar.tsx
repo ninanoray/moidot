@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
-import { NavMain } from "@/app/(home)/components/sidebar/navMain";
-import { NavProjects } from "@/app/(home)/components/sidebar/navProjects";
-import { NavUser } from "@/app/(home)/components/sidebar/navUser";
-import { TeamSwitcher } from "@/app/(home)/components/sidebar/teamSwitcher";
+import { NavMain } from "@/components/sidebar/navMain";
+import { NavProjects } from "@/components/sidebar/navProjects";
+import { NavUser } from "@/components/sidebar/navUser";
+import { TeamSwitcher } from "@/components/sidebar/teamSwitcher";
 import {
   Sidebar,
   SidebarContent,
@@ -22,14 +22,10 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Session } from "next-auth";
 
 // This is sample data.
 const data = {
-  user: {
-    name: "ninano",
-    email: "ninano@example.com",
-    avatar: "https://github.com/shadcn.png",
-  },
   teams: [
     {
       name: "Moidot Inc",
@@ -124,9 +120,11 @@ const data = {
   ],
 };
 
-export function HomeSidebar({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
+interface Props extends React.ComponentProps<typeof Sidebar> {
+  session: Session | null;
+}
+
+export function HomeSidebar({ session, ...props }: Props) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -137,7 +135,7 @@ export function HomeSidebar({
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={session?.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

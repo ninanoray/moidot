@@ -5,17 +5,12 @@ import { GalleryVerticalEnd } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { BASE_URL } from "@/constants/keys";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function LoginForm() {
   const router = useRouter();
-
-  const [contents, setContents] = useState<string>();
 
   function gotoHomePage() {
     router.push("/");
@@ -23,13 +18,20 @@ export function LoginForm({
 
   const loginWithKakao = () => {
     window.Kakao.Auth.authorize({
-      redirectUri: `http://localhost:3000/login/callback/kakao`,
+      redirectUri: BASE_URL + "/api/auth/callback/kakao",
       scope: "profile_image openid profile_image openid",
     });
   };
 
+  const handleKakao = async () => {
+    await signIn("kakao", {
+      redirect: true,
+      callbackUrl: "/",
+    });
+  };
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <form>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
@@ -73,7 +75,7 @@ export function LoginForm({
             <Button
               type="button"
               className="w-full bg-[url(/images/kakao-login/kakao_login_large_narrow.png)] bg-cover bg-center"
-              onClick={loginWithKakao}
+              onClick={handleKakao}
             ></Button>
             <Button variant="outline" type="button" className="w-full">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

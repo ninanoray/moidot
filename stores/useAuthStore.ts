@@ -4,7 +4,8 @@ import { persist } from "zustand/middleware";
 type AuthStore = {
   user: any | undefined;
   saveUser: (user: any) => void;
-  isLogin: boolean;
+  auth: any;
+  login: (res: any) => void;
   logout: () => void;
 };
 
@@ -12,15 +13,15 @@ export const useAuthStore = create(
   persist<AuthStore>(
     (set) => ({
       user: undefined,
-      isLogin: false,
       saveUser: (user) => {
-        set({ user, isLogin: true });
+        set({ user });
+      },
+      auth: "",
+      login: (res) => {
+        set({ auth: res });
       },
       logout: () => {
-        // postLogout().then(() => {
-        //   set({ user: undefined, isLogin: false });
-        //   window.location.replace("/" + "/login");
-        // });
+        set({ user: undefined, auth: undefined });
       },
     }),
     {

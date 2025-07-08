@@ -1,4 +1,3 @@
-import SidebarWrapper from "@/components/sidebarWrapper";
 import { META } from "@/constants/metadata";
 import NextAuthProvider from "@/providers/nexthAuthProvider";
 import QueryProvider from "@/providers/reactQuery/queryProvider";
@@ -7,6 +6,7 @@ import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
+import { SidebarWrapper } from "./sidebar/sidebarWrapper";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  //metadataBase: new URL(META.base),
+  metadataBase: new URL(META.base),
   title: META.title,
   description: META.description,
   keywords: [...META.keywords],
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     siteName: META.siteName,
     locale: "ko_KR",
     type: "website",
-    //url: META.url,
+    url: META.url,
     //images: [{ url: META.ogImage, alt: META.title }],
   },
 };
@@ -70,18 +70,18 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <link
           rel="manifest"
-          href={"/" + "/manifest.webmanifest"}
+          href={META.base + "/manifest.webmanifest"}
           crossOrigin="use-credentials"
         ></link>
       </head>
       <body
         className={`${notoSansKr.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <QueryProvider>
-          <NextAuthProvider>
+        <NextAuthProvider>
+          <QueryProvider>
             <SidebarWrapper>{children}</SidebarWrapper>
-          </NextAuthProvider>
-        </QueryProvider>
+          </QueryProvider>
+        </NextAuthProvider>
       </body>
       <KakaoScript />
     </html>
