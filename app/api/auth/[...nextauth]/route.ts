@@ -1,5 +1,5 @@
 import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
-import { AuthOptions, Session } from "next-auth";
+import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import KakaoProvider from "next-auth/providers/kakao";
@@ -68,9 +68,7 @@ const authOptions: AuthOptions = {
       return { user, auth: { ...account }, ...token };
     },
     async session({ session, token: jwt }) {
-      session = {
-        ...jwt,
-      } as unknown as Session;
+      session = jwt as any;
       console.log("$$$ session: ", session);
       return session;
     },
