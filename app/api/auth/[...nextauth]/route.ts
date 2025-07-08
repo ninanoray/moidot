@@ -1,5 +1,5 @@
 import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
-import { AuthOptions } from "next-auth";
+import { AuthOptions, Session } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import KakaoProvider from "next-auth/providers/kakao";
@@ -53,12 +53,24 @@ const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      return { ...token, ...user };
+    async signIn({ user, account }) {
+      // const data = await postLogin(account?.access_token || ""); // 서버와의 통신
+
+      if (account?.provider) {
+        // user.id = data.user.id;
+        // user.name = data.user.name;
+        // account.access_token = data.token.accessToken;
+      }
+
+      return true;
     },
-    async session({ session, token }) {
-      console.log("$$$ token: ", token);
-      session.user = token as any;
+    async jwt({ token, account, user }) {
+      return { user, auth: { ...account }, ...token };
+    },
+    async session({ session, token: jwt }) {
+      session = {
+        ...jwt,
+      } as unknown as Session;
       console.log("$$$ session: ", session);
       return session;
     },

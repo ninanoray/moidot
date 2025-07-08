@@ -5,7 +5,6 @@ import { GalleryVerticalEnd } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BASE_URL } from "@/constants/keys";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -15,13 +14,6 @@ export function LoginForm() {
   function gotoHomePage() {
     router.push("/");
   }
-
-  const loginWithKakao = () => {
-    window.Kakao.Auth.authorize({
-      redirectUri: BASE_URL + "/api/auth/callback/kakao",
-      scope: "profile_image openid profile_image openid",
-    });
-  };
 
   const handleKakao = async () => {
     await signIn("kakao", {
