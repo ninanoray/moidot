@@ -17,32 +17,32 @@ export const META = {
 
 export const APPLE_ICONS = [
   {
-    url: META.base + "assets/ios/icons/58.png",
+    url: META.base + "assets/ios/58.png",
     type: "image/png",
     sizes: "58x58",
   },
   {
-    url: META.base + "assets/ios/icons/152.png",
+    url: META.base + "assets/ios/152.png",
     type: "image/png",
     sizes: "152x152",
   },
   {
-    url: META.base + "assets/ios/icons/167.png",
+    url: META.base + "assets/ios/167.png",
     type: "image/png",
     sizes: "167x167",
   },
   {
-    url: META.base + "assets/ios/icons/180.png",
+    url: META.base + "assets/ios/180.png",
     type: "image/png",
     sizes: "180x180",
   },
   {
-    url: META.base + "assets/ios/icons/192.png",
+    url: META.base + "assets/ios/192.png",
     type: "image/png",
     sizes: "192x192",
   },
   {
-    url: META.base + "assets/ios/icons/512.png",
+    url: META.base + "assets/ios/512.png",
     type: "image/png",
     sizes: "512x512",
   },
