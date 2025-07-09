@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { FormsItem, formsItemProps } from ".";
+import * as SelectPrimitive from "@radix-ui/react-select";
+import { FormsItem, FormsItemsProps } from ".";
 import { FormControl } from "../ui/form";
 import {
   Select,
@@ -9,72 +10,43 @@ import {
   SelectValue,
 } from "../ui/select";
 
-export type FormsSelection = {
+export interface FormsSelection {
   value: any;
   label: string;
-};
+}
+
+interface FormsSelectProps extends FormsItemsProps {
+  items: FormsSelection[];
+}
 
 const FormsSelect = ({
-  name,
-  label,
   items,
-  placeholder = `${label}을 선택해주세요`,
-  description,
-  fullHeight = false,
-  hideLabel,
-  tabIndex,
-  unselectable = false,
-  className,
-  onChangeValue = () => {},
-}: formsItemProps & {
-  items: FormsSelection[];
-  unselectable?: boolean;
-  onChangeValue?: (value: string) => void;
-}) => {
+  label,
+  placeholder = label + " 정보를 입력해주세요",
+  ...props
+}: FormsSelectProps & React.ComponentProps<typeof SelectPrimitive.Root>) => {
   return (
     <FormsItem
-      name={name}
       label={label}
-      hideLabel={hideLabel}
-      description={description}
-      fullHeight={fullHeight}
-      className={className}
       render={(field) => (
-        <Select
-          onValueChange={(value) => {
-            field.onChange(value);
-            onChangeValue(value);
-          }}
-          value={field.value}
-        >
+        <Select onValueChange={field.onChange} value={field.value}>
           <FormControl>
             <SelectTrigger
-              tabIndex={tabIndex}
               className={cn("w-full", !field.value && "text-muted-foreground")}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
           </FormControl>
           <SelectContent>
-            {items.map((item, index) => {
-              function unselect() {
-                if (field.value === item.value) field.onChange("");
-              }
-              return (
-                <SelectItem
-                  key={index}
-                  value={item.value}
-                  onClick={() => {
-                    if (unselectable) unselect();
-                  }}
-                >
-                  {item.label}
-                </SelectItem>
-              );
-            })}
+            {items.map((item, index) => (
+              <SelectItem key={index} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       )}
+      {...props}
     />
   );
 };

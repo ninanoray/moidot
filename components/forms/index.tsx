@@ -1,13 +1,6 @@
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createContext,
-  JSX,
-  MouseEventHandler,
-  ReactNode,
-  useContext,
-  useMemo,
-} from "react";
+import React from "react";
 import { ControllerRenderProps, useForm, UseFormReturn } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { Button } from "../ui/button";
@@ -30,42 +23,38 @@ type FormsContext = {
   isSearchForm: boolean;
 };
 
-const FormsContext = createContext<FormsContext | null>(null);
-const usePageForm = () => useContext(FormsContext);
+const FormsContext = React.createContext<FormsContext | null>(null);
+const usePageForm = () => React.useContext(FormsContext);
 
-type FormsProps = {
+interface FormsProps {
   schema: ZodType<any, any, any>;
   defaultValues?: any;
-  className?: string | undefined;
-  children: ReactNode;
+  submitText?: string;
   onSubmit?: (data: z.infer<any>) => void;
-  submitButtonLabel?: string;
-  linkButtonLabel?: string;
-  onClickLinkBtn?: MouseEventHandler<HTMLButtonElement> | undefined;
-  SearchForm?: boolean;
-};
+  isSearch?: boolean;
+  children: React.ReactNode;
+  className?: string | undefined;
+}
 
 const Forms = ({
   schema,
   defaultValues,
-  className,
-  SearchForm = false,
-  children,
+  isSearch = false,
+  submitText = "저장",
   onSubmit = (data) => console.log(data),
-  submitButtonLabel = "저장",
-  linkButtonLabel = "목록",
-  onClickLinkBtn,
+  children,
+  className,
 }: FormsProps) => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
   });
 
-  const formsContextValue = useMemo<FormsContext>(() => {
-    return { form: form, isSearchForm: SearchForm };
-  }, [form, SearchForm]);
+  const formsContextValue = React.useMemo<FormsContext>(() => {
+    return { form: form, isSearchForm: isSearch };
+  }, [form, isSearch]);
 
-  if (!SearchForm)
+  if (!isSearch)
     return (
       <FormsContext.Provider value={formsContextValue}>
         <Form {...form}>
@@ -74,24 +63,9 @@ const Forms = ({
             className={cn("size-full -mt-1 flex flex-col gap-2", className)}
           >
             {children}
-            <div className="w-full pt-4 flex justify-end gap-2">
-              <Button
-                type="submit"
-                className={!!onClickLinkBtn ? "w-20" : "w-full"}
-              >
-                {submitButtonLabel}
-              </Button>
-              {onClickLinkBtn && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="w-20"
-                  onClick={onClickLinkBtn}
-                >
-                  {linkButtonLabel}
-                </Button>
-              )}
-            </div>
+            <Button type="submit" className="w-full mt-3">
+              {submitText}
+            </Button>
           </form>
         </Form>
       </FormsContext.Provider>
@@ -116,32 +90,27 @@ const Forms = ({
     );
 };
 
-export type formsItemProps = {
+interface FormsItemsProps {
   name: string;
   label: string;
-  value?: string | number | readonly string[] | undefined;
-  defaultValue?: any;
-  disabled?: boolean;
+  hideLabel?: boolean;
   placeholder?: string;
   description?: string;
-  fullHeight?: boolean;
-  hideLabel?: boolean;
-  tabIndex?: number | undefined;
-  autoFocus?: boolean | undefined;
   className?: string;
-};
+}
+
+interface FormsItemProps extends FormsItemsProps {
+  render: (field: ControllerRenderProps<any, string>) => React.JSX.Element;
+}
 
 const FormsItem = ({
-  name,
   label,
   description,
-  fullHeight = false,
   hideLabel = false,
   className,
   render,
-}: formsItemProps & {
-  render: (field: ControllerRenderProps<any, string>) => JSX.Element;
-}) => {
+  ...props
+}: FormsItemProps & Omit<React.ComponentProps<typeof FormField>, "render">) => {
   const context = usePageForm();
 
   if (context) {
@@ -150,24 +119,13 @@ const FormsItem = ({
     if (!isSearchForm) {
       return (
         <FormField
-          name={name}
           control={form.control}
           render={({ field }) => (
             <FormItem
-              className={cn(
-                "w-full flex flex-col relative md:my-2.5",
-                fullHeight && "h-full",
-                className
-              )}
+              className={cn("w-full flex flex-col relative", className)}
             >
-              <div className="size-full flex flex-col gap-1 md:flex-row">
-                <FormLabel
-                  className={cn(
-                    "text-sm md:text-base md:w-[10em] md:shrink-0 md:self-center",
-                    fullHeight && "md:self-start md:pt-2",
-                    hideLabel && "invisible md:hidden"
-                  )}
-                >
+              <div className="size-full flex flex-col gap-1">
+                <FormLabel className={cn("text-sm", hideLabel && "hidden")}>
                   {label}
                 </FormLabel>
                 <div className="size-full">
@@ -175,7 +133,7 @@ const FormsItem = ({
                   {description && (
                     <FormDescription
                       className={cn(
-                        "mx-1 text-xs break-keep md:absolute",
+                        "mx-1 text-xs break-keep",
                         form.formState.errors.files ? "hidden" : ""
                       )}
                     >
@@ -184,15 +142,15 @@ const FormsItem = ({
                   )}
                 </div>
               </div>
-              <FormMessage />
+              <FormMessage className="absolute -bottom-4 right-0 text-xs break-keep" />
             </FormItem>
           )}
+          {...props}
         />
       );
     } else {
       return (
         <FormField
-          name={name}
           control={form.control}
           render={({ field }) => (
             <FormItem
@@ -208,6 +166,7 @@ const FormsItem = ({
               <FormMessage />
             </FormItem>
           )}
+          {...props}
         />
       );
     }
@@ -224,3 +183,4 @@ export {
   FormsTextArea,
   usePageForm,
 };
+export type { FormsItemsProps };

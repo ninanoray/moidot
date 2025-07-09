@@ -1,4 +1,4 @@
-import { FormsItem, formsItemProps } from ".";
+import { FormsItem, FormsItemsProps } from ".";
 import { FormControl } from "../ui/form";
 import { Input } from "../ui/input";
 
@@ -7,7 +7,7 @@ const FormsFileInput = ({
   label,
   description,
   fullHeight = false,
-}: formsItemProps) => {
+}: FormsItemsProps) => {
   return (
     <FormsItem
       name={name}

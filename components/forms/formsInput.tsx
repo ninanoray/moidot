@@ -1,35 +1,29 @@
-import { HTMLInputTypeAttribute } from "react";
-import { FormsItem, formsItemProps } from ".";
+import { ControllerRenderProps } from "react-hook-form";
+import { FormsItem, FormsItemsProps } from ".";
 import { FormControl } from "../ui/form";
 import { Input } from "../ui/input";
 
 const FormsInput = ({
-  label,
   type,
-  placeholder = `${label}를 입력해주세요`,
+  label,
+  placeholder = label + " 정보를 입력해주세요",
   ...props
-}: formsItemProps & { type?: HTMLInputTypeAttribute }) => {
+}: FormsItemsProps & React.ComponentProps<"input">) => {
   return (
     <FormsItem
-      name={props.name}
       label={label}
-      description={props.description}
-      fullHeight={props.fullHeight}
-      className={props.className}
-      render={(field) => (
+      render={(field: ControllerRenderProps<any, string>) => (
         <FormControl>
           <Input
             {...field}
             type={type}
-            value={props.value}
-            defaultValue={props.defaultValue}
             placeholder={placeholder}
-            disabled={props.disabled}
-            autoFocus={props.autoFocus}
-            tabIndex={props.tabIndex}
+            value={field.value || ""}
+            {...props}
           />
         </FormControl>
       )}
+      {...props}
     />
   );
 };

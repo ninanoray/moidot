@@ -1,4 +1,4 @@
-import { FormsItem, formsItemProps } from ".";
+import { FormsItem, FormsItemsProps } from ".";
 import TextEditor from "../textEditor";
 import { FormControl } from "../ui/form";
 
@@ -6,13 +6,12 @@ const FormsTextArea = ({
   label,
   placeholder = `${label}을 입력해주세요.`,
   ...props
-}: formsItemProps) => {
+}: FormsItemsProps) => {
   return (
     <FormsItem
       name={props.name}
       label={label}
       description={props.description}
-      fullHeight={props.fullHeight}
       render={(field) => (
         <FormControl>
           <TextEditor
