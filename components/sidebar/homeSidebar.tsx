@@ -6,13 +6,12 @@ import {
   GalleryVerticalEnd,
   Map,
   PieChart,
-  Settings2,
   SquareTerminal,
 } from "lucide-react";
 import * as React from "react";
 
 import { MoimSwitcher } from "@/components/sidebar/moimSwitcher";
-import { NavMain } from "@/components/sidebar/navMain";
+import { NavDule } from "@/components/sidebar/navDule";
 import { NavProjects } from "@/components/sidebar/navProjects";
 import { NavUser } from "@/components/sidebar/navUser";
 import {
@@ -38,69 +37,38 @@ const data = {
       count: 10,
     },
   ],
-  navMain: [
+  navDule: [
     {
-      title: "Playground",
+      title: "첫번째 줄",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
-      items: [
+      dots: [
         {
-          title: "History",
+          title: "첫번째 닷",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "두번째 닷",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "세번째 닷",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "두번째 줄",
       url: "#",
       icon: BookOpen,
-      items: [
+      dots: [
         {
-          title: "Introduction",
+          title: "첫번째 닷",
           url: "#",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "두번째 닷",
           url: "#",
         },
       ],
@@ -132,7 +100,7 @@ export function HomeSidebar({ session, ...props }: Props) {
         <MoimSwitcher moims={data.moims} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavDule dules={data.navDule} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
