@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { Bell, ChevronsUpDown, LogOut, UserCircle2 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -75,25 +68,18 @@ export function NavUser({ user }: Props) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <div className="px-1 py-1.5 text-xs">
+              <p>참여 중인 모임: 2개</p>
+            </div>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
                 <Bell />
                 알림
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <UserCircle2 />
+                마이페이지
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

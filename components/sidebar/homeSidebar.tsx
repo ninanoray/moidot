@@ -7,6 +7,7 @@ import {
   Map,
   Settings,
   SquareTerminal,
+  User2,
 } from "lucide-react";
 import * as React from "react";
 
@@ -79,6 +80,11 @@ const data = {
       name: "닷맵",
       url: "#",
       icon: Map,
+    },
+    {
+      name: "마이닷",
+      url: "#",
+      icon: User2,
     },
     {
       name: "설정",
