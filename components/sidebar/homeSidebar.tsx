@@ -20,9 +20,9 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import { Session } from "next-auth";
+import ThemeSwitch from "../theme/themeSwitch";
 
 // This is sample data.
 const data = {
@@ -126,8 +126,9 @@ interface Props extends React.ComponentProps<typeof Sidebar> {
 
 export function HomeSidebar({ session, ...props }: Props) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" className="select-none" {...props}>
       <SidebarHeader>
+        <ThemeSwitch className="mx-2 group-data-[collapsible=icon]:m-0!" />
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
@@ -137,7 +138,6 @@ export function HomeSidebar({ session, ...props }: Props) {
       <SidebarFooter>
         <NavUser user={session?.user} />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }

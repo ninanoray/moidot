@@ -1,5 +1,3 @@
-"use server";
-
 import { HomeSidebar } from "@/components/sidebar/homeSidebar";
 import { authOptions } from "@/utils/authOptions";
 import { getServerSession } from "next-auth/next";

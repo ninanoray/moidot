@@ -1,6 +1,7 @@
 import { META } from "@/constants/metadata";
 import NextAuthProvider from "@/providers/nexthAuthProvider";
 import QueryProvider from "@/providers/reactQuery/queryProvider";
+import { ThemeProvider } from "@/providers/themeProvider";
 import KakaoScript from "@/script/KakaoScript";
 import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
 import type { Metadata, Viewport } from "next";
@@ -65,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <meta name="mobile-web-app-capable" content="yes" />
         <link
@@ -79,7 +80,9 @@ export default function RootLayout({
       >
         <NextAuthProvider>
           <QueryProvider>
-            <SidebarWrapper>{children}</SidebarWrapper>
+            <ThemeProvider>
+              <SidebarWrapper>{children}</SidebarWrapper>
+            </ThemeProvider>
           </QueryProvider>
         </NextAuthProvider>
       </body>
