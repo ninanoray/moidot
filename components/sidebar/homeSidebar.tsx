@@ -5,14 +5,14 @@ import {
   BookOpen,
   GalleryVerticalEnd,
   Map,
-  PieChart,
+  Settings,
   SquareTerminal,
 } from "lucide-react";
 import * as React from "react";
 
 import { MoimSwitcher } from "@/components/sidebar/moimSwitcher";
 import { NavDule } from "@/components/sidebar/navDule";
-import { NavProjects } from "@/components/sidebar/navProjects";
+import { NavProjects } from "@/components/sidebar/navMenu";
 import { NavUser } from "@/components/sidebar/navUser";
 import {
   Sidebar,
@@ -74,16 +74,16 @@ const data = {
       ],
     },
   ],
-  projects: [
+  menu: [
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
+      name: "닷맵",
       url: "#",
       icon: Map,
+    },
+    {
+      name: "설정",
+      url: "#",
+      icon: Settings,
     },
   ],
 };
@@ -96,14 +96,14 @@ export function HomeSidebar({ session, ...props }: Props) {
   return (
     <Sidebar collapsible="icon" className="select-none" {...props}>
       <SidebarHeader>
-        <ThemeSwitch className="mx-2 group-data-[collapsible=icon]:m-0!" />
         <MoimSwitcher moims={data.moims} />
       </SidebarHeader>
       <SidebarContent>
         <NavDule dules={data.navDule} />
-        <NavProjects projects={data.projects} />
+        <NavProjects menu={data.menu} />
       </SidebarContent>
       <SidebarFooter>
+        <ThemeSwitch className="mx-2 group-data-[collapsible=icon]:m-0!" />
         <NavUser user={session?.user} />
       </SidebarFooter>
     </Sidebar>

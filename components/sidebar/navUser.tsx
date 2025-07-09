@@ -93,7 +93,7 @@ export function NavUser({ user }: Props) {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                Notifications
+                알림
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
