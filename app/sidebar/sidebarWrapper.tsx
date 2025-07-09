@@ -1,6 +1,7 @@
 "use server";
 
 import { HomeSidebar } from "@/components/sidebar/homeSidebar";
+import { authOptions } from "@/utils/authOptions";
 import { getServerSession } from "next-auth/next";
 import { cookies, headers } from "next/headers";
 import {
@@ -8,7 +9,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "../../components/ui/sidebar";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export async function SidebarWrapper({
   children,
