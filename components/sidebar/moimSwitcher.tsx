@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { ChevronsUpDown, Icon, IconNode, LucideIcon, Plus } from "lucide-react";
 import * as React from "react";
 
 import {
@@ -23,7 +23,8 @@ export function MoimSwitcher({
 }: {
   moims: {
     name: string;
-    logo: React.ElementType;
+    icon?: LucideIcon;
+    iconNode?: IconNode;
     count: number;
   }[];
 }) {
@@ -44,7 +45,13 @@ export function MoimSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <activeMoim.logo className="size-4" />
+                {activeMoim.icon ? (
+                  <activeMoim.icon className="size-4" />
+                ) : (
+                  activeMoim.iconNode && (
+                    <Icon iconNode={activeMoim.iconNode} className="size-4" />
+                  )
+                )}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{activeMoim.name}</span>
@@ -69,7 +76,16 @@ export function MoimSwitcher({
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-md border">
-                  <moim.logo className="size-3.5 shrink-0" />
+                  {moim.icon ? (
+                    <moim.icon className="size-3.5 shrink-0" />
+                  ) : (
+                    moim.iconNode && (
+                      <Icon
+                        iconNode={moim.iconNode}
+                        className="size-3.5 shrink-0"
+                      />
+                    )
+                  )}
                 </div>
                 {moim.name}
               </DropdownMenuItem>
