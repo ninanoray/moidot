@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
+import { MoimSwitcher } from "@/components/sidebar/moimSwitcher";
 import { NavMain } from "@/components/sidebar/navMain";
 import { NavProjects } from "@/components/sidebar/navProjects";
 import { NavUser } from "@/components/sidebar/navUser";
-import { TeamSwitcher } from "@/components/sidebar/teamSwitcher";
 import {
   Sidebar,
   SidebarContent,
@@ -26,16 +26,16 @@ import ThemeSwitch from "../theme/themeSwitch";
 
 // This is sample data.
 const data = {
-  teams: [
+  moims: [
     {
-      name: "Moidot Inc",
+      name: "서초구 모임",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      count: 20,
     },
     {
-      name: "Moidot Corp.",
+      name: "97년생 모임",
       logo: AudioWaveform,
-      plan: "Startup",
+      count: 10,
     },
   ],
   navMain: [
@@ -129,7 +129,7 @@ export function HomeSidebar({ session, ...props }: Props) {
     <Sidebar collapsible="icon" className="select-none" {...props}>
       <SidebarHeader>
         <ThemeSwitch className="mx-2 group-data-[collapsible=icon]:m-0!" />
-        <TeamSwitcher teams={data.teams} />
+        <MoimSwitcher moims={data.moims} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
