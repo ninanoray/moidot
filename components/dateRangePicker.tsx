@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import CalendarWithTime, { DateRangeString } from "./calendarWIthTime";
 import { getDateString, getDateTimeString } from "./datePicker/utile";
@@ -30,7 +31,7 @@ export default function DateRangePicker({ time = false }: Props) {
   });
 
   const updateRange = useCallback(() => {
-    if (time && range?.from && range.to) {
+    if (time && range) {
       const from = `${getDateString(range.from)} ${rangeTime.from}:00`;
       const to = `${getDateString(range.to)} ${rangeTime.to}:00`;
       setRange({
@@ -47,7 +48,7 @@ export default function DateRangePicker({ time = false }: Props) {
 
   // 표시값
   function getTextValue(range: DateRange | undefined) {
-    if (range?.from && range?.to) {
+    if (range) {
       const from = time
         ? getDateTimeString(range.from)
         : getDateString(range.from);
@@ -66,7 +67,10 @@ export default function DateRangePicker({ time = false }: Props) {
         <Button
           variant="outline"
           id="dates"
-          className="w-fit justify-between border-input font-normal cursor-auto"
+          className={cn(
+            "w-fit justify-between border-input font-normal cursor-auto",
+            range || "text-muted-foreground"
+          )}
         >
           {getTextValue(range)}
           <ChevronDownIcon />

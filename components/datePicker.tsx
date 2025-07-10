@@ -8,6 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import CalendarWithTime from "./calendarWIthTime";
 import { getDateString, getDateTimeString } from "./datePicker/utile";
@@ -47,7 +48,10 @@ export default function DatePicker({ time = false }: Props) {
         <Button
           variant="outline"
           id="date"
-          className="w-fit justify-between border-input font-normal cursor-auto"
+          className={cn(
+            "w-fit justify-between border-input font-normal cursor-auto",
+            date || "text-muted-foreground"
+          )}
         >
           {date
             ? time
@@ -64,7 +68,7 @@ export default function DatePicker({ time = false }: Props) {
           selected={date}
           onSelect={(date) => {
             setDate(date);
-            setOpen(false);
+            if (!time) setOpen(false);
           }}
           timeString={time && { from: dateTime }}
           onTimeStringChange={(range) => setDateTime(range.from)}
