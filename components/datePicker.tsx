@@ -31,6 +31,7 @@ export default function DatePicker({ time = false }: Props) {
   const updateDate = useCallback(() => {
     if (time && date)
       setDate(new Date(`${getDateString(date)} ${dateTime}:00`));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateTime, time]);
 
   useEffect(() => {

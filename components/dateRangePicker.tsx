@@ -38,6 +38,7 @@ export default function DateRangePicker({ time = false }: Props) {
         to: new Date(to),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rangeTime, time]);
 
   useEffect(() => {
