@@ -17,12 +17,14 @@ interface DatePickerProps {
   value: Date | undefined;
   onChange: (...event: any[]) => void;
   useTime?: boolean;
+  className?: string | undefined;
 }
 
 export default function DatePicker({
   value,
   onChange,
   useTime = false,
+  className,
 }: DatePickerProps) {
   const defaultTimeString = new Date().toLocaleTimeString("sv-SE", {
     hour: "numeric",
@@ -55,7 +57,8 @@ export default function DatePicker({
           id="date"
           className={cn(
             "w-fit justify-between border-input font-normal cursor-auto",
-            value || "text-muted-foreground"
+            value || "text-muted-foreground",
+            className
           )}
         >
           {value

@@ -5,8 +5,15 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { ComponentProps } from "react";
-import { DayPicker } from "react-day-picker";
+import { ChangeEvent, ComponentProps } from "react";
+import { DayPicker, DropdownProps } from "react-day-picker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export interface DateRangeString {
   from: string | undefined;
@@ -28,8 +35,43 @@ export default function CalendarWithTime({
     <Card className="w-fit py-4 gap-3">
       <CardContent className="px-4">
         <Calendar
-          mode="range"
-          className={cn("bg-transparent p-0", className)}
+          components={{
+            Dropdown: ({ value, onChange, options }: DropdownProps) => {
+              const selected = options?.find(
+                (option) => option.value === value
+              );
+              const handleChange = (value: string) => {
+                const changeEvent = {
+                  target: { value },
+                } as ChangeEvent<HTMLSelectElement>;
+                onChange?.(changeEvent);
+              };
+
+              return (
+                <Select value={value?.toString()} onValueChange={handleChange}>
+                  <SelectTrigger className="border-0 rounded-md shadow-none">
+                    <SelectValue>{selected?.value}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {/* <ScrollArea className="h-60"> */}
+                    {options?.map((option, index) => (
+                      <SelectItem
+                        key={index}
+                        value={option.value?.toString() ?? ""}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                    {/* </ScrollArea> */}
+                  </SelectContent>
+                </Select>
+              );
+            },
+          }}
+          classNames={{
+            dropdowns: "w-full flex-center flex-row-reverse z-1",
+          }}
+          className={cn("p-0", className)}
           {...props}
         />
       </CardContent>

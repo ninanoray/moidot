@@ -14,6 +14,7 @@ const FormsDateRangePicker = ({
           value={field.value}
           onChange={field.onChange}
           useTime={useTime}
+          className="w-full"
         />
       )}
       {...props}

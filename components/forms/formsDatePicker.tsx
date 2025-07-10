@@ -13,6 +13,7 @@ const FormsDatePicker = ({ useTime, ...props }: FormsDatePickerProps) => {
           value={field.value}
           onChange={field.onChange}
           useTime={useTime}
+          className="w-full"
         />
       )}
       {...props}

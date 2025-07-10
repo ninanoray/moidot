@@ -12,23 +12,22 @@ import {
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import CalendarWithTime, { DateRangeString } from "./calendarWIthTime";
-import { getDateString, getDateTimeString } from "./util";
+import { getDateString, getDateTimeString, getTimeString } from "./util";
 
 interface DateRangePickerProps {
   value: DateRange | undefined;
   onChange: (...event: any[]) => void;
   useTime?: boolean;
+  className?: string | undefined;
 }
 
 export default function DateRangePicker({
   value,
   onChange,
   useTime = false,
+  className,
 }: DateRangePickerProps) {
-  const defaultTimeString = new Date().toLocaleTimeString("sv-SE", {
-    hour: "numeric",
-    minute: "numeric",
-  });
+  const defaultTimeString = getTimeString(new Date());
 
   const [rangeTime, setRangeTime] = useState<DateRangeString>({
     from: defaultTimeString,
@@ -76,7 +75,8 @@ export default function DateRangePicker({
           id="dates"
           className={cn(
             "w-fit justify-between border-input font-normal cursor-auto",
-            value || "text-muted-foreground"
+            value || "text-muted-foreground",
+            className
           )}
         >
           {getTextValue(value)}
