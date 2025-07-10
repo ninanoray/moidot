@@ -1,37 +1,16 @@
 "use client";
 
-import DatePicker from "@/components/datePicker";
-import DateRangePicker from "@/components/dateRangePicker";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Forms, FormsDatePicker } from "@/components/forms";
+import FormsDateRangePicker from "@/components/forms/formsDateRangePicker";
+import { HomeSchema } from "../schema";
 
 const Home = () => {
   return (
     <div className="bg-layout">
-      <Select>
-        <SelectTrigger>
-          <SelectValue placeholder="항목을 선택해주세요" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value="apple">Apple</SelectItem>
-            <SelectItem value="banana">Banana</SelectItem>
-            <SelectItem value="blueberry">Blueberry</SelectItem>
-            <SelectItem value="grapes">Grapes</SelectItem>
-            <SelectItem value="pineapple">Pineapple</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <DatePicker />
-      <DateRangePicker />
+      <Forms schema={HomeSchema}>
+        <FormsDatePicker name="date" label="날짜" useTime />
+        <FormsDateRangePicker name="dateRange" label="기간" useTime />
+      </Forms>
     </div>
   );
 };

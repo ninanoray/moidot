@@ -1,139 +1,98 @@
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { RefreshCcw } from "lucide-react";
-import { useState } from "react";
-import { DateRange } from "react-day-picker";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { FormControl } from "../ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { DatePickerStyleProps, DatePickerTrigger } from "./datePicker";
-import RangeTimePicker from "./timePicker/rangeTimePicker";
+"use client";
 
-type DateRangePickerProps = {
+import { ChevronDownIcon } from "lucide-react";
+import { type DateRange } from "react-day-picker";
+
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { useCallback, useEffect, useState } from "react";
+import CalendarWithTime, { DateRangeString } from "./calendarWIthTime";
+import { getDateString, getDateTimeString } from "./util";
+
+interface DateRangePickerProps {
   value: DateRange | undefined;
   onChange: (...event: any[]) => void;
-  resetValue: () => void;
   useTime?: boolean;
-} & DatePickerStyleProps;
+}
 
-const DateRangePicker = ({
+export default function DateRangePicker({
   value,
   onChange,
-  resetValue,
-  align,
   useTime = false,
-  tabIndex,
-  autoFocus,
-  className,
-}: DateRangePickerProps) => {
-  const isMobile = useIsMobile();
+}: DateRangePickerProps) {
+  const defaultTimeString = new Date().toLocaleTimeString("sv-SE", {
+    hour: "numeric",
+    minute: "numeric",
+  });
 
-  const [open, setOpen] = useState(false);
+  const [rangeTime, setRangeTime] = useState<DateRangeString>({
+    from: defaultTimeString,
+    to: defaultTimeString,
+  });
+
+  const updateRange = useCallback(() => {
+    if (useTime && value) {
+      const from = `${getDateString(value.from)} ${rangeTime.from}:00`;
+      const to = `${getDateString(value.to)} ${rangeTime.to}:00`;
+      onChange({
+        from: new Date(from),
+        to: new Date(to),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rangeTime, useTime]);
+
+  useEffect(() => {
+    updateRange();
+  }, [updateRange]);
+
+  // 표시값
+  function getTextValue(range: DateRange | undefined) {
+    if (range) {
+      const from = useTime
+        ? getDateTimeString(range.from)
+        : getDateString(range.from);
+      const to = useTime
+        ? getDateTimeString(range.to)
+        : getDateString(range.to);
+      if (from === to) return from;
+      else return from + " ~ " + to;
+    } else return "기간을 선택해주세요";
+  }
 
   return (
-    <Popover
-      open={open}
-      onOpenChange={(open) => {
-        if ((value?.from === undefined && value?.to === undefined) || value?.to)
-          setOpen(open);
-        else setOpen(true);
-      }}
-    >
-      <PopoverTrigger asChild onChange={(e) => e.currentTarget.blur()}>
-        <FormControl>
-          <DatePickerTrigger
-            tabIndex={tabIndex}
-            autoFocus={autoFocus}
-            placeholder={
-              value?.from ? "종료일을 선택해주세요" : "기간을 선택해주세요"
-            }
-            className={className}
-          >
-            {value?.from &&
-              value.to &&
-              (isMobile
-                ? `${format(value.from, "yy-MM-dd")} ~ ${format(
-                    value.to,
-                    "yy-MM-dd"
-                  )}`
-                : `${format(value.from, "yyyy-MM-dd")} ~ ${format(
-                    value.to,
-                    "yyyy-MM-dd"
-                  )}`)}
-          </DatePickerTrigger>
-        </FormControl>
+    <Popover>
+      <PopoverTrigger
+        asChild
+        className="[&_svg:not([class*='text-'])]:text-muted-foreground/50"
+      >
+        <Button
+          variant="outline"
+          id="dates"
+          className={cn(
+            "w-fit justify-between border-input font-normal cursor-auto",
+            value || "text-muted-foreground"
+          )}
+        >
+          {getTextValue(value)}
+          <ChevronDownIcon />
+        </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align={align}>
-        <Calendar
+      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+        <CalendarWithTime
           mode="range"
-          defaultMonth={value?.from}
-          // captionLayout="dropdown-buttons"
+          captionLayout="dropdown"
           selected={value}
           onSelect={onChange}
-          fromYear={1950}
-          toYear={new Date().getFullYear()}
-          showOutsideDays={false}
-          showWeekNumber
-          disabled={(date) =>
-            date > new Date() || date < new Date("1950-01-01")
-          }
-          className="w-fit"
-        />
-        <DateRangePickerFooter
-          value={value}
-          onChange={onChange}
-          useTime={useTime}
-          resetValue={resetValue}
-          setOpen={setOpen}
+          timeString={useTime && rangeTime}
+          onTimeStringChange={setRangeTime}
         />
       </PopoverContent>
     </Popover>
   );
-};
-export default DateRangePicker;
-
-const DateRangePickerFooter = ({
-  setOpen,
-  ...props
-}: DateRangePickerProps & { setOpen: (open: boolean) => void }) => {
-  const [playSpinAnimation, setPlaySpinAnimation] = useState(false);
-  const hasValue = props.value?.from && props.value?.to;
-  const noValue = !props.value?.from && !props.value?.to;
-
-  return (
-    <div className="p-1 flex gap-2 justify-end">
-      {props.useTime && (
-        <RangeTimePicker
-          value={props.value}
-          onChange={props.onChange}
-          className="w-full"
-        />
-      )}
-      <Button
-        tabIndex={-1}
-        size={"icon"}
-        className="shrink-0"
-        onClick={() => {
-          props.resetValue();
-          setPlaySpinAnimation(true);
-        }}
-      >
-        <RefreshCcw
-          className={cn(playSpinAnimation && "animate-spin repeat-1")}
-          onAnimationEnd={() => setPlaySpinAnimation(false)}
-        />
-      </Button>
-      <Button
-        variant="secondary"
-        className="shrink-0"
-        onClick={() => {
-          if (hasValue || noValue) setOpen(false);
-        }}
-      >
-        닫기
-      </Button>
-    </div>
-  );
-};
+}
