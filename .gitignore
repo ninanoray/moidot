@@ -9,6 +9,9 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+# for mac
+/node_modules/@jridgewll/*
+/node_modules/yallist/*
 
 # testing
 /coverage
