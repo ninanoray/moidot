@@ -18,7 +18,6 @@ const FormsTextArea = ({
             content={field.value}
             onChange={field.onChange}
             placeholder={placeholder}
-            tabIndex={props.tabIndex}
           />
         </FormControl>
       )}

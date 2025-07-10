@@ -2,18 +2,12 @@ import { FormsItem, FormsItemsProps } from ".";
 import { FormControl } from "../ui/form";
 import { Input } from "../ui/input";
 
-const FormsFileInput = ({
-  name,
-  label,
-  description,
-  fullHeight = false,
-}: FormsItemsProps) => {
+const FormsFileInput = ({ name, label, description }: FormsItemsProps) => {
   return (
     <FormsItem
       name={name}
       label={label}
       description={description}
-      fullHeight={fullHeight}
       render={(field) => (
         <FormControl>
           <Input
