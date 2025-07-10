@@ -36,7 +36,7 @@ export function LoginForm() {
       submitText="로그인"
       // onSubmit={login}
     >
-      <FormsInput type="email" name="email" label="이메일" autoFocus />
+      <FormsInput type="text" name="email" label="이메일" autoFocus />
       <FormsInput type="password" name="password" label="비밀번호" />
     </Forms>
   );

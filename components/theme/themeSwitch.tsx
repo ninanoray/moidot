@@ -34,7 +34,7 @@ export default function ThemeSwitch({ className }: { className?: string }) {
 
   return (
     <Button
-      variant="destructive"
+      variant="secondary"
       size="icon"
       onClick={handleThemeChange}
       className={cn("size-8 rounded-2xl shrink-0", className)}
