@@ -1,5 +1,5 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { HomeSidebar } from "@/components/sidebar/homeSidebar";
-import { authOptions } from "@/utils/authOptions";
 import { getServerSession } from "next-auth/next";
 import { cookies, headers } from "next/headers";
 import {
