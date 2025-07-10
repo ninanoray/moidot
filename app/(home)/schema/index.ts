@@ -1,4 +1,7 @@
+import { FILE_TYPE_WHITELIST } from "@/constants";
 import { z } from "zod";
+
+const fileSizeMax = 5;
 
 export const HomeSchema = z.object({
   date: z.date({
@@ -16,4 +19,20 @@ export const HomeSchema = z.object({
       (data) => data.from <= data.to,
       "종료일이 시작일보다 나중이어야 합니다."
     ),
+  files: z
+    .array(z.instanceof(File))
+    .max(3, "3개 이하로 선택해주세요.")
+    .refine(
+      (files) =>
+        files?.every((file) =>
+          FILE_TYPE_WHITELIST.find((type) => file?.type.includes(type))
+        ),
+      "유효하지 않은 파일입니다"
+    )
+    .refine(
+      (files) =>
+        files?.every((file) => file?.size <= fileSizeMax * 1000 * 1000),
+      `등록 가능한 최대 파일 사이즈는 ${fileSizeMax}MB 입니다.`
+    )
+    .optional(),
 });

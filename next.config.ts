@@ -27,10 +27,10 @@ const nextConfig: NextConfig = {
         source: "/server/:path*", // api 요청
         destination: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/:path*`, // 프록시할 서버의 주소
       },
-      {
-        source: "/api/auth/callback/:path*", // api 요청
-        destination: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auth/callback/:path*`, // 프록시할 서버의 주소
-      },
+      // {
+      //   source: "/api/auth/callback/:path*", // api 요청
+      //   destination: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auth/callback/:path*`, // 프록시할 서버의 주소
+      // },
     ];
   },
 };
