@@ -12,8 +12,8 @@ interface EditorProps {
   content: Content;
   placeholder?: string;
   className?: string;
-  onChange: (value: string) => void;
   tabIndex?: number | undefined;
+  onChange: (value: string) => void;
 }
 
 export const editorTextAreaStyle = [
@@ -28,8 +28,8 @@ const TextEditor = ({
   content,
   placeholder,
   className,
-  onChange,
   tabIndex,
+  onChange,
 }: EditorProps) => {
   const editor = useEditor(
     {
