@@ -74,7 +74,7 @@ export default function DateRangePicker({
           variant="outline"
           id="dates"
           className={cn(
-            "w-fit justify-between border-input font-normal cursor-auto",
+            "w-fit justify-between font-normal cursor-auto",
             value || "text-muted-foreground",
             className
           )}
@@ -83,7 +83,7 @@ export default function DateRangePicker({
           <ChevronDownIcon />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+      <PopoverContent align="end" className="w-auto p-0 rounded-lg">
         <CalendarWithTime
           mode="range"
           captionLayout="dropdown"

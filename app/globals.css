@@ -25,6 +25,7 @@
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -57,14 +58,13 @@
   --secondary: oklch(0.7484 0.1247 144.2045);
   --secondary-foreground: oklch(1 0 0);
   --muted: oklch(0.9461 0 0);
-  --muted-foreground: oklch(0.2435 0 0);
+  --muted-foreground: oklch(0.4435 0 0);
   --accent: oklch(0.9461 0 0);
   --accent-foreground: oklch(0.2435 0 0);
-  /* --destructive: oklch(0.8475 0.1483 84.34); */
-  --destructive: oklch(0.8475 0.2852 29.7877);
-  --destructive-foreground: oklch(0.9934 0.0032 17.2118);
+  --destructive: oklch(0.6743 0.2013 24.29);
+  --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.9037 0 0);
-  --input: oklch(0.5452 0 0);
+  --input: oklch(0.6452 0 0);
   --ring: oklch(0.8348 0.1302 160.908);
   --chart-1: oklch(0.8348 0.1302 160.908);
   --chart-2: oklch(0.6231 0.188 259.8145);
@@ -90,16 +90,16 @@
   --popover-foreground: oklch(0.7348 0 0);
   --primary: oklch(0.4365 0.1044 156.7556);
   --primary-foreground: oklch(0.9213 0.0135 167.1556);
-  --secondary: oklch(0.2603 0.1247 144.2045);
+  --secondary: oklch(0.4475 0.1483 84.34);
   --secondary-foreground: oklch(0.9851 0 0);
   --muted: oklch(0.2393 0 0);
   --muted-foreground: oklch(0.7122 0 0);
-  --accent: oklch(0.3132 0 0);
+  --accent: oklch(0.3532 0 0);
   --accent-foreground: oklch(0.9851 0 0);
   --destructive: oklch(0.3123 0.0852 29.7877);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.2809 0 0);
-  --input: oklch(0.2603 0 0);
+  --input: oklch(0.3603 0 0);
   --ring: oklch(0.8003 0.1821 151.711);
   --chart-1: oklch(0.8003 0.1821 151.711);
   --chart-2: oklch(0.7137 0.1434 254.624);
@@ -118,7 +118,7 @@
 
 /* Text Editor: placeholder */
 .tiptap .is-editor-empty::after {
-  @apply text-muted-foreground/70 content-[attr(data-placeholder)] absolute top-0.5 pointer-events-none text-sm font-normal;
+  @apply text-muted-foreground content-[attr(data-placeholder)] absolute top-0.5 pointer-events-none text-sm font-normal;
 }
 
 /* Base Classes */

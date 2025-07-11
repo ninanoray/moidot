@@ -56,7 +56,7 @@ export default function DatePicker({
           variant="outline"
           id="date"
           className={cn(
-            "w-fit justify-between border-input font-normal cursor-auto",
+            "w-fit justify-between font-normal cursor-auto",
             value || "text-muted-foreground",
             className
           )}
@@ -69,7 +69,7 @@ export default function DatePicker({
           <ChevronDownIcon />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+      <PopoverContent align="end" className="w-auto p-0 rounded-lg">
         <CalendarWithTime
           mode="single"
           captionLayout="dropdown"

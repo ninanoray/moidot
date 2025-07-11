@@ -12,7 +12,6 @@ interface EditorProps {
   content: Content;
   placeholder?: string;
   className?: string;
-  tabIndex?: number | undefined;
   onChange: (value: string) => void;
 }
 
@@ -28,7 +27,6 @@ const TextEditor = ({
   content,
   placeholder,
   className,
-  tabIndex,
   onChange,
 }: EditorProps) => {
   const editor = useEditor(
@@ -56,7 +54,7 @@ const TextEditor = ({
 
   if (!editor)
     return (
-      <div className="size-full border border-input bg-background rounded-md">
+      <div className="size-full border border-input bg-background dark:bg-input/30 rounded-md">
         <div className="w-full h-9 bg-card rounded-t-md"></div>
       </div>
     );
@@ -64,7 +62,7 @@ const TextEditor = ({
   return (
     <div
       className={cn(
-        "size-full flex flex-col border border-input bg-background rounded-md trans-200",
+        "size-full flex flex-col border border-input bg-background dark:bg-input/30 rounded-md trans-200",
         "ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
         editorTextAreaStyle,
         className
@@ -72,9 +70,8 @@ const TextEditor = ({
     >
       <EditorToolbar editor={editor} />
       <EditorContent
-        tabIndex={tabIndex}
         editor={editor}
-        className="size-full py-2 flex flex-col"
+        className="size-full py-2 flex flex-col rounded-b-md transition-all bg-background hover:brightness-90 hover:text-accent-foreground dark:bg-input/30 dark:hover:brightness-50"
       />
     </div>
   );

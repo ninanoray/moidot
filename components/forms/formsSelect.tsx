@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { FormsItem, FormsItemsProps } from ".";
+import { buttonVariants } from "../ui/button";
 import { FormControl } from "../ui/form";
 import {
   Select,
@@ -32,7 +33,13 @@ const FormsSelect = ({
         <Select onValueChange={field.onChange} value={field.value}>
           <FormControl>
             <SelectTrigger
-              className={cn("w-full", !field.value && "text-muted-foreground")}
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                  className: "w-full justify-between font-normal cursor-auto",
+                }),
+                !field.value && "text-muted-foreground"
+              )}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>

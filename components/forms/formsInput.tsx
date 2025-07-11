@@ -1,5 +1,7 @@
+import { cn } from "@/lib/utils";
 import { ControllerRenderProps } from "react-hook-form";
 import { FormsItem, FormsItemsProps } from ".";
+import { buttonVariants } from "../ui/button";
 import { FormControl } from "../ui/form";
 import { Input } from "../ui/input";
 
@@ -19,6 +21,14 @@ const FormsInput = ({
             type={type}
             placeholder={placeholder}
             value={field.value || ""}
+            className={cn(
+              buttonVariants({
+                variant: "outline",
+                className:
+                  "w-full px-3 justify-between font-normal cursor-auto",
+              }),
+              !field.value && "text-muted-foreground"
+            )}
             {...props}
           />
         </FormControl>

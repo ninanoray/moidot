@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { ko } from "date-fns/locale";
 import { ChangeEvent, ComponentProps } from "react";
 import { DayPicker, DropdownProps } from "react-day-picker";
 import { ScrollArea } from "../ui/scroll-area";
@@ -33,9 +34,10 @@ export default function CalendarWithTime({
   ...props
 }: ComponentProps<typeof DayPicker> & CalendarWithTimeProps) {
   return (
-    <Card className="w-fit py-4 gap-3">
+    <Card className="w-fit py-4 gap-3 border-0 rounded-lg">
       <CardContent className="px-4">
         <Calendar
+          locale={ko}
           components={{
             Dropdown: ({ value, onChange, options }: DropdownProps) => {
               const selected = options?.find(
@@ -47,10 +49,9 @@ export default function CalendarWithTime({
                 } as ChangeEvent<HTMLSelectElement>;
                 onChange?.(changeEvent);
               };
-
               return (
                 <Select value={value?.toString()} onValueChange={handleChange}>
-                  <SelectTrigger className="border-0 rounded-md shadow-none">
+                  <SelectTrigger className="bg-accent dark:bg-accent/80 border-0 rounded-full transition-all hover:brightness-90 first-of-type:rounded-l-none last-of-type:rounded-r-none">
                     <SelectValue>{selected?.label}</SelectValue>
                   </SelectTrigger>
                   <SelectContent>
@@ -97,7 +98,7 @@ export default function CalendarWithTime({
                 from: event.target.value,
               })
             }
-            className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            className="border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
           {props.mode === "range" && (
             <>
@@ -112,7 +113,7 @@ export default function CalendarWithTime({
                     to: event.target.value,
                   })
                 }
-                className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                className="border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
               />
             </>
           )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Forms, FormsInput } from "@/components/forms";
+import { Button } from "@/components/ui/button";
 import { LoginSchema } from "../schema";
 
 export function LoginForm() {
@@ -33,11 +34,12 @@ export function LoginForm() {
   return (
     <Forms
       schema={LoginSchema}
-      submitText="로그인"
       // onSubmit={login}
+      className="[&_button[type='submit']]:w-full"
     >
       <FormsInput type="text" name="email" label="이메일" autoFocus />
       <FormsInput type="password" name="password" label="비밀번호" />
+      <Button type="submit">로그인</Button>
     </Forms>
   );
 }
