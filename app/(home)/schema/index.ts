@@ -1,9 +1,21 @@
 import { FILE_TYPE_WHITELIST } from "@/constants";
 import { z } from "zod";
 
+export const TypeSelection = [
+  { value: "TES_CLI01_PRO15", label: "일일업무보고" },
+  { value: "TES_CLI01_PRO09", label: "주간보고" },
+];
+
+const typeEnum = TypeSelection.map(
+  (type) => type.value
+) as unknown as readonly [string, ...string[]];
+
 const fileSizeMax = 5;
 
 export const HomeSchema = z.object({
+  type: z.enum(typeEnum, {
+    required_error: "타입을 선택해주세요.",
+  }),
   date: z.date({
     required_error: "날짜를 선택해주세요.",
   }),
