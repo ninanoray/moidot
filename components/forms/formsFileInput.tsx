@@ -5,7 +5,6 @@ import { Input } from "../ui/input";
 const FormsFileInput = ({ ...props }: FormsItemsProps) => {
   return (
     <FormsItem
-      {...props}
       render={(field) => (
         <FormControl>
           <Input
@@ -17,6 +16,7 @@ const FormsFileInput = ({ ...props }: FormsItemsProps) => {
           />
         </FormControl>
       )}
+      {...props}
     />
   );
 };

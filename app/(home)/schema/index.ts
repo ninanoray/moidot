@@ -36,6 +36,9 @@ export const HomeSchema = z.object({
       (data) => data.from <= data.to,
       "종료일이 시작일보다 나중이어야 합니다."
     ),
+  text: z.string({
+    required_error: "내용을 입력해주세요.",
+  }),
   files: z
     .array(z.instanceof(File))
     .max(3, "3개 이하로 선택해주세요.")

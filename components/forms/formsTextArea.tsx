@@ -1,17 +1,17 @@
+import { cn } from "@/lib/utils";
 import { FormsItem, FormsItemsProps } from ".";
 import TextEditor from "../textEditor";
 import { FormControl } from "../ui/form";
 
 const FormsTextArea = ({
   label,
-  placeholder = `${label}을 입력해주세요.`,
+  placeholder = `${label} 정보를 입력해주세요`,
+  className,
   ...props
 }: FormsItemsProps) => {
   return (
     <FormsItem
-      name={props.name}
       label={label}
-      description={props.description}
       render={(field) => (
         <FormControl>
           <TextEditor
@@ -21,6 +21,8 @@ const FormsTextArea = ({
           />
         </FormControl>
       )}
+      className={cn("min-h-32", className)}
+      {...props}
     />
   );
 };

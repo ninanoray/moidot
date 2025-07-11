@@ -22,7 +22,7 @@ interface FormsSelectProps extends FormsItemsProps {
 const FormsSelect = ({
   items,
   label,
-  placeholder = label + " 정보를 입력해주세요",
+  placeholder = label + " 정보를 선택해주세요",
   ...props
 }: FormsSelectProps & React.ComponentProps<typeof SelectPrimitive.Root>) => {
   return (

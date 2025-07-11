@@ -115,6 +115,11 @@
   --sidebar-ring: oklch(0.8003 0.1821 151.711);
 }
 
+/* Text Editor: placeholder */
+.tiptap .is-editor-empty::after {
+  @apply text-muted-foreground/70 content-[attr(data-placeholder)] absolute top-0.5 pointer-events-none text-sm font-normal;
+}
+
 /* Base Classes */
 @layer base {
   * {
