@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { ChangeEvent, ComponentProps } from "react";
 import { DayPicker, DropdownProps } from "react-day-picker";
+import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -50,19 +51,19 @@ export default function CalendarWithTime({
               return (
                 <Select value={value?.toString()} onValueChange={handleChange}>
                   <SelectTrigger className="border-0 rounded-md shadow-none">
-                    <SelectValue>{selected?.value}</SelectValue>
+                    <SelectValue>{selected?.label}</SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {/* <ScrollArea className="h-60"> */}
-                    {options?.map((option, index) => (
-                      <SelectItem
-                        key={index}
-                        value={option.value?.toString() ?? ""}
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                    {/* </ScrollArea> */}
+                    <ScrollArea className="max-h-52">
+                      {options?.map((option, index) => (
+                        <SelectItem
+                          key={index}
+                          value={option.value.toString() ?? ""}
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </ScrollArea>
                   </SelectContent>
                 </Select>
               );

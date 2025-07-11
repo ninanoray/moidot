@@ -16,7 +16,7 @@ import {
   Undo,
 } from "lucide-react";
 import { ButtonHTMLAttributes, forwardRef } from "react";
-import { FormatType } from "./formatType";
+import { SelectHeading } from "./selectHeading";
 
 interface EditorToolbarProps {
   editor: Editor;
@@ -25,13 +25,10 @@ interface EditorToolbarProps {
 const EditorToolbar = ({ editor }: EditorToolbarProps) => {
   return (
     <div
-      className={cn(
-        "w-full pr-1 flex bg-card rounded-t-md",
-        "flex-wrap-reverse min-[440px]:flex-nowrap"
-      )}
+      className="w-full pr-1 flex bg-card rounded-t-md flex-wrap-reverse min-[440px]:flex-nowrap"
       aria-label="text editor toolbar"
     >
-      <div className={cn("grid grid-cols-6", "min-[440px]:shrink-0")}>
+      <div className="grid grid-cols-6 min-[440px]:shrink-0">
         <Toggle
           size="sm"
           aria-label="bold"
@@ -88,7 +85,7 @@ const EditorToolbar = ({ editor }: EditorToolbarProps) => {
         </ToolbarButton>
       </div>
       <div className="w-full flex justify-between items-center">
-        <FormatType editor={editor} />
+        <SelectHeading editor={editor} />
         <ToggleGroup className="grid grid-cols-2" type="multiple">
           <ToolbarButton onClick={() => editor.chain().focus().undo().run()}>
             <Undo />
@@ -116,10 +113,8 @@ const ToolbarButton = forwardRef<
       type="button"
       tabIndex={-1}
       className={cn(
-        "size-9 flex-center rounded-full transition-colors outline-none",
+        "size-9 flex-center rounded-full transition-colors outline-none active:bg-accent [&_svg]:size-4 [&_svg]:shrink-0",
         !isMobile && "hover:bg-muted",
-        "active:bg-accent",
-        "[&_svg]:size-4 [&_svg]:shrink-0",
         className
       )}
       {...props}

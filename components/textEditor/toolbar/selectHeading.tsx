@@ -9,12 +9,12 @@ import {
 import { cn } from "@/lib/utils";
 import { Editor } from "@tiptap/react";
 
-interface FormatTypeProps {
+interface Props {
   editor: Editor;
   className?: string;
 }
 
-export function FormatType({ editor, className }: FormatTypeProps) {
+export function SelectHeading({ editor, className }: Props) {
   const value = () => {
     if (editor.isActive("paragraph")) return "paragraph";
     else if (editor.isActive("heading", { level: 1 })) return "h1";
