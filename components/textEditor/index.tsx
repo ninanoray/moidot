@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import Placeholder from "@tiptap/extension-placeholder";
+import { Placeholder } from "@tiptap/extension-placeholder";
 import { Content, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { ClipboardList, Share2 } from "lucide-react";
@@ -54,7 +54,12 @@ const TextEditor = ({
     [placeholder]
   );
 
-  if (!editor) return <></>;
+  if (!editor)
+    return (
+      <div className="size-full border border-input bg-background rounded-md">
+        <div className="w-full h-9 bg-card rounded-t-md"></div>
+      </div>
+    );
 
   return (
     <div
