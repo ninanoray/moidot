@@ -1,5 +1,6 @@
 "use client";
 
+import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import {
   Forms,
   FormsDatePicker,
@@ -9,7 +10,6 @@ import {
   FormsTextArea,
 } from "@/components/forms";
 import FormsDateRangePicker from "@/components/forms/formsDateRangePicker";
-import { Button } from "@/components/ui/button";
 import { HomeSchema, TypeSelection } from "../schema";
 
 const Home = () => {
@@ -23,13 +23,13 @@ const Home = () => {
           <FormsDateRangePicker name="dateRange" label="기간" useTime />
           <FormsTextArea name="text" label="내용" />
           <FormsFileInput name="files" label="첨부파일" />
-          <Button type="submit">저장</Button>
+          <RippleButton type="submit">저장</RippleButton>
         </Forms>
-        <Button>버튼</Button>
-        <Button variant="secondary">버튼</Button>
-        <Button variant="destructive">버튼</Button>
-        <Button variant="outline">버튼</Button>
-        <Button variant="ghost">버튼</Button>
+        <RippleButton>버튼</RippleButton>
+        <RippleButton variant="secondary">버튼</RippleButton>
+        <RippleButton variant="destructive">버튼</RippleButton>
+        <RippleButton variant="outline">버튼</RippleButton>
+        <RippleButton variant="ghost">버튼</RippleButton>
       </div>
     </div>
   );

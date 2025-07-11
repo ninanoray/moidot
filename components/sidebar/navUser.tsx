@@ -12,14 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
+} from "../animate-ui/radix/sidebar";
 
 interface Props {
   user: Session["user"] | undefined;

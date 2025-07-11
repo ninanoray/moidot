@@ -4,12 +4,6 @@ import { MoimSwitcher } from "@/components/sidebar/moimSwitcher";
 import { NavDule } from "@/components/sidebar/navDule";
 import { NavProjects } from "@/components/sidebar/navMenu";
 import { NavUser } from "@/components/sidebar/navUser";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-} from "@/components/ui/sidebar";
 import { cowHead } from "@lucide/lab";
 import {
   BookOpen,
@@ -21,6 +15,12 @@ import {
 } from "lucide-react";
 import { Session } from "next-auth";
 import * as React from "react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+} from "../animate-ui/radix/sidebar";
 import ThemeSwitch from "../theme/themeSwitch";
 
 interface Props extends React.ComponentProps<typeof Sidebar> {

@@ -1,12 +1,12 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import { HomeSidebar } from "@/components/sidebar/homeSidebar";
-import { getServerSession } from "next-auth/next";
-import { cookies, headers } from "next/headers";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "../../components/ui/sidebar";
+} from "@/components/animate-ui/radix/sidebar";
+import { HomeSidebar } from "@/components/sidebar/homeSidebar";
+import { getServerSession } from "next-auth/next";
+import { cookies, headers } from "next/headers";
 
 export async function SidebarWrapper({
   children,

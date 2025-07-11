@@ -16,7 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
+} from "../animate-ui/radix/sidebar";
 
 export function MoimSwitcher({
   moims,
