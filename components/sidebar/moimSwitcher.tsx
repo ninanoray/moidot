@@ -2,7 +2,6 @@
 
 import { ChevronsUpDown, Icon, IconNode, LucideIcon, Plus } from "lucide-react";
 import * as React from "react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../animate-ui/radix/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,

@@ -3,6 +3,8 @@
 import { Bell, ChevronsUpDown, LogOut, UserCircle2 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
+} from "../animate-ui/radix/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
