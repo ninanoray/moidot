@@ -1,4 +1,4 @@
-import { FILE_TYPE_WHITELIST } from "@/constants";
+import { FileTypeWhitelist, RegexPassword } from "@/constants";
 import { z } from "zod";
 
 export const TypeSelection = [
@@ -13,6 +13,11 @@ const typeEnum = TypeSelection.map(
 const fileSizeMax = 5;
 
 export const HomeSchema = z.object({
+  password: z
+    .string({
+      required_error: "비밀번호를 입력해주세요.",
+    })
+    .regex(RegexPassword.regex, RegexPassword.message),
   type: z.enum(typeEnum, {
     required_error: "타입을 선택해주세요.",
   }),
@@ -37,7 +42,7 @@ export const HomeSchema = z.object({
     .refine(
       (files) =>
         files?.every((file) =>
-          FILE_TYPE_WHITELIST.find((type) => file?.type.includes(type))
+          FileTypeWhitelist.find((type) => file?.type.includes(type))
         ),
       "유효하지 않은 파일입니다"
     )

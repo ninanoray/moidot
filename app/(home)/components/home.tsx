@@ -4,6 +4,7 @@ import {
   Forms,
   FormsDatePicker,
   FormsFileInput,
+  FormsInput,
   FormsSelect,
 } from "@/components/forms";
 import FormsDateRangePicker from "@/components/forms/formsDateRangePicker";
@@ -13,6 +14,7 @@ const Home = () => {
   return (
     <div className="bg-layout">
       <Forms schema={HomeSchema} className="w-80">
+        <FormsInput type="password" name="password" label="비밀번호" />
         <FormsSelect name="codeName" label="타입" items={TypeSelection} />
         <FormsDatePicker name="date" label="날짜" useTime />
         <FormsDateRangePicker name="dateRange" label="기간" useTime />
