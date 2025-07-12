@@ -570,7 +570,7 @@ function MotionHighlightItem({
           )}
         </AnimatePresence>
       )}
-      <Ripple className="justify-start" rippleClassName="bg-input">
+      <Ripple className="justify-start [&>*]:w-full" rippleClassName="bg-input">
         {React.cloneElement(element, {
           className: cn("relative z-[1]", element.props.className),
           ...getNonOverridingDataAttributes(element, {

@@ -56,9 +56,10 @@ const Ripple = ({
     <motion.div
       ref={divRef}
       // onClick={handleClick}
+      tabIndex={1}
       onMouseDown={createRipple}
       className={cn(
-        "relative size-full overflow-hidden inline-flex items-center justify-center rounded-md",
+        "relative size-full overflow-hidden inline-flex items-center justify-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&>*]:focus-visible:ring-0",
         className
       )}
       {...props}
