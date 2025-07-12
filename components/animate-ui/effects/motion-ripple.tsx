@@ -55,7 +55,6 @@ const Ripple = ({
   return (
     <motion.div
       ref={divRef}
-      // onClick={handleClick}
       tabIndex={1}
       onMouseDown={createRipple}
       className={cn(

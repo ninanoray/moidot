@@ -34,7 +34,6 @@ type MotionHighlightContextType<T extends string> = {
 };
 
 const MotionHighlightContext = React.createContext<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   MotionHighlightContextType<any> | undefined
 >(undefined);
 
@@ -570,7 +569,7 @@ function MotionHighlightItem({
           )}
         </AnimatePresence>
       )}
-      <Ripple className="justify-start [&>*]:w-full" rippleClassName="bg-input">
+      <Ripple className="justify-start" rippleClassName="bg-input">
         {React.cloneElement(element, {
           className: cn("relative z-[1]", element.props.className),
           ...getNonOverridingDataAttributes(element, {
