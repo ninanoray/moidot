@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { LucideIcon, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "../ui/button";
+import { RippleButton } from "../animate-ui/buttons/ripple";
 
 const THEME_LIGHT = "light";
 const THEME_DARK = "dark";
@@ -33,13 +33,13 @@ export default function ThemeSwitch({ className }: { className?: string }) {
   useEffect(() => initTheme(), [initTheme]);
 
   return (
-    <Button
+    <RippleButton
       variant="secondary"
       size="icon"
       onClick={handleThemeChange}
       className={cn("size-8 rounded-2xl shrink-0", className)}
     >
       <Icon />
-    </Button>
+    </RippleButton>
   );
 }

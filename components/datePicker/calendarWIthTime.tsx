@@ -6,8 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { ko } from "date-fns/locale";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "lucide-react";
 import { ChangeEvent, ComponentProps } from "react";
 import { DayPicker, DropdownProps } from "react-day-picker";
+import Ripple from "../animate-ui/effects/motion-ripple";
 import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
@@ -67,6 +73,27 @@ export default function CalendarWithTime({
                     </ScrollArea>
                   </SelectContent>
                 </Select>
+              );
+            },
+            Chevron: ({ className, orientation, ...props }) => {
+              if (orientation === "left") {
+                return (
+                  <Ripple>
+                    <ChevronLeftIcon className="size-4" {...props} />
+                  </Ripple>
+                );
+              }
+              if (orientation === "right") {
+                return (
+                  <Ripple>
+                    <ChevronRightIcon className="size-4" {...props} />
+                  </Ripple>
+                );
+              }
+              return (
+                <Ripple>
+                  <ChevronDownIcon className="size-4" {...props} />
+                </Ripple>
               );
             },
           }}
