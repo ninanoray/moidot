@@ -1,7 +1,7 @@
 "use client";
 
+import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import { Forms, FormsInput } from "@/components/forms";
-import { Button } from "@/components/ui/button";
 import { LoginSchema } from "../schema";
 
 export function LoginForm() {
@@ -39,7 +39,7 @@ export function LoginForm() {
     >
       <FormsInput type="text" name="email" label="이메일" autoFocus />
       <FormsInput type="password" name="password" label="비밀번호" />
-      <Button type="submit">로그인</Button>
+      <RippleButton type="submit">로그인</RippleButton>
     </Forms>
   );
 }

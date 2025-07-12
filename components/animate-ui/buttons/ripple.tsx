@@ -13,11 +13,11 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "border border-input bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
         ghost: "hover:bg-primary/90 hover:text-primary-foreground",
       },
       size: {
@@ -38,10 +38,10 @@ const rippleVariants = cva("absolute rounded-full size-5 pointer-events-none", {
   variants: {
     variant: {
       default: "bg-primary-foreground",
-      destructive: "bg-destructive",
+      destructive: "bg-destructive-foreground",
       outline: "bg-input",
-      secondary: "bg-secondary",
-      ghost: "bg-accent",
+      secondary: "bg-secondary-foreground",
+      ghost: "bg-primary-foreground",
     },
   },
   defaultVariants: {
@@ -56,7 +56,7 @@ type Ripple = {
 };
 
 type RippleButtonProps = HTMLMotionProps<"button"> & {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   rippleClassName?: string;
   scale?: number;
   transition?: Transition;
@@ -126,7 +126,7 @@ const RippleButton = ({
       {ripples.map((ripple) => (
         <motion.span
           key={ripple.id}
-          initial={{ scale: 0, opacity: 0.5 }}
+          initial={{ scale: 0, opacity: 0.4 }}
           animate={{ scale, opacity: 0 }}
           transition={transition}
           className={cn(

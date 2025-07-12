@@ -1,16 +1,13 @@
 import { cn } from "@/lib/utils";
-import { VariantProps } from "class-variance-authority";
-import { Button, buttonVariants } from "../ui/button";
+import { RippleButton, RippleButtonProps } from "../animate-ui/buttons/ripple";
 import KakaoTalk from "./kakaoTalk";
 
-const KakaoLoginButton = ({
-  className,
-  ...props
-}: React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>) => {
+const KakaoLoginButton = ({ className, ...props }: RippleButtonProps) => {
   return (
-    <Button
+    <RippleButton
+      variant="outline"
       className={cn(
-        "relative w-full bg-[#FEE500] text-[#000000 85%] [&_svg:not([class*='size-'])]:size-5",
+        "relative w-full border-0 bg-[#FEE500] text-black/85 hover:bg-[#FEE500]/80 hover:text-black/75 [&_svg:not([class*='size-'])]:size-5 hover:[&_svg:not([class*='size-'])]:fill-black/75",
         className
       )}
       {...props}
@@ -18,7 +15,7 @@ const KakaoLoginButton = ({
       <KakaoTalk className="absolute left-3" />
       <span className="size-3" />
       카카오 로그인
-    </Button>
+    </RippleButton>
   );
 };
 
