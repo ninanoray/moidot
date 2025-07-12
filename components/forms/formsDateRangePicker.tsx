@@ -1,5 +1,6 @@
 import { FormsItem, FormsItemsProps } from ".";
 import DateRangePicker from "../datePicker/dateRangePicker";
+import { FormControl } from "../ui/form";
 
 const FormsDateRangePicker = ({
   useTime,
@@ -10,12 +11,14 @@ const FormsDateRangePicker = ({
       description={props.description}
       className={props.className}
       render={(field) => (
-        <DateRangePicker
-          value={field.value}
-          onChange={field.onChange}
-          useTime={useTime}
-          className="w-full"
-        />
+        <FormControl>
+          <DateRangePicker
+            value={field.value}
+            onChange={field.onChange}
+            useTime={useTime}
+            className="w-full"
+          />
+        </FormControl>
       )}
       {...props}
     />

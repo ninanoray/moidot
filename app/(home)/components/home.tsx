@@ -18,7 +18,7 @@ const Home = () => {
       <div className="w-100">
         <Forms schema={HomeSchema}>
           <FormsInput type="password" name="password" label="비밀번호" />
-          <FormsSelect name="codeName" label="타입" items={TypeSelection} />
+          <FormsSelect name="type" label="타입" items={TypeSelection} />
           <FormsDatePicker name="date" label="날짜" useTime />
           <FormsDateRangePicker name="dateRange" label="기간" useTime />
           <FormsTextArea name="text" label="내용" />

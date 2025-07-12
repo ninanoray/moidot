@@ -26,6 +26,7 @@ export default function DateRangePicker({
   onChange,
   useTime = false,
   className,
+  ...props
 }: DateRangePickerProps) {
   const defaultTimeString = getTimeString(new Date());
 
@@ -78,6 +79,7 @@ export default function DateRangePicker({
             value || "text-muted-foreground",
             className
           )}
+          {...props}
         >
           {getTextValue(value)}
           <ChevronDownIcon />

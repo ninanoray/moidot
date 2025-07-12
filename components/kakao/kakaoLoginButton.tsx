@@ -7,7 +7,7 @@ const KakaoLoginButton = ({ className, ...props }: RippleButtonProps) => {
     <RippleButton
       variant="outline"
       className={cn(
-        "relative w-full border-0 bg-[#FEE500] text-black/85 hover:bg-[#FEE500]/80 hover:text-black/75 [&_svg:not([class*='size-'])]:size-5 hover:[&_svg:not([class*='size-'])]:fill-black/75",
+        "relative w-full border-0 bg-kakao text-kakao-foreground dark:bg-kakao/50 hover:bg-kakao/75 dark:hover:bg-kakao/40 [&_svg:not([class*='size-'])]:size-5 focus-visible:ring-kakao/20",
         className
       )}
       {...props}

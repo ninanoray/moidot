@@ -25,6 +25,7 @@ export default function DatePicker({
   onChange,
   useTime = false,
   className,
+  ...props
 }: DatePickerProps) {
   const defaultTimeString = new Date().toLocaleTimeString("sv-SE", {
     hour: "numeric",
@@ -60,6 +61,7 @@ export default function DatePicker({
             value || "text-muted-foreground",
             className
           )}
+          {...props}
         >
           {value
             ? useTime

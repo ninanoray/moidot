@@ -25,7 +25,7 @@ const FormsInput = ({
               buttonVariants({
                 variant: "outline",
                 className:
-                  "w-full px-3 justify-between font-normal cursor-auto",
+                  "w-full px-3 justify-between font-normal cursor-auto focus:brightness-100",
               }),
               !field.value && "text-muted-foreground"
             )}

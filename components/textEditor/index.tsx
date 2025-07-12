@@ -28,6 +28,7 @@ const TextEditor = ({
   placeholder,
   className,
   onChange,
+  ...props
 }: EditorProps) => {
   const editor = useEditor(
     {
@@ -63,10 +64,12 @@ const TextEditor = ({
     <div
       className={cn(
         "size-full flex flex-col border border-input bg-background dark:bg-input/30 rounded-md trans-200",
-        "ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] focus-within:[&_*]:brightness-100",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
         editorTextAreaStyle,
         className
       )}
+      {...props}
     >
       <EditorToolbar editor={editor} />
       <EditorContent
