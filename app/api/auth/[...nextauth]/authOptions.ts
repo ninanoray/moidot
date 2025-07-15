@@ -15,6 +15,15 @@ export const authOptions: AuthOptions = {
     KakaoProvider({
       clientId: KAKAO_JAVASCRIPT_KEY,
       clientSecret: `${process.env.KAKAO_CLIENT_SECRET}`,
+      // authorization: {
+      //   url: "https://kauth.kakao.com/oauth/authorize",
+      //   params: {
+      //     redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/kakao`, // Kakao 콘솔과 일치해야 함
+      //     response_type: "code",
+      //   },
+      // },
+      // token: "https://kauth.kakao.com/oauth/token",
+      // userinfo: "https://kapi.kakao.com/v2/user/me",
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -64,6 +73,27 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async jwt({ token, account, user }) {
+      if (account?.access_token) {
+        //백엔드에게 줄 토큰 encoded 실행
+        const encodedToken = encodeURIComponent(account.access_token);
+        const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/token/refresh/${account.provider}?token=${encodedToken}`;
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          token.accessToken = data.token.accessToken; // 백엔드에서 받은 토큰 저장
+          token.refreshToken = data.token.refreshToken; // 리프레시 토큰이 있다면 저장
+
+          return token;
+        }
+      }
+
       return { user, auth: { ...account }, ...token };
     },
     async session({ session, token: jwt }) {

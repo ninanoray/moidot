@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
@@ -6,23 +6,20 @@ export async function middleware(request: NextRequest) {
   const headers = new Headers(request.headers);
   headers.set("x-current-path", request.nextUrl.pathname); // SSR 환경에서 pathname 가져오기
 
-  const cookieStore = await cookies();
-  const sessionId = cookieStore.get("next-auth.session-token")?.value; // session ID
+  const { pathname } = request.nextUrl;
 
-  const currentPath = request.nextUrl.pathname;
-  const url = request.nextUrl.clone();
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-  if (currentPath.startsWith("/login")) {
-    // 로그인 상태인데 로그인 페이지 진입시 홈으로 리다이렉트
-    if (sessionId) {
-      url.pathname = "/";
-      return NextResponse.redirect(url);
+  if (pathname.startsWith("/login")) {
+    if (token) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
   } else {
-    // 로그아웃 상태인데 다른 페이지 진입시 로그인 페이지로 리다이렉트
-    if (!sessionId) {
-      url.pathname = "/login";
-      return NextResponse.redirect(url);
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
