@@ -1,7 +1,9 @@
 import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
+import axios from "axios";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import KakaoProvider from "next-auth/providers/kakao";
+import { ur } from "zod/v4/locales";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -63,6 +65,18 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       // const data = await postLogin(account?.access_token || ""); // 서버와의 통신
+      const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auth/social-login`;
+      const data = {
+        provider: account?.provider,
+        email: user.email,
+      };
+
+      try {
+        const reponse = await axios.post(url, data);
+        console.log(reponse.data);
+      } catch (error) {
+        console.log(data, error);
+      }
 
       if (account?.provider) {
         // user.id = data.user.id;
@@ -73,32 +87,32 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async jwt({ token, account, user }) {
-      if (account?.access_token) {
-        //백엔드에게 줄 토큰 encoded 실행
-        const encodedToken = encodeURIComponent(account.access_token);
-        const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/token/refresh/${account.provider}?token=${encodedToken}`;
+      // if (account?.access_token) {
+      //   //백엔드에게 줄 토큰 encoded 실행
+      //   const encodedToken = encodeURIComponent(account.access_token);
+      //   const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auth/social-login`;
 
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+      //   const response = await fetch(url, {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   });
 
-        if (response.ok) {
-          const data = await response.json();
-          token.accessToken = data.token.accessToken; // 백엔드에서 받은 토큰 저장
-          token.refreshToken = data.token.refreshToken; // 리프레시 토큰이 있다면 저장
+      //   if (response.ok) {
+      //     const data = await response.json();
+      //     token.accessToken = data.token.accessToken; // 백엔드에서 받은 토큰 저장
+      //     token.refreshToken = data.token.refreshToken; // 리프레시 토큰이 있다면 저장
 
-          return token;
-        }
-      }
+      //     return token;
+      //   }
+      // }
 
       return { user, auth: { ...account }, ...token };
     },
     async session({ session, token: jwt }) {
       session = jwt as any;
-      console.log("$$$ session: ", session);
+      // console.log("$$$ session: ", session);
       return session;
     },
   },
