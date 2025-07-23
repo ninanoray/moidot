@@ -28,7 +28,7 @@ const EditorToolbar = ({ editor }: EditorToolbarProps) => {
       className="w-full pr-1 flex bg-card rounded-t-md flex-wrap-reverse min-[440px]:flex-nowrap"
       aria-label="editor-toolbar"
     >
-      <div className="flex min-[440px]:shrink-0">
+      <div className="flex items-center gap-1 min-[440px]:shrink-0">
         <ToggleGroup
           type="multiple"
           onValueChange={(value) => {
@@ -97,8 +97,9 @@ const EditorToolbar = ({ editor }: EditorToolbarProps) => {
         </ToggleGroup>
         <RippleButton
           type="button"
+          size="sm"
           variant="outline"
-          className="bg-transparent border-0"
+          className="aspect-square bg-transparent border-0"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         >
           <SquareSplitVertical />
@@ -109,16 +110,18 @@ const EditorToolbar = ({ editor }: EditorToolbarProps) => {
         <div className="grid grid-cols-2">
           <RippleButton
             type="button"
+            size="sm"
             variant="outline"
-            className="rounded-full bg-transparent border-0"
+            className="aspect-square rounded-full bg-transparent border-0"
             onClick={() => editor.chain().focus().undo().run()}
           >
             <Undo />
           </RippleButton>
           <RippleButton
             type="button"
+            size="sm"
             variant="outline"
-            className="rounded-full bg-transparent border-0"
+            className="aspect-square rounded-full bg-transparent border-0"
             onClick={() => editor.chain().focus().redo().run()}
           >
             <Redo />

@@ -42,9 +42,10 @@ export function SelectHeading({ editor, className }: Props) {
   return (
     <Select onValueChange={onChange} defaultValue={value()} value={value()}>
       <SelectTrigger
+        data-value={value()}
         tabIndex={-1}
         className={cn(
-          "max-h-7 w-[88px] mx-1 text-sm sm:text-xs bg-accent dark:bg-accent/80 border-0 rounded-full transition-all hover:brightness-90",
+          "max-h-7 w-[88px] mx-1 text-sm sm:text-xs bg-accent dark:bg-accent/80 border-0 rounded-full transition-all hover:brightness-90 focus-visible:ring-0",
           className
         )}
       >

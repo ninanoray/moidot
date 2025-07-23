@@ -17,10 +17,10 @@ interface EditorProps {
 
 export const editorTextAreaStyle = [
   "prose prose-sm dark:prose-invert max-w-none",
-  "prose-h1:m-0 prose-h1:text-3xl",
-  "prose-h2:m-0 prose-h2:text-2xl prose-h2:font-semibold",
-  "prose-h3:m-0 prose-h3:text-xl prose-h3:font-normal",
-  "prose-p:m-0 prose-p:text-base prose-p:text-foreground",
+  "prose-h1:m-0 prose-h1:text-2xl prose-h1:font-bold",
+  "prose-h2:m-0 prose-h2:text-xl prose-h2:font-semibold",
+  "prose-h3:m-0 prose-h3:text-lg prose-h3:font-normal",
+  "prose-p:m-0 prose-p:text-sm prose-p:font-normal prose-p:text-foreground",
   "prose-ul:m-0 prose-ol:m-0",
   "prose-li:m-0 prose-li:p-0 prose-li:marker:text-foreground/80",
   "prose-hr:mt-[0.9em] prose-hr:mb-[0.5em] prose-hr:border-foreground/50",
@@ -66,7 +66,7 @@ const TextEditor = ({
   return (
     <div
       className={cn(
-        "size-full min-w-56 flex flex-col border border-input bg-background dark:bg-input/30 rounded-md trans-200",
+        "tiptap-editor size-full min-w-56 flex flex-col border border-input bg-background dark:bg-input/30 rounded-md trans-200",
         "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] focus-within:[&_*]:brightness-100",
         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
         editorTextAreaStyle,

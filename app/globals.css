@@ -123,8 +123,21 @@
 }
 
 /* Text Editor: placeholder */
+
 .tiptap .is-editor-empty::after {
-  @apply text-muted-foreground content-[attr(data-placeholder)] absolute top-0.5 pointer-events-none text-sm font-normal;
+  @apply text-muted-foreground content-[attr(data-placeholder)] absolute top-0.5 pointer-events-none;
+}
+.tiptap-editor:has(*[role="combobox"][data-value="h1"])
+  .is-editor-empty::after {
+  @apply text-muted-foreground/60;
+}
+.tiptap-editor:has(*[role="combobox"][data-value="h2"])
+  .is-editor-empty::after {
+  @apply text-muted-foreground/70;
+}
+.tiptap-editor:has(*[role="combobox"][data-value="h3"])
+  .is-editor-empty::after {
+  @apply text-muted-foreground/90;
 }
 
 /* Base Classes */
@@ -148,13 +161,13 @@
     @apply text-base font-normal my-0.5 text-foreground/90;
   }
   p {
-    @apply text-base font-light text-foreground/80;
+    @apply text-sm font-normal text-foreground/80;
   }
   h5 {
-    @apply text-sm font-light text-foreground/70;
+    @apply text-xs font-light text-foreground/70;
   }
   h6 {
-    @apply text-sm font-extralight text-foreground/60;
+    @apply text-xs font-extralight text-foreground/60;
   }
 }
 
