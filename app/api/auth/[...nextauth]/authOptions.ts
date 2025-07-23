@@ -1,12 +1,14 @@
 import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
+import { AxiosError } from "axios";
 import { AuthOptions } from "next-auth";
-import KakaoProvider from "next-auth/providers/kakao";
+import KakaoProvider, { KakaoProfile } from "next-auth/providers/kakao";
 import { postSocialLogin } from "../postSocialLogin";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
+    error: "/error/auth",
   },
   session: {
     strategy: "jwt", // JWT를 사용하여 세션을 유지
@@ -52,7 +54,7 @@ export const authOptions: AuthOptions = {
     // }),
   ],
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       if (user.email) {
         if (account?.provider) {
           try {
@@ -62,16 +64,38 @@ export const authOptions: AuthOptions = {
             });
             user.id = data.email;
           } catch (error) {
-            console.log(error);
+            const axiosError = error as AxiosError;
+            throw new Error(axiosError.status?.toString());
+          }
+
+          if (account.provider === "kakao") {
+            const kakaoProfile = (profile as KakaoProfile).kakao_account;
+            account.isDefaultImg = kakaoProfile?.profile?.is_default_image;
           }
         }
         return true;
       }
       return false;
     },
-    async jwt({ token, account, user }) {
+    async jwt({ token, account, user, trigger }) {
+      if (user && account) {
+        // OAuth 제공자로부터 받은 토큰 추출 (access_token 또는 id_token)
+        const oauthToken =
+          account.provider === "kakao"
+            ? account.access_token
+            : account.id_token;
+
+        // 애플리케이션 전용 accessToken 발급 (내부 로직 또는 API 호출)
+        // const accessToken = await getAccessToken(account.provider, oauthToken);
+        // // 추가 사용자 정보 조회
+        // const userInfo = await getUserInfo(accessToken);
+      } else if (trigger === "update") {
+        // 세션 갱신 시 OAuth 토큰으로 애플리케이션 토큰 재발급
+        // const accessToken = await getAccessToken(token.user.provider, token.user.oauthToken);
+        // const userInfo = await getUserInfo(accessToken);
+      }
       return {
-        user,
+        user: { ...user, isDefaultImg: account?.isDefaultImg },
         auth: { type: account?.type, provider: account?.provider },
         ...token,
       };

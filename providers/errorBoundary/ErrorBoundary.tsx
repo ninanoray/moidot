@@ -1,5 +1,6 @@
 "use client";
 
+import { AxiosError } from "axios";
 import { Component, ComponentType, ErrorInfo, ReactNode } from "react";
 import { ErrorPageProps } from "./ErrorFallback";
 
@@ -56,7 +57,7 @@ export default class ErrorBoundary extends Component<
     if (hasError && error) {
       return (
         <FallbackComponent
-          error={error}
+          error={error as AxiosError}
           resetErrorBoundary={this.resetErrorBoundary}
         />
       );
