@@ -15,7 +15,8 @@ const FormsFileInput = ({ className, ...props }: FormsItemsProps) => {
               field.onChange([...Array.from(e.target.files ?? [])])
             }
             className={cn(
-              "bg-background transition-all hover:brightness-90 hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:brightness-50",
+              "text-sm",
+              !field.value && "text-muted-foreground",
               className
             )}
           />

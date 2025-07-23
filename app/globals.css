@@ -145,16 +145,16 @@
     @apply text-lg sm:text-xl font-medium text-foreground/90;
   }
   h4 {
-    @apply text-base sm:text-lg font-normal text-foreground/80;
+    @apply text-base sm:text-lg font-normal text-foreground/90;
   }
   p {
-    @apply text-sm sm:text-base font-normal text-foreground/80;
+    @apply text-sm sm:text-base font-light text-foreground/80;
   }
   h5 {
-    @apply text-xs sm:text-sm font-light text-foreground/70;
+    @apply text-sm sm:text-base font-light text-foreground/70;
   }
   h6 {
-    @apply text-xs sm:text-sm font-light text-foreground/60;
+    @apply text-xs sm:text-sm font-extralight text-foreground/60;
   }
 }
 

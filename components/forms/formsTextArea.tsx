@@ -21,7 +21,7 @@ const FormsTextArea = ({
           />
         </FormControl>
       )}
-      className={cn("min-h-32", className)}
+      className={cn("min-h-40 sm:min-h-32", className)}
       {...props}
     />
   );

@@ -17,7 +17,10 @@ interface EditorProps {
 
 export const editorTextAreaStyle = [
   "prose prose-sm dark:prose-invert max-w-none",
-  "prose-p:m-0 prose-p:p-0",
+  "prose-h1:m-0 prose-h1:text-3xl",
+  "prose-h2:m-0 prose-h2:text-2xl prose-h2:font-semibold",
+  "prose-h3:m-0 prose-h3:text-xl prose-h3:font-normal",
+  "prose-p:m-0 prose-p:p-0 prose-p:text-base prose-p:text-foreground",
   "prose-ul:m-0 prose-ol:m-0",
   "prose-li:m-0 prose-li:p-0 prose-li:marker:text-foreground/80",
   "prose-hr:mt-[0.9em] prose-hr:mb-[0.5em] prose-hr:border-foreground/50",
@@ -74,7 +77,7 @@ const TextEditor = ({
       <EditorToolbar editor={editor} />
       <EditorContent
         editor={editor}
-        className="size-full py-2 flex flex-col rounded-b-md transition-all bg-background hover:brightness-90 hover:text-accent-foreground dark:bg-input/30 dark:hover:brightness-50"
+        className="size-full py-2 flex flex-col rounded-b-md transition-all bg-background hover:brightness-90 dark:bg-input/30 dark:hover:brightness-50"
       />
     </div>
   );

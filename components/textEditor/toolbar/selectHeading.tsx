@@ -44,7 +44,7 @@ export function SelectHeading({ editor, className }: Props) {
       <SelectTrigger
         tabIndex={-1}
         className={cn(
-          "h-7 sm:h-7 w-[88px] mx-1 border-card-foreground/40",
+          "max-h-8 sm:max-h-7 w-[88px] mx-1 text-sm sm:text-xs bg-accent dark:bg-accent/80 border-0 rounded-full transition-all hover:brightness-90",
           className
         )}
       >
