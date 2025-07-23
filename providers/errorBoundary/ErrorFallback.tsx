@@ -20,16 +20,12 @@ export const ErrorFallback = ({
 
   return (
     <div className="h-screen w-full flex-center flex-col">
-      <div className="max-w-sm rounded-lg border border-gray-200 bg-white p-6 flex-center flex-col gap-6 shadow dark:border-gray-700 dark:bg-gray-800">
+      <div className="max-w-sm p-10 flex-center flex-col gap-4 bg-card text-card-foreground rounded-lg border shadow">
+        <code className="m-0 p-1 rounded-sm bg-destructive text-destructive-foreground text-xs">
+          {data.code}
+        </code>
         <h3>오류</h3>
-        <h5 className="whitespace-pre-line text-center">
-          {data.message}
-          <br />
-          코드{" "}
-          <code className="rounded-sm bg-slate-100 p-1 text-xs">
-            {data.code}
-          </code>
-        </h5>
+        <h5 className="my-6 whitespace-pre-line text-center">{data.message}</h5>
         {data.requireLogin ? (
           <RippleButton onClick={() => signOut()}>로그아웃</RippleButton>
         ) : (

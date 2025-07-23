@@ -148,10 +148,10 @@
     @apply text-base sm:text-lg font-normal text-foreground/80;
   }
   p {
-    @apply text-base sm:text-lg font-normal text-foreground/80;
+    @apply text-sm sm:text-base font-normal text-foreground/80;
   }
   h5 {
-    @apply text-sm sm:text-base font-light text-foreground/70;
+    @apply text-xs sm:text-sm font-light text-foreground/70;
   }
   h6 {
     @apply text-xs sm:text-sm font-light text-foreground/60;
