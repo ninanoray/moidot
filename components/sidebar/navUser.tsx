@@ -69,7 +69,7 @@ export function NavUser({ user }: Props) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <div className="px-1 py-1.5 text-xs">
-              <p>참여 중인 모임: 2개</p>
+              <h6 className="font-normal">참여 중인 모임: 2개</h6>
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>

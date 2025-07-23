@@ -22,7 +22,7 @@ const Login = () => {
           width={200}
           height={200}
           priority
-          className="rounded-full"
+          className="rounded-full mobile drag-none"
         />
       </div>
       <LoginForm />

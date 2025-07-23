@@ -20,7 +20,7 @@ export const editorTextAreaStyle = [
   "prose-h1:m-0 prose-h1:text-3xl",
   "prose-h2:m-0 prose-h2:text-2xl prose-h2:font-semibold",
   "prose-h3:m-0 prose-h3:text-xl prose-h3:font-normal",
-  "prose-p:m-0 prose-p:p-0 prose-p:text-base prose-p:text-foreground",
+  "prose-p:m-0 prose-p:text-base prose-p:text-foreground",
   "prose-ul:m-0 prose-ol:m-0",
   "prose-li:m-0 prose-li:p-0 prose-li:marker:text-foreground/80",
   "prose-hr:mt-[0.9em] prose-hr:mb-[0.5em] prose-hr:border-foreground/50",

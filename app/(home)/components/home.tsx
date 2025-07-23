@@ -14,7 +14,7 @@ import { HomeSchema, TypeSelection } from "../schema";
 
 const Home = () => {
   return (
-    <div className="bg-layout">
+    <div className="bg-layout flex flex-col">
       <div className="w-100 max-w-full">
         <Forms schema={HomeSchema}>
           <FormsInput type="password" name="password" label="비밀번호" />
@@ -25,18 +25,20 @@ const Home = () => {
           <FormsFileInput name="files" label="첨부파일" />
           <RippleButton type="submit">저장</RippleButton>
         </Forms>
+      </div>
+      <div>
         <RippleButton>버튼</RippleButton>
         <RippleButton variant="secondary">버튼</RippleButton>
         <RippleButton variant="destructive">버튼</RippleButton>
         <RippleButton variant="outline">버튼</RippleButton>
         <RippleButton variant="ghost">버튼</RippleButton>
-        <h1>h1: 다람쥐쳇바퀴</h1>
-        <h2>h2: 다람쥐쳇바퀴</h2>
-        <h3>h3: 다람쥐쳇바퀴</h3>
-        <h4>h4: 다람쥐쳇바퀴</h4>
-        <p>p: 다람쥐쳇바퀴</p>
-        <h5>h5: 다람쥐쳇바퀴</h5>
-        <h6>h6: 다람쥐쳇바퀴</h6>
+        <h1>h1: 다람쥐 헌 쳇바퀴에 타고파</h1>
+        <h2>h2: 다람쥐 헌 쳇바퀴에 타고파</h2>
+        <h3>h3: 다람쥐 헌 쳇바퀴에 타고파</h3>
+        <h4>h4: 다람쥐 헌 쳇바퀴에 타고파</h4>
+        <p>pp: 다람쥐 헌 쳇바퀴에 타고파</p>
+        <h5>h5: 다람쥐 헌 쳇바퀴에 타고파</h5>
+        <h6>h6: 다람쥐 헌 쳇바퀴에 타고파</h6>
       </div>
     </div>
   );
