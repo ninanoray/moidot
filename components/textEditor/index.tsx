@@ -66,7 +66,7 @@ const TextEditor = ({
   return (
     <div
       className={cn(
-        "size-full flex flex-col border border-input bg-background dark:bg-input/30 rounded-md trans-200",
+        "size-full min-w-56 flex flex-col border border-input bg-background dark:bg-input/30 rounded-md trans-200",
         "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] focus-within:[&_*]:brightness-100",
         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
         editorTextAreaStyle,

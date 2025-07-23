@@ -1,9 +1,10 @@
 "use client";
 
-import { Toggle } from "@/components/ui/toggle";
-import { ToggleGroup } from "@/components/ui/toggle-group";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
+import { RippleButton } from "@/components/animate-ui/buttons/ripple";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/animate-ui/radix/toggle-group";
 import { Editor } from "@tiptap/react";
 import {
   Bold,
@@ -15,7 +16,6 @@ import {
   Strikethrough,
   Undo,
 } from "lucide-react";
-import { ButtonHTMLAttributes, forwardRef } from "react";
 import { SelectHeading } from "./selectHeading";
 
 interface EditorToolbarProps {
@@ -26,101 +26,107 @@ const EditorToolbar = ({ editor }: EditorToolbarProps) => {
   return (
     <div
       className="w-full pr-1 flex bg-card rounded-t-md flex-wrap-reverse min-[440px]:flex-nowrap"
-      aria-label="text editor toolbar"
+      aria-label="editor-toolbar"
     >
-      <div className="grid grid-cols-6 min-[440px]:shrink-0">
-        <Toggle
-          size="sm"
-          aria-label="bold"
-          tabIndex={-1}
-          pressed={editor.isActive("bold")}
-          onPressedChange={() => editor.chain().focus().toggleBold().run()}
+      <div className="flex min-[440px]:shrink-0">
+        <ToggleGroup
+          type="multiple"
+          onValueChange={(value) => {
+            if (value.includes("bold")) editor.commands.setBold();
+            else editor.commands.unsetBold();
+            if (value.includes("italic")) editor.commands.setItalic();
+            else editor.commands.unsetItalic();
+            if (value.includes("strike")) editor.commands.setStrike();
+            else editor.commands.unsetStrike();
+          }}
         >
-          <Bold />
-        </Toggle>
-        <Toggle
-          size="sm"
-          aria-label="italic"
-          tabIndex={-1}
-          pressed={editor.isActive("italic")}
-          onPressedChange={() => editor.chain().focus().toggleItalic().run()}
+          <ToggleGroupItem
+            size="sm"
+            value="bold"
+            aria-label="toggle-bold"
+            tabIndex={-1}
+          >
+            <Bold />
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            size="sm"
+            value="italic"
+            aria-label="toggle-italic"
+            tabIndex={-1}
+          >
+            <Italic />
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            size="sm"
+            value="strike"
+            aria-label="toggle-strike"
+            tabIndex={-1}
+          >
+            <Strikethrough />
+          </ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup
+          type="single"
+          onValueChange={(value) => {
+            if (value) {
+              editor.commands.toggleList(value, "listItem");
+            } else {
+              if (editor.isActive("bulletList"))
+                editor.commands.toggleBulletList();
+              if (editor.isActive("orderedList"))
+                editor.commands.toggleOrderedList();
+            }
+          }}
         >
-          <Italic />
-        </Toggle>
-        <Toggle
-          size="sm"
-          aria-label="strike"
-          tabIndex={-1}
-          pressed={editor.isActive("strike")}
-          onPressedChange={() => editor.chain().focus().toggleStrike().run()}
-        >
-          <Strikethrough />
-        </Toggle>
-        <Toggle
-          size="sm"
-          aria-label="bullet list"
-          tabIndex={-1}
-          pressed={editor.isActive("bulletList")}
-          onPressedChange={() =>
-            editor.chain().focus().toggleBulletList().run()
-          }
-        >
-          <List />
-        </Toggle>
-        <Toggle
-          size="sm"
-          aria-label="ordered list"
-          tabIndex={-1}
-          pressed={editor.isActive("orderedList")}
-          onPressedChange={() =>
-            editor.chain().focus().toggleOrderedList().run()
-          }
-        >
-          <ListOrdered />
-        </Toggle>
-        <ToolbarButton
+          <ToggleGroupItem
+            size="sm"
+            value="bulletList"
+            aria-label="toggle-bullet-list"
+            tabIndex={-1}
+          >
+            <List />
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            size="sm"
+            value="orderedList"
+            aria-label="toggle-ordered-list"
+            tabIndex={-1}
+          >
+            <ListOrdered />
+          </ToggleGroupItem>
+        </ToggleGroup>
+        <RippleButton
+          type="button"
+          variant="outline"
+          className="bg-transparent border-0"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         >
           <SquareSplitVertical />
-        </ToolbarButton>
+        </RippleButton>
       </div>
       <div className="w-full flex justify-between items-center">
         <SelectHeading editor={editor} />
-        <ToggleGroup className="grid grid-cols-2" type="multiple">
-          <ToolbarButton onClick={() => editor.chain().focus().undo().run()}>
+        <div className="grid grid-cols-2">
+          <RippleButton
+            type="button"
+            variant="outline"
+            className="rounded-full bg-transparent border-0"
+            onClick={() => editor.chain().focus().undo().run()}
+          >
             <Undo />
-          </ToolbarButton>
-          <ToolbarButton onClick={() => editor.chain().focus().redo().run()}>
+          </RippleButton>
+          <RippleButton
+            type="button"
+            variant="outline"
+            className="rounded-full bg-transparent border-0"
+            onClick={() => editor.chain().focus().redo().run()}
+          >
             <Redo />
-          </ToolbarButton>
-        </ToggleGroup>
+          </RippleButton>
+        </div>
       </div>
     </div>
   );
 };
 
 export default EditorToolbar;
-
-const ToolbarButton = forwardRef<
-  HTMLButtonElement,
-  ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, children, ...props }, ref) => {
-  const isMobile = useIsMobile();
-
-  return (
-    <button
-      ref={ref}
-      type="button"
-      tabIndex={-1}
-      className={cn(
-        "size-9 flex-center rounded-full transition-colors outline-none active:bg-accent [&_svg]:size-4 [&_svg]:shrink-0",
-        !isMobile && "hover:bg-muted",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-});
-ToolbarButton.displayName = "ToolbarButton";
