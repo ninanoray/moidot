@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/server/:path*", // api 요청
-        destination: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/:path*`, // 프록시할 서버의 주소
+        destination: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/:path*`, // 프록시할 서버의 주소
       },
     ];
   },
