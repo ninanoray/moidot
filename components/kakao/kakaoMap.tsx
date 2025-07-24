@@ -3,17 +3,18 @@
 import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Currency } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Currency, Minus, Plus } from "lucide-react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import {
   CustomOverlayMap,
   Map,
   MapMarker,
-  MapTypeControl,
   useKakaoLoader,
-  ZoomControl,
 } from "react-kakao-maps-sdk";
 import { RippleButton } from "../animate-ui/buttons/ripple";
+import { ToggleGroup, ToggleGroupItem } from "../animate-ui/radix/toggle-group";
+
+type MapType = "ROADMAP" | "HYBRID";
 
 interface Position {
   lat: number;
@@ -35,14 +36,19 @@ const KakaoMap = ({ className }: KakaoMapProps) => {
     libraries: ["clusterer", "drawing", "services"],
   });
 
-  const [centerPostion, setCenterPosition] = useState(CENTER_INIT);
+  const mapRef = useRef<kakao.maps.Map>(null);
 
+  const [mapType, setMapType] = useState<MapType>("ROADMAP");
+
+  const [centerPostion, setCenterPosition] = useState(CENTER_INIT);
   const [clickedPosition, setClickedPosition] = useState<Position>();
 
   return (
     <Map
+      ref={mapRef}
       level={3} // 지도의 확대 레벨
       isPanto // 지도 부드럽게 이동
+      mapTypeId={mapType}
       center={centerPostion}
       onCenterChanged={(map) => {
         const centerPos = map.getCenter();
@@ -57,8 +63,7 @@ const KakaoMap = ({ className }: KakaoMapProps) => {
       }}
       className={cn("size-full my-1 rounded-lg", className)}
     >
-      <MapTypeControl position="TOPRIGHT" />
-      <ZoomControl position="RIGHT" />
+      <MapController ref={mapRef} type={mapType} setType={setMapType} />
       <CurrentMarker setCenterPos={setCenterPosition} />
       <ClickedMarker position={clickedPosition} />
     </Map>
@@ -66,6 +71,58 @@ const KakaoMap = ({ className }: KakaoMapProps) => {
 };
 
 export default KakaoMap;
+
+interface MapControllerProps {
+  ref: RefObject<kakao.maps.Map | null>;
+  type: MapType;
+  setType: (type: MapType) => void;
+}
+
+const MapController = ({ ref, type, setType }: MapControllerProps) => {
+  const zoomIn = () => {
+    const map = ref.current;
+    if (!map) return;
+    map.setLevel(map.getLevel() - 1);
+  };
+
+  const zoomOut = () => {
+    const map = ref.current;
+    if (!map) return;
+    map.setLevel(map.getLevel() + 1);
+  };
+
+  return (
+    <div className="absolute top-10 right-3 z-1 flex flex-col items-end gap-2">
+      <ToggleGroup
+        type="single"
+        className="bg-white dark:bg-input p-1 border-1 border-input rounded-lg"
+        value={type}
+        onValueChange={setType}
+      >
+        <ToggleGroupItem value="ROADMAP">지도</ToggleGroupItem>
+        <ToggleGroupItem value="HYBRID">스카이뷰</ToggleGroupItem>
+      </ToggleGroup>
+      <div className="flex flex-col bg-white dark:bg-input border-1 border-input rounded-lg">
+        <RippleButton
+          size="icon"
+          variant="ghost"
+          onClick={zoomIn}
+          className="border-0 rounded-b-none"
+        >
+          <Plus />
+        </RippleButton>
+        <RippleButton
+          size="icon"
+          variant="ghost"
+          onClick={zoomOut}
+          className="border-0 rounded-t-none"
+        >
+          <Minus />
+        </RippleButton>
+      </div>
+    </div>
+  );
+};
 
 interface CurrentPosition {
   position: Position;
@@ -122,7 +179,6 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
       <>
         <RippleButton
           size="icon"
-          variant="outline"
           className="absolute z-1 right-3 bottom-3"
           onClick={() => {
             setCenterPos(currentPosition.position);
