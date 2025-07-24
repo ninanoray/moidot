@@ -1,5 +1,7 @@
+import Dotmap from ".";
+
 const dotmap = () => {
-  return <div>Enter</div>;
+  return <Dotmap />;
 };
 
 export default dotmap;
