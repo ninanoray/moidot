@@ -45,13 +45,13 @@ export function SelectHeading({ editor, className }: Props) {
         data-value={value()}
         tabIndex={-1}
         className={cn(
-          "max-h-7 w-[88px] mx-1 text-sm sm:text-xs bg-accent dark:bg-accent/80 border-0 rounded-full transition-all hover:brightness-90 focus-visible:ring-0",
+          "max-h-7 w-26 min-[400px]:mx-1 text-xs bg-accent dark:bg-accent/80 border-0 transition-all hover:brightness-90 focus-visible:ring-0",
           className
         )}
       >
         <SelectValue placeholder="크기" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="min-w-26">
         <SelectGroup>
           <SelectItem value="paragraph">본문</SelectItem>
           <SelectItem value="h1">제목 1</SelectItem>

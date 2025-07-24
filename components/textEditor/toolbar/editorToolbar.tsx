@@ -25,10 +25,10 @@ interface EditorToolbarProps {
 const EditorToolbar = ({ editor }: EditorToolbarProps) => {
   return (
     <div
-      className="w-full pr-1 flex bg-card rounded-t-md flex-wrap-reverse min-[440px]:flex-nowrap"
+      className="w-full p-1 flex bg-card rounded-t-md flex-wrap-reverse min-[400px]:flex-nowrap"
       aria-label="editor-toolbar"
     >
-      <div className="flex items-center gap-1 min-[440px]:shrink-0">
+      <div className="flex items-center gap-1">
         <ToggleGroup
           type="multiple"
           onValueChange={(value) => {
@@ -105,9 +105,9 @@ const EditorToolbar = ({ editor }: EditorToolbarProps) => {
           <SquareSplitVertical />
         </RippleButton>
       </div>
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between min-[400px]:items-center">
         <SelectHeading editor={editor} />
-        <div className="grid grid-cols-2">
+        <div className="mx-0.5 grid grid-cols-2 gap-1 shrink-0">
           <RippleButton
             type="button"
             size="sm"
