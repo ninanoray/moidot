@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronsUpDown, Icon, IconNode, LucideIcon, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import {
   DropdownMenu,
@@ -9,13 +10,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../animate-ui/radix/dropdown-menu";
+} from "../../../components/animate-ui/radix/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "../animate-ui/radix/sidebar";
+} from "../../../components/animate-ui/radix/sidebar";
 
 export function MoimSwitcher({
   moims,
@@ -28,6 +29,8 @@ export function MoimSwitcher({
   }[];
 }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
+
   const [activeMoim, setActiveMoim] = React.useState(moims[0]);
 
   if (!activeMoim) {
@@ -71,7 +74,10 @@ export function MoimSwitcher({
             {moims.map((moim) => (
               <DropdownMenuItem
                 key={moim.name}
-                onClick={() => setActiveMoim(moim)}
+                onClick={() => {
+                  setActiveMoim(moim);
+                  router.push("/");
+                }}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-md border">

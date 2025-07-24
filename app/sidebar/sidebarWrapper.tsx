@@ -1,10 +1,10 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { HomeSidebar } from "@/app/sidebar/components/homeSidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/animate-ui/radix/sidebar";
-import { HomeSidebar } from "@/components/sidebar/homeSidebar";
 import { getServerSession } from "next-auth/next";
 import { cookies, headers } from "next/headers";
 
