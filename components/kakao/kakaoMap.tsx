@@ -3,14 +3,22 @@
 import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Currency, Minus, Plus } from "lucide-react";
-import { Fragment, RefObject, useEffect, useRef, useState } from "react";
+import { Currency, Minus, Phone, Plus } from "lucide-react";
+import {
+  Fragment,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   CustomOverlayMap,
   Map,
   MapMarker,
   useKakaoLoader,
 } from "react-kakao-maps-sdk";
+import { useLongPress } from "use-long-press";
 import { RippleButton } from "../animate-ui/buttons/ripple";
 import {
   Popover,
@@ -27,6 +35,7 @@ interface Position {
 }
 
 interface KakaoMapProps {
+  keyword?: string | undefined;
   className?: string | undefined;
 }
 
@@ -35,47 +44,64 @@ const CENTER_INIT = {
   lng: 126.570667,
 } as Position;
 
-const KakaoMap = ({ className }: KakaoMapProps) => {
+const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
   useKakaoLoader({
     appkey: KAKAO_JAVASCRIPT_KEY,
-    libraries: ["clusterer", "drawing", "services"],
+    libraries: ["clusterer"],
   });
 
   const mapRef = useRef<kakao.maps.Map>(null);
-
   const [mapType, setMapType] = useState<MapType>("ROADMAP");
 
   const [centerPostion, setCenterPosition] = useState(CENTER_INIT);
-  const [clickedPosition, setClickedPosition] = useState<Position>();
 
-  const [map, setMap] = useState<kakao.maps.Map>();
+  const [clickedPosition, setClickedPosition] = useState<Position>();
+  const [showClickedMarker, setShowClickedMarker] = useState<boolean>(false);
+  const onLongPress = useLongPress(() => {}, {
+    onStart: () => setShowClickedMarker(false),
+    onFinish: () => setShowClickedMarker(true),
+    threshold: 300, // press 시간 /ms 초 단위이다.
+    cancelOnMovement: true, // 확실하진않지만 꾹 눌렀다가 옆으로 이동했을때 취소여부 옵션인것같다
+  });
+
+  const [searchedMap, setSearchedMap] = useState<kakao.maps.Map>();
 
   return (
-    <Map
-      ref={mapRef}
-      level={3} // 지도의 확대 레벨
-      isPanto // 지도 부드럽게 이동
-      mapTypeId={mapType} // 맵뷰
-      center={centerPostion}
-      onCenterChanged={(map) => {
-        const centerPos = map.getCenter();
-        setCenterPosition({ lat: centerPos.getLat(), lng: centerPos.getLng() });
-      }}
-      onCreate={(map) => setMap(map)}
-      onClick={(_, mouseEvent) => {
-        const mousePos = mouseEvent.latLng;
-        setClickedPosition({
-          lat: mousePos.getLat(),
-          lng: mousePos.getLng(),
-        });
-      }}
-      className={cn("size-full my-1 rounded-lg", className)}
-    >
-      <MapController ref={mapRef} type={mapType} setType={setMapType} />
-      <CurrentMarker setCenterPos={setCenterPosition} />
-      <ClickedMarker position={clickedPosition} />
-      <SearchMarker map={map} />
-    </Map>
+    <div className="relative size-full my-1 rounded-lg overflow-hidden select-none">
+      <Map
+        ref={mapRef}
+        level={3} // 지도의 확대 레벨
+        isPanto // 지도 부드럽게 이동
+        mapTypeId={mapType} // 맵뷰
+        center={centerPostion}
+        onCenterChanged={(map) => {
+          const centerPos = map.getCenter();
+          setCenterPosition({
+            lat: centerPos.getLat(),
+            lng: centerPos.getLng(),
+          });
+        }}
+        onCreate={setSearchedMap}
+        {...onLongPress()}
+        onClick={(_, mouseEvent) => {
+          if (showClickedMarker) {
+            const mousePos = mouseEvent.latLng;
+            setClickedPosition({
+              lat: mousePos.getLat(),
+              lng: mousePos.getLng(),
+            });
+          }
+        }}
+        className={cn("size-full", className)}
+      >
+        <MapController ref={mapRef} type={mapType} setType={setMapType} />
+        {clickedPosition && (
+          <ClickedMarker position={clickedPosition} name="마이닷" />
+        )}
+        {keyword && <SearchedMarker map={searchedMap} keyword={keyword} />}
+        <CurrentMarker setCenterPos={setCenterPosition} />
+      </Map>
+    </div>
   );
 };
 
@@ -101,7 +127,8 @@ const MapController = ({ ref, type, setType }: MapControllerProps) => {
   };
 
   return (
-    <div className="absolute top-10 right-3 z-1 flex flex-col items-end gap-2">
+    <div className="absolute top-1.5 right-1.5 z-1 flex flex-col items-end gap-2">
+      {/* 맵뷰 타입 */}
       <ToggleGroup
         type="single"
         className="bg-white dark:bg-input p-1 border-1 border-input rounded-lg"
@@ -111,6 +138,7 @@ const MapController = ({ ref, type, setType }: MapControllerProps) => {
         <ToggleGroupItem value="ROADMAP">지도</ToggleGroupItem>
         <ToggleGroupItem value="HYBRID">스카이뷰</ToggleGroupItem>
       </ToggleGroup>
+      {/* 확대/축소 */}
       <div className="flex flex-col bg-white dark:bg-input border-1 border-input rounded-lg">
         <RippleButton
           size="icon"
@@ -133,6 +161,18 @@ const MapController = ({ ref, type, setType }: MapControllerProps) => {
   );
 };
 
+interface Marker {
+  position: Position;
+  id?: string;
+  name: string;
+  address?: string;
+  roadAddress?: string;
+  url?: string;
+  phone?: string;
+  group?: string;
+  category?: string;
+}
+
 interface CurrentPosition {
   position: Position;
   errMsg: string | null;
@@ -150,7 +190,7 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
     isLoading: true,
   });
 
-  useEffect(() => {
+  const updateCurrentPostition = useCallback(() => {
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition(
@@ -183,38 +223,40 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
     }
   }, [setCenterPos]);
 
+  useEffect(() => {
+    updateCurrentPostition();
+  }, [updateCurrentPostition]);
+
   if (!currentPosition.isLoading)
     return (
       <>
+        {/* 현위치로 이동하기 버튼 */}
         <RippleButton
           size="icon"
-          className="absolute z-1 right-3 bottom-3"
+          className="absolute z-1 right-1.5 bottom-1.5"
           onClick={() => {
             setCenterPos(currentPosition.position);
           }}
         >
           <Currency className="rotate-45" />
         </RippleButton>
+        {/* 현위치 마커 */}
         <CustomOverlayMap position={currentPosition.position}>
-          <div className="w-16 flex-center rounded-full">
+          <div className="size-16 flex-center rounded-full">
             <DotLottieReact
               src="images/kakao-map/current-location-secondary.lottie"
               loop
               autoplay
-              className="h-16 shrink-0"
+              className="size-16 shrink-0"
             />
-            <div className="absolute size-4 bg-background rounded-full"></div>
+            <div className="absolute size-3 bg-background rounded-full"></div>
           </div>
         </CustomOverlayMap>
       </>
     );
 };
 
-interface MarkerProps {
-  position: Position | undefined;
-}
-
-const ClickedMarker = ({ position }: MarkerProps) => {
+const ClickedMarker = ({ position, name }: Marker) => {
   const [open, setOpen] = useState<boolean>(false);
 
   if (position)
@@ -233,7 +275,7 @@ const ClickedMarker = ({ position }: MarkerProps) => {
         {open && (
           <CustomOverlayMap position={position} clickable>
             <RippleButton className="absolute -top-20 right-1/2 translate-x-1/2">
-              여기닷
+              {name}
             </RippleButton>
           </CustomOverlayMap>
         )}
@@ -241,25 +283,19 @@ const ClickedMarker = ({ position }: MarkerProps) => {
     );
 };
 
-interface Marker {
-  position: Position;
-  name: string;
-  address?: string;
-  roadAddress?: string;
-  url?: string;
-  phone?: string;
-  category?: string;
+interface SearchedMarkerProps {
+  keyword: string;
+  map: kakao.maps.Map | undefined;
 }
 
-const SearchMarker = ({ map }: { map: kakao.maps.Map | undefined }) => {
-  const [info, setInfo] = useState<Marker>();
+const SearchedMarker = ({ keyword, map }: SearchedMarkerProps) => {
   const [markers, setMarkers] = useState<Marker[]>([]);
 
   useEffect(() => {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch("영등포 맛집", (data, status, _pagination) => {
+    ps.keywordSearch(keyword, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -274,11 +310,13 @@ const SearchMarker = ({ map }: { map: kakao.maps.Map | undefined }) => {
               lat,
               lng,
             },
+            id: item.id,
             name: item.place_name,
             address: item.address_name,
             roadAddress: item.road_address_name,
             url: item.place_url,
             phone: item.phone,
+            group: item.category_group_name,
             category: item.category_name,
           });
           bounds.extend(new kakao.maps.LatLng(lat, lng));
@@ -289,34 +327,51 @@ const SearchMarker = ({ map }: { map: kakao.maps.Map | undefined }) => {
         map.setBounds(bounds);
       }
     });
-  }, [map]);
+  }, [keyword, map]);
 
   return (
     <>
       {markers.map((marker) => (
-        <Fragment
-          key={`marker-${marker.name}-${marker.position.lat},${marker.position.lng}`}
-        >
-          <MapMarker
-            position={marker.position}
-            onClick={() => setInfo(marker)}
-          />
+        <Fragment key={`marker-${marker.id}`}>
+          <MapMarker position={marker.position} />
           <CustomOverlayMap position={marker.position} clickable>
             <Popover>
               <PopoverTrigger className="w-7 h-10 bg-transparent absolute bottom-1/2 right-1/2 translate-x-1/2 rounded-full cursor-pointer" />
-              <PopoverContent side="top">
-                <h5>{marker.category}</h5>
-                <h2>{marker.name}</h2>
-                <p>{marker.address}</p>
-                <p>{marker.roadAddress}</p>
-                <p>{marker.phone}</p>
+              <PopoverContent
+                side="top"
+                className="w-fit flex flex-col gap-1 whitespace-nowrap"
+              >
+                <h2 className="flex items-center">
+                  {marker.name}
+                  {marker.group && (
+                    <b className="ml-2 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
+                      {marker.group}
+                    </b>
+                  )}
+                </h2>
+                <div className="flex items-center gap-1">
+                  <div className="mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm">
+                    지번
+                  </div>
+                  <p>{marker.address}</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm">
+                    도로명
+                  </div>
+                  <p>{marker.roadAddress}</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Phone className="size-3" />
+                  <p>{marker.phone}</p>
+                </div>
                 <a
                   href={marker.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-secondary"
+                  className="text-xs text-card-foreground"
                 >
-                  {marker.url}
+                  카카오맵 바로가기
                 </a>
               </PopoverContent>
             </Popover>
