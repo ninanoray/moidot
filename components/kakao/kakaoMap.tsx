@@ -1,23 +1,19 @@
 "use client";
 
-import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Currency, Minus, Phone, Plus } from "lucide-react";
 import {
+  Dispatch,
   Fragment,
   RefObject,
+  SetStateAction,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import {
-  CustomOverlayMap,
-  Map,
-  MapMarker,
-  useKakaoLoader,
-} from "react-kakao-maps-sdk";
+import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
 import { useLongPress } from "use-long-press";
 import { RippleButton } from "../animate-ui/buttons/ripple";
 import {
@@ -26,10 +22,11 @@ import {
   PopoverTrigger,
 } from "../animate-ui/radix/popover";
 import { ToggleGroup, ToggleGroupItem } from "../animate-ui/radix/toggle-group";
+import { calcDistance, getLocalDistanceString } from "./util";
 
 type MapType = "ROADMAP" | "HYBRID";
 
-interface Position {
+export interface Position {
   lat: number;
   lng: number;
 }
@@ -45,23 +42,29 @@ const CENTER_INIT = {
 } as Position;
 
 const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
-  useKakaoLoader({
-    appkey: KAKAO_JAVASCRIPT_KEY,
-    libraries: ["clusterer"],
-  });
+  // const kakaoLoader = useKakaoLoader({
+  //   appkey: KAKAO_JAVASCRIPT_KEY,
+  //   libraries: ["clusterer", "services"],
+  // });
 
   const mapRef = useRef<kakao.maps.Map>(null);
   const [mapType, setMapType] = useState<MapType>("ROADMAP");
 
   const [centerPostion, setCenterPosition] = useState(CENTER_INIT);
 
+  const [currentPosition, setCurrentPosition] = useState<CurrentPosition>({
+    position: CENTER_INIT,
+    errMsg: null,
+    isLoading: true,
+  });
+
   const [clickedPosition, setClickedPosition] = useState<Position>();
   const [showClickedMarker, setShowClickedMarker] = useState<boolean>(false);
   const onLongPress = useLongPress(() => {}, {
     onStart: () => setShowClickedMarker(false),
     onFinish: () => setShowClickedMarker(true),
-    threshold: 300, // press 시간 /ms 초 단위이다.
-    cancelOnMovement: true, // 확실하진않지만 꾹 눌렀다가 옆으로 이동했을때 취소여부 옵션인것같다
+    threshold: 300,
+    cancelOnMovement: true,
   });
 
   const [searchedMap, setSearchedMap] = useState<kakao.maps.Map>();
@@ -98,8 +101,18 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         {clickedPosition && (
           <ClickedMarker position={clickedPosition} name="마이닷" />
         )}
-        {keyword && <SearchedMarker map={searchedMap} keyword={keyword} />}
-        <CurrentMarker setCenterPos={setCenterPosition} />
+        {keyword && (
+          <SearchedMarker
+            map={searchedMap}
+            keyword={keyword}
+            currentPos={currentPosition.position}
+          />
+        )}
+        <CurrentMarker
+          currentPos={currentPosition}
+          setCurrentPos={setCurrentPosition}
+          setCenterPos={setCenterPosition}
+        />
       </Map>
     </div>
   );
@@ -171,6 +184,7 @@ interface Marker {
   phone?: string;
   group?: string;
   category?: string;
+  distance?: number;
 }
 
 interface CurrentPosition {
@@ -180,16 +194,16 @@ interface CurrentPosition {
 }
 
 interface CurrentMarkerProps {
+  currentPos: CurrentPosition;
+  setCurrentPos: Dispatch<SetStateAction<CurrentPosition>>;
   setCenterPos: (pos: Position) => void;
 }
 
-const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
-  const [currentPosition, setCurrentPosition] = useState<CurrentPosition>({
-    position: CENTER_INIT,
-    errMsg: null,
-    isLoading: true,
-  });
-
+const CurrentMarker = ({
+  currentPos,
+  setCurrentPos,
+  setCenterPos,
+}: CurrentMarkerProps) => {
   const updateCurrentPostition = useCallback(() => {
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
@@ -197,7 +211,7 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
         (position) => {
           const lat = position.coords.latitude; // 위도
           const lng = position.coords.longitude; // 경도
-          setCurrentPosition((prev) => ({
+          setCurrentPos((prev) => ({
             ...prev,
             position: { lat, lng },
             isLoading: false,
@@ -206,7 +220,7 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
           setCenterPos({ lat, lng });
         },
         (err) => {
-          setCurrentPosition((prev) => ({
+          setCurrentPos((prev) => ({
             ...prev,
             errMsg: err.message,
             isLoading: false,
@@ -215,19 +229,19 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
       );
     } else {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      setCurrentPosition((prev) => ({
+      setCurrentPos((prev) => ({
         ...prev,
         errMsg: "현위치를 찾을 수 없습니다.",
         isLoading: true,
       }));
     }
-  }, [setCenterPos]);
+  }, [setCenterPos, setCurrentPos]);
 
   useEffect(() => {
     updateCurrentPostition();
   }, [updateCurrentPostition]);
 
-  if (!currentPosition.isLoading)
+  if (!currentPos.isLoading)
     return (
       <>
         {/* 현위치로 이동하기 버튼 */}
@@ -235,13 +249,13 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
           size="icon"
           className="absolute z-1 right-1.5 bottom-1.5"
           onClick={() => {
-            setCenterPos(currentPosition.position);
+            setCenterPos(currentPos.position);
           }}
         >
           <Currency className="rotate-45" />
         </RippleButton>
         {/* 현위치 마커 */}
-        <CustomOverlayMap position={currentPosition.position}>
+        <CustomOverlayMap position={currentPos.position}>
           <div className="size-16 flex-center rounded-full">
             <DotLottieReact
               src="images/kakao-map/current-location-secondary.lottie"
@@ -286,48 +300,57 @@ const ClickedMarker = ({ position, name }: Marker) => {
 interface SearchedMarkerProps {
   keyword: string;
   map: kakao.maps.Map | undefined;
+  currentPos?: Position;
 }
 
-const SearchedMarker = ({ keyword, map }: SearchedMarkerProps) => {
+const SearchedMarker = ({ keyword, map, currentPos }: SearchedMarkerProps) => {
   const [markers, setMarkers] = useState<Marker[]>([]);
 
   useEffect(() => {
     if (!map) return;
-    const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(keyword, (data, status, _pagination) => {
-      if (status === kakao.maps.services.Status.OK) {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        const bounds = new kakao.maps.LatLngBounds();
-        const list = [] as Marker[];
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+    // LatLngBounds 객체에 좌표를 추가합니다
+    const bounds = new kakao.maps.LatLngBounds();
 
-        data.map((item) => {
-          const lat = Number(item.y);
-          const lng = Number(item.x);
-          list.push({
-            position: {
-              lat,
-              lng,
-            },
-            id: item.id,
-            name: item.place_name,
-            address: item.address_name,
-            roadAddress: item.road_address_name,
-            url: item.place_url,
-            phone: item.phone,
-            group: item.category_group_name,
-            category: item.category_name,
+    const kakaoPlaces = new kakao.maps.services.Places(map);
+    kakaoPlaces.keywordSearch(
+      keyword,
+      (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          const list = [] as Marker[];
+
+          data.map((item) => {
+            const lat = Number(item.y);
+            const lng = Number(item.x);
+            list.push({
+              position: {
+                lat,
+                lng,
+              },
+              id: item.id,
+              name: item.place_name,
+              address: item.address_name,
+              roadAddress: item.road_address_name,
+              url: item.place_url,
+              phone: item.phone,
+              group: item.category_group_name,
+              category: item.category_name,
+              distance: calcDistance(currentPos, { lat, lng }), // 현재 위치와 마커 사이의 거리
+            });
+            bounds.extend(new kakao.maps.LatLng(lat, lng));
           });
-          bounds.extend(new kakao.maps.LatLng(lat, lng));
-        });
-        setMarkers(list);
+          setMarkers(list);
 
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        map.setBounds(bounds);
+          // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
+          if (!bounds.contain(map.getCenter())) map.setBounds(bounds);
+        }
+      },
+      {
+        useMapCenter: true,
       }
-    });
-  }, [keyword, map]);
+    );
+  }, [currentPos, keyword, map]);
 
   return (
     <>
@@ -341,14 +364,22 @@ const SearchedMarker = ({ keyword, map }: SearchedMarkerProps) => {
                 side="top"
                 className="w-fit flex flex-col gap-1 whitespace-nowrap"
               >
-                <h2 className="flex items-center">
-                  {marker.name}
+                <div className="flex justify-between items-center gap-2">
+                  <h2>
+                    {marker.name}
+                    {marker.distance && (
+                      <span className="mx-1.5 text-xs font-light text-card-foreground/80">
+                        {getLocalDistanceString(marker.distance)}
+                      </span>
+                    )}
+                  </h2>
                   {marker.group && (
-                    <b className="ml-2 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
+                    <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
                       {marker.group}
-                    </b>
+                    </p>
                   )}
-                </h2>
+                </div>
+
                 <div className="flex items-center gap-1">
                   <div className="mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm">
                     지번
