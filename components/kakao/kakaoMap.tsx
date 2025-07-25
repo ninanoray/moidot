@@ -4,7 +4,7 @@ import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Currency, Minus, Plus } from "lucide-react";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { Fragment, RefObject, useEffect, useRef, useState } from "react";
 import {
   CustomOverlayMap,
   Map,
@@ -12,6 +12,11 @@ import {
   useKakaoLoader,
 } from "react-kakao-maps-sdk";
 import { RippleButton } from "../animate-ui/buttons/ripple";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../animate-ui/radix/popover";
 import { ToggleGroup, ToggleGroupItem } from "../animate-ui/radix/toggle-group";
 
 type MapType = "ROADMAP" | "HYBRID";
@@ -43,17 +48,20 @@ const KakaoMap = ({ className }: KakaoMapProps) => {
   const [centerPostion, setCenterPosition] = useState(CENTER_INIT);
   const [clickedPosition, setClickedPosition] = useState<Position>();
 
+  const [map, setMap] = useState<kakao.maps.Map>();
+
   return (
     <Map
       ref={mapRef}
       level={3} // 지도의 확대 레벨
       isPanto // 지도 부드럽게 이동
-      mapTypeId={mapType}
+      mapTypeId={mapType} // 맵뷰
       center={centerPostion}
       onCenterChanged={(map) => {
         const centerPos = map.getCenter();
         setCenterPosition({ lat: centerPos.getLat(), lng: centerPos.getLng() });
       }}
+      onCreate={(map) => setMap(map)}
       onClick={(_, mouseEvent) => {
         const mousePos = mouseEvent.latLng;
         setClickedPosition({
@@ -66,6 +74,7 @@ const KakaoMap = ({ className }: KakaoMapProps) => {
       <MapController ref={mapRef} type={mapType} setType={setMapType} />
       <CurrentMarker setCenterPos={setCenterPosition} />
       <ClickedMarker position={clickedPosition} />
+      <SearchMarker map={map} />
     </Map>
   );
 };
@@ -189,11 +198,12 @@ const CurrentMarker = ({ setCenterPos }: CurrentMarkerProps) => {
         <CustomOverlayMap position={currentPosition.position}>
           <div className="w-16 flex-center rounded-full">
             <DotLottieReact
-              src="images/kakao-map/current-location.lottie"
+              src="images/kakao-map/current-location-secondary.lottie"
               loop
               autoplay
               className="h-16 shrink-0"
             />
+            <div className="absolute size-4 bg-background rounded-full"></div>
           </div>
         </CustomOverlayMap>
       </>
@@ -215,6 +225,10 @@ const ClickedMarker = ({ position }: MarkerProps) => {
           clickable
           onMouseOver={() => setOpen(true)}
           onClick={() => setOpen(!open)}
+          image={{
+            src: "/images/kakao-map/clicked-location.gif",
+            size: { width: 48, height: 48 },
+          }}
         />
         {open && (
           <CustomOverlayMap position={position} clickable>
@@ -225,4 +239,90 @@ const ClickedMarker = ({ position }: MarkerProps) => {
         )}
       </>
     );
+};
+
+interface Marker {
+  position: Position;
+  name: string;
+  address?: string;
+  roadAddress?: string;
+  url?: string;
+  phone?: string;
+  category?: string;
+}
+
+const SearchMarker = ({ map }: { map: kakao.maps.Map | undefined }) => {
+  const [info, setInfo] = useState<Marker>();
+  const [markers, setMarkers] = useState<Marker[]>([]);
+
+  useEffect(() => {
+    if (!map) return;
+    const ps = new kakao.maps.services.Places();
+
+    ps.keywordSearch("영등포 맛집", (data, status, _pagination) => {
+      if (status === kakao.maps.services.Status.OK) {
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        const bounds = new kakao.maps.LatLngBounds();
+        const list = [] as Marker[];
+
+        data.map((item) => {
+          const lat = Number(item.y);
+          const lng = Number(item.x);
+          list.push({
+            position: {
+              lat,
+              lng,
+            },
+            name: item.place_name,
+            address: item.address_name,
+            roadAddress: item.road_address_name,
+            url: item.place_url,
+            phone: item.phone,
+            category: item.category_name,
+          });
+          bounds.extend(new kakao.maps.LatLng(lat, lng));
+        });
+        setMarkers(list);
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        map.setBounds(bounds);
+      }
+    });
+  }, [map]);
+
+  return (
+    <>
+      {markers.map((marker) => (
+        <Fragment
+          key={`marker-${marker.name}-${marker.position.lat},${marker.position.lng}`}
+        >
+          <MapMarker
+            position={marker.position}
+            onClick={() => setInfo(marker)}
+          />
+          <CustomOverlayMap position={marker.position} clickable>
+            <Popover>
+              <PopoverTrigger className="w-7 h-10 bg-transparent absolute bottom-1/2 right-1/2 translate-x-1/2 rounded-full cursor-pointer" />
+              <PopoverContent side="top">
+                <h5>{marker.category}</h5>
+                <h2>{marker.name}</h2>
+                <p>{marker.address}</p>
+                <p>{marker.roadAddress}</p>
+                <p>{marker.phone}</p>
+                <a
+                  href={marker.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-secondary"
+                >
+                  {marker.url}
+                </a>
+              </PopoverContent>
+            </Popover>
+          </CustomOverlayMap>
+        </Fragment>
+      ))}
+    </>
+  );
 };
