@@ -174,7 +174,7 @@ const MapController = ({ ref, type, setType }: MapControllerProps) => {
   );
 };
 
-interface Marker {
+export interface Marker {
   position: Position;
   id?: string;
   name: string;
@@ -306,51 +306,68 @@ interface SearchedMarkerProps {
 const SearchedMarker = ({ keyword, map, currentPos }: SearchedMarkerProps) => {
   const [markers, setMarkers] = useState<Marker[]>([]);
 
+  const createSearchedMarkers = useCallback(
+    (
+      mapBounds: kakao.maps.LatLngBounds,
+      currentPosition: Position | undefined,
+      data: kakao.maps.services.PlacesSearchResult,
+      status: kakao.maps.services.Status
+    ) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const result = [] as Marker[];
+
+        data.map((item) => {
+          const lat = Number(item.y);
+          const lng = Number(item.x);
+          result.push({
+            position: {
+              lat,
+              lng,
+            },
+            id: item.id,
+            name: item.place_name,
+            address: item.address_name,
+            roadAddress: item.road_address_name,
+            url: item.place_url,
+            phone: item.phone,
+            group: item.category_group_name,
+            category: item.category_name,
+            distance: calcDistance(currentPosition, { lat, lng }), // 현재 위치와 마커 사이의 거리
+          });
+          mapBounds.extend(new kakao.maps.LatLng(lat, lng));
+        });
+        return result;
+      } else return [];
+    },
+    []
+  );
+
   useEffect(() => {
     if (!map) return;
 
-    // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-    // LatLngBounds 객체에 좌표를 추가합니다
-    const bounds = new kakao.maps.LatLngBounds();
-
     const kakaoPlaces = new kakao.maps.services.Places(map);
+
     kakaoPlaces.keywordSearch(
       keyword,
       (data, status, _pagination) => {
-        if (status === kakao.maps.services.Status.OK) {
-          const list = [] as Marker[];
-
-          data.map((item) => {
-            const lat = Number(item.y);
-            const lng = Number(item.x);
-            list.push({
-              position: {
-                lat,
-                lng,
-              },
-              id: item.id,
-              name: item.place_name,
-              address: item.address_name,
-              roadAddress: item.road_address_name,
-              url: item.place_url,
-              phone: item.phone,
-              group: item.category_group_name,
-              category: item.category_name,
-              distance: calcDistance(currentPos, { lat, lng }), // 현재 위치와 마커 사이의 거리
-            });
-            bounds.extend(new kakao.maps.LatLng(lat, lng));
-          });
-          setMarkers(list);
-
-          // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
-          if (!bounds.contain(map.getCenter())) map.setBounds(bounds);
-        }
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        const bounds = new kakao.maps.LatLngBounds();
+        const searchedMarkers = createSearchedMarkers(
+          bounds,
+          currentPos,
+          data,
+          status
+        );
+        setMarkers(searchedMarkers);
+        // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
+        if (!bounds.contain(map.getCenter())) map.setBounds(bounds);
       },
       {
-        useMapCenter: true,
+        useMapCenter: true, // 지도의 중심 기준으로 검색
       }
     );
-  }, [currentPos, keyword, map]);
+  }, [createSearchedMarkers, currentPos, keyword, map]);
 
   return (
     <>
