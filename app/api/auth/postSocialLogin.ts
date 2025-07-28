@@ -1,3 +1,4 @@
+import { SERVER_URL } from "@/constants/keys";
 import axios from "axios";
 
 interface PostSocialLogin {
@@ -7,15 +8,13 @@ interface PostSocialLogin {
 
 interface LoginResponse {
   email: string;
-  accessToken: string;
-  refreshToken: string;
 }
 
 export async function postSocialLogin({
   email,
   provider,
 }: PostSocialLogin): Promise<LoginResponse> {
-  const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auth/social-login`;
+  const url = SERVER_URL + "/api/auth/social-login";
   const data = {
     provider: provider,
     email: email,
