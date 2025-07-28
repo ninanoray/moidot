@@ -8,12 +8,14 @@ import { Input } from "../ui/input";
 const FormsInput = ({
   type,
   label,
+  hidelabel,
   placeholder = label + " 정보를 입력해주세요",
   ...props
 }: FormsItemsProps & React.ComponentProps<"input">) => {
   return (
     <FormsItem
       label={label}
+      hidelabel={hidelabel}
       render={(field: ControllerRenderProps<any, string>) => (
         <FormControl>
           <Input

@@ -13,13 +13,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../animate-ui/radix/dropdown-menu";
+} from "../../../components/animate-ui/radix/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "../animate-ui/radix/sidebar";
+} from "../../../components/animate-ui/radix/sidebar";
 
 interface Props {
   user: Session["user"] | undefined;

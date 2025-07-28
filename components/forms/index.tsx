@@ -68,7 +68,7 @@ const Forms = ({
 interface FormsItemsProps {
   name: string;
   label: string;
-  hideLabel?: boolean;
+  hidelabel?: boolean;
   placeholder?: string;
   description?: string;
   className?: string;
@@ -81,7 +81,7 @@ interface FormsItemProps extends FormsItemsProps {
 const FormsItem = ({
   label,
   description,
-  hideLabel = false,
+  hidelabel = false,
   className,
   render,
   ...props
@@ -95,7 +95,7 @@ const FormsItem = ({
         render={({ field }) => (
           <FormItem className={cn("w-full flex flex-col relative", className)}>
             <div className="size-full flex flex-col gap-1">
-              <FormLabel className={cn("text-sm", hideLabel && "hidden")}>
+              <FormLabel className={cn("text-sm", hidelabel && "hidden")}>
                 {label}
               </FormLabel>
               <div className="size-full">

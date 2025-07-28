@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
+    "@lottiefiles/dotlottie-react": "^0.14.4",
     "@lucide/lab": "^0.1.2",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-collapsible": "^1.1.11",
@@ -35,7 +36,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.523.0",
-    "motion": "^12.23.3",
+    "motion": "^12.23.9",
     "next": "15.3.4",
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.4",
@@ -45,8 +46,10 @@
     "react-day-picker": "^9.8.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.58.1",
+    "react-kakao-maps-sdk": "^1.2.0",
     "sharp": "^0.34.2",
     "tailwind-merge": "^3.3.1",
+    "use-long-press": "^3.3.0",
     "webpack": "^5.99.9",
     "zod": "^3.25.67",
     "zustand": "^5.0.5"

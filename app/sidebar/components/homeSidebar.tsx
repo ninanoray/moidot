@@ -1,9 +1,9 @@
 "use client";
 
-import { MoimSwitcher } from "@/components/sidebar/moimSwitcher";
-import { NavDule } from "@/components/sidebar/navDule";
-import { NavProjects } from "@/components/sidebar/navMenu";
-import { NavUser } from "@/components/sidebar/navUser";
+import { MoimSwitcher } from "@/app/sidebar/components/moimSwitcher";
+import { NavDule } from "@/app/sidebar/components/navDule";
+import { NavProjects } from "@/app/sidebar/components/navMenu";
+import { NavUser } from "@/app/sidebar/components/navUser";
 import { cowHead } from "@lucide/lab";
 import {
   BookOpen,
@@ -20,8 +20,8 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "../animate-ui/radix/sidebar";
-import ThemeSwitch from "../theme/themeSwitch";
+} from "../../../components/animate-ui/radix/sidebar";
+import ThemeSwitch from "../../../components/theme/themeSwitch";
 
 interface Props extends React.ComponentProps<typeof Sidebar> {
   session: Session | null;
@@ -82,7 +82,7 @@ export function HomeSidebar({ session, ...props }: Props) {
     menu: [
       {
         name: "닷맵",
-        url: "#",
+        url: "/dotmap",
         icon: Map,
       },
       {
