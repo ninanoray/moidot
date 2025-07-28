@@ -24,8 +24,8 @@ import {
   Folder,
   Forward,
   MoreHorizontal,
+  Shell,
   Trash2,
-  type LucideIcon,
 } from "lucide-react";
 import {
   Collapsible,
@@ -39,7 +39,6 @@ export function NavDule({
   dules: {
     title: string;
     url: string;
-    icon?: LucideIcon;
     isActive?: boolean;
     dots?: {
       title: string;
@@ -63,7 +62,7 @@ export function NavDule({
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={dule.title}>
-                  {dule.icon && <dule.icon />}
+                  <Shell />
                   <span>{dule.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>

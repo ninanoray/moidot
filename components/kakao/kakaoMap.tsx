@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Currency, Minus, Phone, Plus } from "lucide-react";
+import { Locate, Minus, Phone, Plus } from "lucide-react";
 import {
   Dispatch,
   Fragment,
@@ -252,7 +252,7 @@ const CurrentMarker = ({
             setCenterPos(currentPos.position);
           }}
         >
-          <Currency className="rotate-45" />
+          <Locate />
         </RippleButton>
         {/* 현위치 마커 */}
         <CustomOverlayMap position={currentPos.position}>
