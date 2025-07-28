@@ -46,11 +46,12 @@ export async function postSocialLogin({
     withCredentials: true,
   });
 
+  // access token
   const resHeaders = response.headers;
   axios.defaults.headers.common["Authorization"] = resHeaders["authorizaion"];
 
+  // refresh token
   const setCookie = resHeaders["set-cookie"];
-
   if (setCookie) {
     const tokenCookie = parseSetCookie(setCookie[0]);
     const coockieStore = await cookies();

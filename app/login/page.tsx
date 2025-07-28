@@ -1,5 +1,5 @@
 import { ErrorFallback } from "@/providers/errorBoundary/ErrorFallback";
-import Login from "./components/login";
+import Login from ".";
 
 interface Params {
   searchParams: Promise<{ [key: string]: string | undefined }>;

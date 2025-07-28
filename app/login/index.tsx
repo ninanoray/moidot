@@ -3,7 +3,7 @@
 import KakaoLoginButton from "@/components/kakao/kakaoLoginButton";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import { LoginForm } from "./loginForm";
+import { LoginForm } from "./components/loginForm";
 
 const Login = () => {
   async function kakaoLogin() {
