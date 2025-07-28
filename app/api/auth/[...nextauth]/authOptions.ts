@@ -65,6 +65,7 @@ export const authOptions: AuthOptions = {
             user.id = data.email;
           } catch (error) {
             const axiosError = error as AxiosError;
+            console.log(error);
             throw new Error(axiosError.status?.toString());
           }
 
@@ -102,7 +103,7 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token: jwt }) {
       session = jwt as any;
-      console.log("$$$ session: ", session);
+      // console.log("$$$ session: ", session);
       return session;
     },
   },

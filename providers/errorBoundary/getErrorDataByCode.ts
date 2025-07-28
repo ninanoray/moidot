@@ -68,6 +68,12 @@ export const ERROR_CODE: ErrorCodeType = {
     code: "504",
     message: "게이트웨이 시간 초과입니다.",
   },
+
+  //oauth
+  OAuthCallback: {
+    code: "oauth",
+    message: "oauth 콜백 오류입니다.",
+  },
 } as const;
 
 export const getErrorDataByCode = (error: AxiosError | string | null) => {
