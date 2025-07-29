@@ -1,8 +1,9 @@
 "use client";
 
-import { ChevronsUpDown, Icon, IconNode, LucideIcon, Plus } from "lucide-react";
+import { ChevronsUpDown, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { JSX } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,8 +24,7 @@ export function MoimSwitcher({
 }: {
   moims: {
     name: string;
-    icon?: LucideIcon;
-    iconNode?: IconNode;
+    icon: JSX.Element;
     count: number;
   }[];
 }) {
@@ -47,15 +47,9 @@ export function MoimSwitcher({
         >
           <div
             onClick={() => router.push("/")}
-            className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg cursor-pointer"
+            className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg cursor-pointer [&>*]:size-4 hover:[&>*]:animate-jello"
           >
-            {activeMoim.icon ? (
-              <activeMoim.icon className="size-4" />
-            ) : (
-              activeMoim.iconNode && (
-                <Icon iconNode={activeMoim.iconNode} className="size-4" />
-              )
-            )}
+            {activeMoim.icon}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -87,17 +81,8 @@ export function MoimSwitcher({
                   }}
                   className="gap-2 p-2"
                 >
-                  <div className="flex size-6 items-center justify-center rounded-md border">
-                    {moim.icon ? (
-                      <moim.icon className="size-3.5 shrink-0" />
-                    ) : (
-                      moim.iconNode && (
-                        <Icon
-                          iconNode={moim.iconNode}
-                          className="size-3.5 shrink-0"
-                        />
-                      )
-                    )}
+                  <div className="flex size-6 items-center justify-center rounded-md border [&>*]:size-4">
+                    {moim.icon}
                   </div>
                   {moim.name}
                 </DropdownMenuItem>

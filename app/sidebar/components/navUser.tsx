@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronsUpDown, LogOut, UserCircle2 } from "lucide-react";
+import { Bell, ChevronsUpDown, LogOut, User2 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Session } from "next-auth";
@@ -78,7 +78,7 @@ export function NavUser({ user }: Props) {
                 알림
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <UserCircle2 />
+                <User2 />
                 마이페이지
               </DropdownMenuItem>
             </DropdownMenuGroup>

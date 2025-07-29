@@ -1,6 +1,6 @@
 "use client";
 
-import { type LucideIcon } from "lucide-react";
+import { JSX } from "react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -15,7 +15,7 @@ export function NavMenu({
   menu: {
     name: string;
     url: string;
-    icon: LucideIcon;
+    icon: JSX.Element;
   }[];
 }) {
   return (
@@ -30,7 +30,7 @@ export function NavMenu({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild tooltip={item.name}>
               <a href={item.url}>
-                <item.icon />
+                {item.icon}
                 <span>{item.name}</span>
               </a>
             </SidebarMenuButton>

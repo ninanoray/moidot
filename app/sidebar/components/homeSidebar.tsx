@@ -4,15 +4,10 @@ import { MoimSwitcher } from "@/app/sidebar/components/moimSwitcher";
 import { NavDule } from "@/app/sidebar/components/navDule";
 import { NavMenu } from "@/app/sidebar/components/navMenu";
 import { NavUser } from "@/app/sidebar/components/navUser";
+import { Compass } from "@/components/animate-icons/Compass";
+import UserDot from "@/components/animate-icons/UserDot";
 import { cowHead } from "@lucide/lab";
-import {
-  BookOpen,
-  Map,
-  MapPin,
-  Settings,
-  SquareTerminal,
-  User2,
-} from "lucide-react";
+import { BookOpen, Icon, MapPin, Settings, SquareTerminal } from "lucide-react";
 import { Session } from "next-auth";
 import * as React from "react";
 import {
@@ -34,12 +29,12 @@ export function HomeSidebar({ session, ...props }: Props) {
     moims: [
       {
         name: "서초구 모임",
-        icon: MapPin,
+        icon: <MapPin />,
         count: 20,
       },
       {
         name: "97년생 모임",
-        iconNode: cowHead,
+        icon: <Icon iconNode={cowHead} />,
         count: 10,
       },
     ],
@@ -83,17 +78,17 @@ export function HomeSidebar({ session, ...props }: Props) {
       {
         name: "닷맵",
         url: "/dotmap",
-        icon: Map,
+        icon: <Compass />,
       },
       {
         name: "마이닷",
         url: "#",
-        icon: User2,
+        icon: <UserDot />,
       },
       {
         name: "설정",
-        url: "#",
-        icon: Settings,
+        url: "/settings",
+        icon: <Settings className="group-hover/menu-item:animate-rotate" />,
       },
     ],
   };

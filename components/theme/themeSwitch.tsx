@@ -37,7 +37,10 @@ export default function ThemeSwitch({ className }: { className?: string }) {
       variant="secondary"
       size="icon"
       onClick={handleThemeChange}
-      className={cn("size-8 rounded-2xl shrink-0", className)}
+      className={cn(
+        "size-8 rounded-2xl shrink-0 hover:[&>*]:animate-rotate",
+        className
+      )}
     >
       <Icon />
     </RippleButton>

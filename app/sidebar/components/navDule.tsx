@@ -1,5 +1,6 @@
 "use client";
 
+import { AudioWaveform } from "@/components/animate-icons/AudioWaveform";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +25,6 @@ import {
   Folder,
   Forward,
   MoreHorizontal,
-  Shell,
   Trash2,
 } from "lucide-react";
 import {
@@ -67,7 +67,7 @@ export function NavDule({
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={dule.title}>
-                  <Shell />
+                  <AudioWaveform />
                   <span>{dule.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
