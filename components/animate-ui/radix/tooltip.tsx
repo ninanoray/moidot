@@ -1,38 +1,38 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Tooltip as TooltipPrimitive } from 'radix-ui';
-import { AnimatePresence, motion, type Transition } from 'motion/react';
+import { AnimatePresence, motion, type Transition } from "motion/react";
+import { Tooltip as TooltipPrimitive } from "radix-ui";
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 type TooltipContextType = {
   isOpen: boolean;
 };
 
 const TooltipContext = React.createContext<TooltipContextType | undefined>(
-  undefined,
+  undefined
 );
 
 const useTooltip = (): TooltipContextType => {
   const context = React.useContext(TooltipContext);
   if (!context) {
-    throw new Error('useTooltip must be used within a Tooltip');
+    throw new Error("useTooltip must be used within a Tooltip");
   }
   return context;
 };
 
-type Side = 'top' | 'bottom' | 'left' | 'right';
+type Side = "top" | "bottom" | "left" | "right";
 
 const getInitialPosition = (side: Side) => {
   switch (side) {
-    case 'top':
+    case "top":
       return { y: 15 };
-    case 'bottom':
+    case "bottom":
       return { y: -15 };
-    case 'left':
+    case "left":
       return { x: 15 };
-    case 'right':
+    case "right":
       return { x: -15 };
   }
 };
@@ -49,7 +49,7 @@ type TooltipProps = React.ComponentProps<typeof TooltipPrimitive.Root>;
 
 function Tooltip(props: TooltipProps) {
   const [isOpen, setIsOpen] = React.useState(
-    props?.open ?? props?.defaultOpen ?? false,
+    props?.open ?? props?.defaultOpen ?? false
   );
 
   React.useEffect(() => {
@@ -61,7 +61,7 @@ function Tooltip(props: TooltipProps) {
       setIsOpen(open);
       props.onOpenChange?.(open);
     },
-    [props],
+    [props]
   );
 
   return (
@@ -92,9 +92,9 @@ type TooltipContentProps = React.ComponentProps<
 
 function TooltipContent({
   className,
-  side = 'top',
+  side = "top",
   sideOffset = 4,
-  transition = { type: 'spring', stiffness: 300, damping: 25 },
+  transition = { type: "spring", stiffness: 300, damping: 25 },
   arrow = true,
   children,
   ...props
@@ -108,6 +108,7 @@ function TooltipContent({
         <TooltipPrimitive.Portal forceMount data-slot="tooltip-portal">
           <TooltipPrimitive.Content
             forceMount
+            side={side}
             sideOffset={sideOffset}
             className="z-50"
             {...props}
@@ -120,8 +121,8 @@ function TooltipContent({
               exit={{ opacity: 0, scale: 0, ...initialPosition }}
               transition={transition}
               className={cn(
-                'relative bg-primary text-primary-foreground shadow-md w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-sm text-balance',
-                className,
+                "relative bg-primary text-primary-foreground shadow-md w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-sm text-balance",
+                className
               )}
             >
               {children}
@@ -142,13 +143,13 @@ function TooltipContent({
 
 export {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
   TooltipProvider,
+  TooltipTrigger,
   useTooltip,
+  type TooltipContentProps,
   type TooltipContextType,
   type TooltipProps,
-  type TooltipTriggerProps,
-  type TooltipContentProps,
   type TooltipProviderProps,
+  type TooltipTriggerProps,
 };
