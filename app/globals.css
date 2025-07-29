@@ -221,8 +221,7 @@
   --animate-rotate: rotate 2s ease-in-out infinite;
   --animate-draw-circle: draw-circle 1s ease-in-out;
   --animate-scale: scale 1s ease-in-out infinite;
-  --animate-user-dot: user-dot 1s cubic-bezier(0.83, -0.07, 0, 1.04) both
-    infinite;
+  --animate-user-dot: user-dot 2s ease-in-out infinite;
   --animate-jello: jello 1s both infinite cubic-bezier(0.69, 0.34, 0.09, 0.6);
 }
 
@@ -277,8 +276,14 @@
   0% {
     transform: translateY(0) translateX(0);
   }
+  25% {
+    transform: translateY(-2px) translateX(-3px);
+  }
   50% {
-    transform: translateY(-1px) translateX(-3px);
+    transform: translateY(0) translateX(0);
+  }
+  75% {
+    transform: translateY(-2px) translateX(3px);
   }
   100% {
     transform: translateY(0) translateX(0);

@@ -20,7 +20,7 @@ const UserDot = ({ className, ...props }: UserDotProps) => {
         )}
         {...props}
       >
-        <circle cx="12" cy="6" r="4" />
+        <circle cx="12" cy="8" r="4" />
         <ellipse cx="12" cy="18" rx="8" ry="2.5" />
       </svg>
     </div>
