@@ -54,7 +54,7 @@ const Forms = ({
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={cn(
-            "size-full -mt-1 flex flex-col gap-2 [&_button[type='submit']]:w-24 [&_button[type='submit']]:mt-3 [&_button[type='submit']]:self-end",
+            "size-full flex flex-col gap-2 [&_button[type='submit']]:w-24 [&_button[type='submit']]:mt-3 [&_button[type='submit']]:self-end",
             className
           )}
         >

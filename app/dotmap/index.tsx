@@ -9,7 +9,7 @@ import { DotmapSchema } from "./schema";
 const Dotmap = () => {
   const [search, setSearch] = useState<string>();
   return (
-    <div className="bg-layout">
+    <div className="bg-layout gap-2">
       <Forms
         schema={DotmapSchema}
         className="h-fit flex-row"
@@ -17,8 +17,8 @@ const Dotmap = () => {
           setSearch(value.keyword)
         }
       >
-        <FormsInput name="keyword" label="검색" hidelabel />
-        <RippleButton>검색</RippleButton>
+        <FormsInput name="keyword" label="검색" hidelabel autoFocus />
+        <RippleButton className="w-20">검색</RippleButton>
       </Forms>
       <KakaoMap keyword={search} />
     </div>

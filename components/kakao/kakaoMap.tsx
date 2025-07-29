@@ -70,7 +70,7 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
   const [searchedMap, setSearchedMap] = useState<kakao.maps.Map>();
 
   return (
-    <div className="relative size-full my-1 rounded-lg overflow-hidden select-none">
+    <div className="relative size-full rounded-lg overflow-hidden select-none">
       <Map
         ref={mapRef}
         level={3} // 지도의 확대 레벨
