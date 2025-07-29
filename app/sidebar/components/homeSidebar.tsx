@@ -88,7 +88,12 @@ export function HomeSidebar({ session, ...props }: Props) {
       {
         name: "설정",
         url: "/settings",
-        icon: <Settings className="group-hover/menu-item:animate-rotate" />,
+        icon: (
+          <Settings
+            strokeDasharray={100}
+            className="group-hover/menu-item:[&_*]:animate-draw group-hover/menu-item:animate-rotate"
+          />
+        ),
       },
     ],
   };

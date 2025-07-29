@@ -20,8 +20,8 @@ const AudioWaveform = ({
         strokeLinecap="round"
         strokeLinejoin="round"
         className={cn(
-          "size-4 fill-none stroke-2 stroke-sidebar-foreground hover:animate-audiowaveform",
-          "group-hover/menu-item:animate-audiowaveform",
+          "size-4 fill-none stroke-2 stroke-sidebar-foreground hover:[&_path]:animate-erase-draw",
+          "group-hover/menu-item:[&_path]:animate-erase-draw",
           className
         )}
         {...props}

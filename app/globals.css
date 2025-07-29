@@ -217,7 +217,8 @@
 }
 
 @theme inline {
-  --animate-audiowaveform: audiowaveform 1.8s ease-in-out infinite;
+  --animate-erase-draw: erase-draw 1.8s ease-in-out infinite;
+  --animate-draw: draw 1s ease-in-out;
   --animate-rotate: rotate 2s ease-in-out infinite;
   --animate-draw-circle: draw-circle 1s ease-in-out;
   --animate-scale: scale 1s ease-in-out infinite;
@@ -225,7 +226,7 @@
   --animate-jello: jello 1s both infinite cubic-bezier(0.69, 0.34, 0.09, 0.6);
 }
 
-@keyframes audiowaveform {
+@keyframes erase-draw {
   0% {
     stroke-dashoffset: 100;
   }
@@ -234,6 +235,15 @@
   }
   100% {
     stroke-dashoffset: -100;
+  }
+}
+
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
   }
 }
 
