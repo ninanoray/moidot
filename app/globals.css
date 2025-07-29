@@ -218,7 +218,7 @@
 
 @theme inline {
   --animate-erase-draw: erase-draw 1.8s ease-in-out infinite;
-  --animate-draw: draw 1s ease-in-out;
+  --animate-draw: draw 0.8s ease-in-out;
   --animate-rotate: rotate 2s ease-in-out infinite;
   --animate-draw-circle: draw-circle 1s ease-in-out;
   --animate-scale: scale 1s ease-in-out infinite;

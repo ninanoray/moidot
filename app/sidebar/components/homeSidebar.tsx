@@ -91,7 +91,7 @@ export function HomeSidebar({ session, ...props }: Props) {
         icon: (
           <Settings
             strokeDasharray={100}
-            className="group-hover/menu-item:[&_*]:animate-draw group-hover/menu-item:animate-rotate"
+            className="group-hover/menu-item:[&_*]:animate-draw group-hover/menu-item:delay-500 group-hover/menu-item:animate-rotate origin-center"
           />
         ),
       },
