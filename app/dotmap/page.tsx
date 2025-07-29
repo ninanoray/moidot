@@ -1,7 +1,13 @@
+import KakaoMapScript from "@/script/KakaoMapScript";
 import Dotmap from ".";
 
 const dotmap = () => {
-  return <Dotmap />;
+  return (
+    <>
+      <KakaoMapScript />
+      <Dotmap />
+    </>
+  );
 };
 
 export default dotmap;

@@ -4,7 +4,7 @@ import Test from "./components/test";
 
 const Home = () => {
   return (
-    <div className="bg-layout flex flex-col">
+    <div className="bg-layout">
       <Test />
     </div>
   );

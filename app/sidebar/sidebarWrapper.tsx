@@ -3,7 +3,6 @@ import { HomeSidebar } from "@/app/sidebar/components/homeSidebar";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/animate-ui/radix/sidebar";
 import { getServerSession } from "next-auth/next";
 import { cookies, headers } from "next/headers";
@@ -28,7 +27,7 @@ export async function SidebarWrapper({
       <SidebarProvider defaultOpen={defaultOpen} className="min-h-dvh">
         <HomeSidebar session={session} />
         <SidebarInset>
-          <SidebarTrigger />
+          {/* <SidebarTrigger /> */}
           {children}
         </SidebarInset>
       </SidebarProvider>

@@ -49,7 +49,12 @@ export function NavDule({
   const { isMobile } = useSidebar();
 
   return (
-    <SidebarGroup>
+    <SidebarGroup
+      className="group-data-[collapsible=icon]:hidden"
+      onClick={(e) => {
+        e.stopPropagation(); // 중복 클릭 방지
+      }}
+    >
       <SidebarGroupLabel>줄</SidebarGroupLabel>
       <SidebarMenu>
         {dules.map((dule) => (

@@ -2,7 +2,7 @@
 
 import { MoimSwitcher } from "@/app/sidebar/components/moimSwitcher";
 import { NavDule } from "@/app/sidebar/components/navDule";
-import { NavProjects } from "@/app/sidebar/components/navMenu";
+import { NavMenu } from "@/app/sidebar/components/navMenu";
 import { NavUser } from "@/app/sidebar/components/navUser";
 import { cowHead } from "@lucide/lab";
 import {
@@ -20,6 +20,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  useSidebar,
 } from "../../../components/animate-ui/radix/sidebar";
 import ThemeSwitch from "../../../components/theme/themeSwitch";
 
@@ -47,7 +48,6 @@ export function HomeSidebar({ session, ...props }: Props) {
         title: "첫번째 줄",
         url: "#",
         icon: SquareTerminal,
-        isActive: true,
         dots: [
           {
             title: "첫번째 닷",
@@ -98,14 +98,16 @@ export function HomeSidebar({ session, ...props }: Props) {
     ],
   };
 
+  const { toggleSidebar } = useSidebar();
+
   return (
     <Sidebar collapsible="icon" className="select-none" {...props}>
       <SidebarHeader>
         <MoimSwitcher moims={data.moims} />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent onClick={toggleSidebar}>
         <NavDule dules={data.navDule} />
-        <NavProjects menu={data.menu} />
+        <NavMenu menu={data.menu} />
       </SidebarContent>
       <SidebarFooter>
         <ThemeSwitch className="mx-2 group-data-[collapsible=icon]:m-0!" />

@@ -9,7 +9,7 @@ import { DotmapSchema } from "./schema";
 const Dotmap = () => {
   const [search, setSearch] = useState<string>();
   return (
-    <div className="bg-layout flex flex-col">
+    <div className="bg-layout">
       <Forms
         schema={DotmapSchema}
         className="h-fit flex-row"
