@@ -58,7 +58,7 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
     isLoading: true,
   });
 
-  const [clickedPosition, setClickedPosition] = useState<Position>();
+  const [clickedMarker, setClickedMaker] = useState<Marker>();
   const [showClickedMarker, setShowClickedMarker] = useState<boolean>(false);
   const onLongPress = useLongPress(() => {}, {
     onStart: () => setShowClickedMarker(false),
@@ -88,19 +88,34 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         {...onLongPress()}
         onClick={(_, mouseEvent) => {
           if (showClickedMarker) {
-            const mousePos = mouseEvent.latLng;
-            setClickedPosition({
-              lat: mousePos.getLat(),
-              lng: mousePos.getLng(),
-            });
+            const mousePosLat = mouseEvent.latLng.getLat();
+            const mousePosLng = mouseEvent.latLng.getLng();
+
+            // 좌표를 주소로 변환
+            const geocoder = new kakao.maps.services.Geocoder();
+            geocoder.coord2Address(
+              mousePosLng,
+              mousePosLat,
+              (result, status) => {
+                if (status === kakao.maps.services.Status.OK) {
+                  setClickedMaker({
+                    name: "마이닷",
+                    position: {
+                      lat: mousePosLat,
+                      lng: mousePosLng,
+                    },
+                    address: result[0].address.address_name,
+                    roadAddress: result[0].road_address?.address_name,
+                  });
+                } else setClickedMaker(undefined);
+              }
+            );
           }
         }}
         className={cn("size-full", className)}
       >
         <MapController ref={mapRef} type={mapType} setType={setMapType} />
-        {clickedPosition && (
-          <ClickedMarker position={clickedPosition} name="마이닷" />
-        )}
+        {clickedMarker && <ClickedMarker {...clickedMarker} />}
         {keyword && (
           <SearchedMarker
             map={searchedMap}
@@ -270,10 +285,36 @@ const CurrentMarker = ({
     );
 };
 
-const ClickedMarker = ({ position, name }: Marker) => {
+interface MarkerCardLabelProps {
+  label: string;
+  content: string | undefined;
+  className?: string | undefined;
+}
+
+const MarkerCardLabelContent = ({
+  label,
+  content,
+  className,
+}: MarkerCardLabelProps) => {
+  return (
+    <div className="flex items-center gap-1">
+      <div
+        className={cn(
+          "mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm",
+          className
+        )}
+      >
+        {label}
+      </div>
+      <p>{content}</p>
+    </div>
+  );
+};
+
+const ClickedMarker = ({ position, name, address, roadAddress }: Marker) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  if (position)
+  if (position) {
     return (
       <>
         <MapMarker
@@ -288,13 +329,18 @@ const ClickedMarker = ({ position, name }: Marker) => {
         />
         {open && (
           <CustomOverlayMap position={position} clickable>
-            <RippleButton className="absolute -top-20 right-1/2 translate-x-1/2">
-              {name}
-            </RippleButton>
+            <div className="absolute -top-40 right-1/2 translate-x-1/2 p-2 flex flex-col gap-2 bg-card rounded-lg cursor-auto select-text">
+              <MarkerCardLabelContent label="지번" content={address} />
+              {roadAddress && (
+                <MarkerCardLabelContent label="도로명" content={roadAddress} />
+              )}
+              <RippleButton>{name}</RippleButton>
+            </div>
           </CustomOverlayMap>
         )}
       </>
     );
+  }
 };
 
 interface SearchedMarkerProps {
@@ -397,18 +443,11 @@ const SearchedMarker = ({ keyword, map, currentPos }: SearchedMarkerProps) => {
                   )}
                 </div>
 
-                <div className="flex items-center gap-1">
-                  <div className="mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm">
-                    지번
-                  </div>
-                  <p>{marker.address}</p>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm">
-                    도로명
-                  </div>
-                  <p>{marker.roadAddress}</p>
-                </div>
+                <MarkerCardLabelContent label="지번" content={marker.address} />
+                <MarkerCardLabelContent
+                  label="도로명"
+                  content={marker.roadAddress}
+                />
                 <div className="flex items-center gap-1">
                   <Phone className="size-3" />
                   <p>{marker.phone}</p>
