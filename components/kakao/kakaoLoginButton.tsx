@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { RippleButton, RippleButtonProps } from "../animate-ui/buttons/ripple";
-import KakaoTalk from "./kakaoTalk";
+import KakaoTalk from "./kakaoTalkIcon";
 
 const KakaoLoginButton = ({ className, ...props }: RippleButtonProps) => {
   return (

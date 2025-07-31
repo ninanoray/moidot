@@ -2,7 +2,7 @@
 
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import { Forms, FormsInput } from "@/components/forms";
-import KakaoMap from "@/components/kakao/kakaoMap";
+import KakaoMap from "@/components/kakao/map/kakaoMap";
 import { useState } from "react";
 import { DotmapSchema } from "./schema";
 

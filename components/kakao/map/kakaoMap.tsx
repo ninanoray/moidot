@@ -1,11 +1,11 @@
 "use client";
 
+import ClickedMarker from "@/app/dotmap/components/mydot";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Locate, Minus, Phone, Plus } from "lucide-react";
+import { Locate, Minus, Plus } from "lucide-react";
 import {
   Dispatch,
-  Fragment,
   RefObject,
   SetStateAction,
   useCallback,
@@ -13,16 +13,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
+import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
 import { useLongPress } from "use-long-press";
-import { RippleButton } from "../animate-ui/buttons/ripple";
+import { RippleButton } from "../../animate-ui/buttons/ripple";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../animate-ui/radix/popover";
-import { ToggleGroup, ToggleGroupItem } from "../animate-ui/radix/toggle-group";
-import { calcDistance, getLocalDistanceString } from "./util";
+  ToggleGroup,
+  ToggleGroupItem,
+} from "../../animate-ui/radix/toggle-group";
+import SearchedMarkers from "./searchedMarkers";
 
 type MapType = "ROADMAP" | "HYBRID";
 
@@ -115,9 +113,9 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         className={cn("size-full", className)}
       >
         <MapController ref={mapRef} type={mapType} setType={setMapType} />
-        {clickedMarker && <ClickedMarker {...clickedMarker} />}
+        {clickedMarker && <ClickedMarker marker={clickedMarker} />}
         {keyword && (
-          <SearchedMarker
+          <SearchedMarkers
             map={searchedMap}
             keyword={keyword}
             currentPos={currentPosition.position}
@@ -291,7 +289,7 @@ interface MarkerCardLabelProps {
   className?: string | undefined;
 }
 
-const MarkerCardLabelContent = ({
+export const MarkerCardLabelContent = ({
   label,
   content,
   className,
@@ -308,163 +306,5 @@ const MarkerCardLabelContent = ({
       </div>
       <p>{content}</p>
     </div>
-  );
-};
-
-const ClickedMarker = ({ position, name, address, roadAddress }: Marker) => {
-  const [open, setOpen] = useState<boolean>(false);
-
-  if (position) {
-    return (
-      <>
-        <MapMarker
-          position={position}
-          clickable
-          onMouseOver={() => setOpen(true)}
-          onClick={() => setOpen(!open)}
-          image={{
-            src: "/images/kakao-map/clicked-location.gif",
-            size: { width: 48, height: 48 },
-          }}
-        />
-        {open && (
-          <CustomOverlayMap position={position} clickable>
-            <div className="absolute -top-40 right-1/2 translate-x-1/2 p-2 flex flex-col gap-2 bg-card rounded-lg cursor-auto select-text">
-              <MarkerCardLabelContent label="지번" content={address} />
-              {roadAddress && (
-                <MarkerCardLabelContent label="도로명" content={roadAddress} />
-              )}
-              <RippleButton>{name}</RippleButton>
-            </div>
-          </CustomOverlayMap>
-        )}
-      </>
-    );
-  }
-};
-
-interface SearchedMarkerProps {
-  keyword: string;
-  map: kakao.maps.Map | undefined;
-  currentPos?: Position;
-}
-
-const SearchedMarker = ({ keyword, map, currentPos }: SearchedMarkerProps) => {
-  const [markers, setMarkers] = useState<Marker[]>([]);
-
-  const createSearchedMarkers = useCallback(
-    (
-      mapBounds: kakao.maps.LatLngBounds,
-      currentPosition: Position | undefined,
-      data: kakao.maps.services.PlacesSearchResult,
-      status: kakao.maps.services.Status
-    ) => {
-      if (status === kakao.maps.services.Status.OK) {
-        const result = [] as Marker[];
-
-        data.map((item) => {
-          const lat = Number(item.y);
-          const lng = Number(item.x);
-          result.push({
-            position: {
-              lat,
-              lng,
-            },
-            id: item.id,
-            name: item.place_name,
-            address: item.address_name,
-            roadAddress: item.road_address_name,
-            url: item.place_url,
-            phone: item.phone,
-            group: item.category_group_name,
-            category: item.category_name,
-            distance: calcDistance(currentPosition, { lat, lng }), // 현재 위치와 마커 사이의 거리
-          });
-          mapBounds.extend(new kakao.maps.LatLng(lat, lng));
-        });
-        return result;
-      } else return [];
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (!map) return;
-
-    const kakaoPlaces = new kakao.maps.services.Places(map);
-
-    kakaoPlaces.keywordSearch(
-      keyword,
-      (data, status, _pagination) => {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        const bounds = new kakao.maps.LatLngBounds();
-        const searchedMarkers = createSearchedMarkers(
-          bounds,
-          currentPos,
-          data,
-          status
-        );
-        setMarkers(searchedMarkers);
-        // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
-        if (!bounds.contain(map.getCenter())) map.setBounds(bounds);
-      },
-      {
-        useMapCenter: true, // 지도의 중심 기준으로 검색
-      }
-    );
-  }, [createSearchedMarkers, currentPos, keyword, map]);
-
-  return (
-    <>
-      {markers.map((marker) => (
-        <Fragment key={`marker-${marker.id}`}>
-          <MapMarker position={marker.position} />
-          <CustomOverlayMap position={marker.position} clickable>
-            <Popover>
-              <PopoverTrigger className="w-7 h-10 bg-transparent absolute bottom-1/2 right-1/2 translate-x-1/2 rounded-full cursor-pointer" />
-              <PopoverContent
-                side="top"
-                className="w-fit flex flex-col gap-1 whitespace-nowrap"
-              >
-                <div className="flex justify-between items-center gap-2">
-                  <h2>
-                    {marker.name}
-                    {marker.distance && (
-                      <span className="mx-1.5 text-xs font-light text-card-foreground/80">
-                        {getLocalDistanceString(marker.distance)}
-                      </span>
-                    )}
-                  </h2>
-                  {marker.group && (
-                    <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
-                      {marker.group}
-                    </p>
-                  )}
-                </div>
-
-                <MarkerCardLabelContent label="지번" content={marker.address} />
-                <MarkerCardLabelContent
-                  label="도로명"
-                  content={marker.roadAddress}
-                />
-                <div className="flex items-center gap-1">
-                  <Phone className="size-3" />
-                  <p>{marker.phone}</p>
-                </div>
-                <a
-                  href={marker.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-card-foreground"
-                >
-                  카카오맵 바로가기
-                </a>
-              </PopoverContent>
-            </Popover>
-          </CustomOverlayMap>
-        </Fragment>
-      ))}
-    </>
   );
 };

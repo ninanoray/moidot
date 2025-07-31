@@ -1,4 +1,4 @@
-import { Position } from "./kakaoMap";
+import { Position } from "./map/kakaoMap";
 
 export function getLocalDistanceString(distance: number) {
   if (distance > 1000)
