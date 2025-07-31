@@ -17,7 +17,7 @@ const Dotmap = () => {
           setSearch(value.keyword)
         }
       >
-        <FormsInput name="keyword" label="검색" hidelabel autoFocus />
+        <FormsInput name="keyword" autoFocus />
         <RippleButton className="w-20">검색</RippleButton>
       </Forms>
       <KakaoMap keyword={search} />

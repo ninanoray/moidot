@@ -5,7 +5,7 @@ import { FormControl } from "../ui/form";
 
 const FormsTextArea = ({
   label,
-  placeholder = `${label} 정보를 입력해주세요`,
+  placeholder = label ? label + " 정보를 입력해주세요" : "내용을 입력해주세요",
   className,
   ...props
 }: FormsItemsProps) => {

@@ -1,5 +1,8 @@
-import { Popover } from "@/components/animate-ui/radix/popover";
-import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/animate-ui/radix/popover";
 import { Phone } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import { CustomOverlayMap, MapMarker } from "react-kakao-maps-sdk";
@@ -33,7 +36,7 @@ const SearchedMarkers = ({
               <PopoverTrigger className="w-7 h-10 bg-transparent absolute bottom-1/2 right-1/2 translate-x-1/2 rounded-full cursor-pointer" />
               <PopoverContent
                 side="top"
-                className="w-fit flex flex-col gap-1 whitespace-nowrap"
+                className="w-fit p-4 flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
               >
                 <div className="flex justify-between items-center gap-2">
                   <h2>
@@ -50,7 +53,6 @@ const SearchedMarkers = ({
                     </p>
                   )}
                 </div>
-
                 <MarkerCardLabelContent label="지번" content={marker.address} />
                 <MarkerCardLabelContent
                   label="도로명"
@@ -88,7 +90,7 @@ export function searchMarkers(
   const kakaoPlaces = new kakao.maps.services.Places(map);
   kakaoPlaces.keywordSearch(
     keyword,
-    (places, status, _pagination) => {
+    (places, status, pagination) => {
       // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
       // LatLngBounds 객체에 좌표를 추가합니다
       const bounds = new kakao.maps.LatLngBounds();

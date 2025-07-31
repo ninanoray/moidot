@@ -1,6 +1,6 @@
 "use client";
 
-import ClickedMarker from "@/app/dotmap/components/mydot";
+import CreateMydotMarker from "@/app/dotmap/components/createMydotMarker";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Locate, Minus, Plus } from "lucide-react";
@@ -29,17 +29,30 @@ export interface Position {
   lng: number;
 }
 
+export interface Marker {
+  position: Position;
+  id?: string;
+  name: string;
+  address?: string;
+  roadAddress?: string;
+  url?: string;
+  phone?: string;
+  group?: string;
+  category?: string;
+  distance?: number;
+}
+
 interface KakaoMapProps {
   keyword?: string | undefined;
   className?: string | undefined;
 }
 
-const CENTER_INIT = {
-  lat: 33.450701,
-  lng: 126.570667,
-} as Position;
-
 const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
+  const CENTER_INIT = {
+    lat: 33.450701,
+    lng: 126.570667,
+  } as Position;
+
   // const kakaoLoader = useKakaoLoader({
   //   appkey: KAKAO_JAVASCRIPT_KEY,
   //   libraries: ["clusterer", "services"],
@@ -113,7 +126,6 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         className={cn("size-full", className)}
       >
         <MapController ref={mapRef} type={mapType} setType={setMapType} />
-        {clickedMarker && <ClickedMarker marker={clickedMarker} />}
         {keyword && (
           <SearchedMarkers
             map={searchedMap}
@@ -121,6 +133,7 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
             currentPos={currentPosition.position}
           />
         )}
+        {clickedMarker && <CreateMydotMarker marker={clickedMarker} />}
         <CurrentMarker
           currentPos={currentPosition}
           setCurrentPos={setCurrentPosition}
@@ -186,19 +199,6 @@ const MapController = ({ ref, type, setType }: MapControllerProps) => {
     </div>
   );
 };
-
-export interface Marker {
-  position: Position;
-  id?: string;
-  name: string;
-  address?: string;
-  roadAddress?: string;
-  url?: string;
-  phone?: string;
-  group?: string;
-  category?: string;
-  distance?: number;
-}
 
 interface CurrentPosition {
   position: Position;
@@ -283,7 +283,7 @@ const CurrentMarker = ({
     );
 };
 
-interface MarkerCardLabelProps {
+interface MarkerCardLabelContentProps {
   label: string;
   content: string | undefined;
   className?: string | undefined;
@@ -293,7 +293,7 @@ export const MarkerCardLabelContent = ({
   label,
   content,
   className,
-}: MarkerCardLabelProps) => {
+}: MarkerCardLabelContentProps) => {
   return (
     <div className="flex items-center gap-1">
       <div
