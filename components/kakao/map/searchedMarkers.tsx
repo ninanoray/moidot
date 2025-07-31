@@ -1,4 +1,5 @@
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
+import PaginateNavigation from "@/components/animate-ui/paginateNavigation";
 import {
   Popover,
   PopoverContent,
@@ -82,7 +83,7 @@ const SearchedMarkers = ({
         </Fragment>
       ))}
       {pagination && (
-        <div className="absolute bottom-0 left-0 z-1">
+        <div className="absolute bottom-10 left-0 z-1">
           {Array.from({ length: pagination.last }).map((_, index) => (
             <RippleButton
               variant={page === index + 1 ? "secondary" : "default"}
@@ -92,6 +93,7 @@ const SearchedMarkers = ({
               {index + 1}
             </RippleButton>
           ))}
+          <PaginateNavigation />
         </div>
       )}
     </>
