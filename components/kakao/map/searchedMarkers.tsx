@@ -1,3 +1,4 @@
+import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import {
   Popover,
   PopoverContent,
@@ -21,10 +22,15 @@ const SearchedMarkers = ({
   currentPos,
 }: SearchedMarkersProps) => {
   const [markers, setMarkers] = useState<Marker[]>([]);
+  const [pagination, setPagination] = useState<kakao.maps.Pagination>();
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    searchMarkers(keyword, map, currentPos, setMarkers);
-  }, [currentPos, keyword, map]);
+    searchMarkers(keyword, page, map, currentPos, (markers, pagination) => {
+      setMarkers(markers);
+      setPagination(pagination);
+    });
+  }, [currentPos, keyword, map, page]);
 
   return (
     <>
@@ -75,6 +81,19 @@ const SearchedMarkers = ({
           </CustomOverlayMap>
         </Fragment>
       ))}
+      {pagination && (
+        <div className="absolute bottom-0 left-0 z-1">
+          {Array.from({ length: pagination.last }).map((_, index) => (
+            <RippleButton
+              variant={page === index + 1 ? "secondary" : "default"}
+              key={index + 1}
+              onClick={() => setPage(index + 1)}
+            >
+              {index + 1}
+            </RippleButton>
+          ))}
+        </div>
+      )}
     </>
   );
 };
@@ -83,9 +102,10 @@ export default SearchedMarkers;
 
 export function searchMarkers(
   keyword: string,
+  page?: number | undefined,
   map?: kakao.maps.Map | undefined,
   currentPosition?: Position | undefined,
-  callback?: (markers: Marker[]) => void
+  callback?: (markers: Marker[], pagination?: kakao.maps.Pagination) => void
 ) {
   const kakaoPlaces = new kakao.maps.services.Places(map);
   kakaoPlaces.keywordSearch(
@@ -106,7 +126,7 @@ export function searchMarkers(
         });
       }
 
-      if (callback) callback(searchedMarkers);
+      if (callback) callback(searchedMarkers, pagination);
 
       // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
       if (map && !bounds.contain(map.getCenter())) map.setBounds(bounds);
@@ -115,6 +135,7 @@ export function searchMarkers(
     },
     {
       useMapCenter: true, // 지도의 중심 기준으로 검색
+      page: page,
     }
   );
 

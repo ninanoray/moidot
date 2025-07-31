@@ -40,10 +40,10 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
   useEffect(() => {
     const _ = undefined;
     if (marker.roadAddress)
-      searchMarkers(marker.roadAddress, _, _, setSearchedMarkers);
+      searchMarkers(marker.roadAddress, _, _, _, setSearchedMarkers);
     else {
       if (marker.address)
-        searchMarkers(marker.address, _, _, setSearchedMarkers);
+        searchMarkers(marker.address, _, _, _, setSearchedMarkers);
     }
   }, [marker.address, marker.roadAddress]);
 
