@@ -9,9 +9,9 @@ import {
   Marker,
   MarkerCardLabelContent,
 } from "@/components/kakao/map/kakaoMap";
-import { searchMarkers } from "@/components/kakao/map/searchedMarkers";
+import { placeToMarker } from "@/components/kakao/map/searchedMarkers";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import z from "zod";
 
@@ -22,6 +22,8 @@ interface CreateMydotMarkerProps {
 const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
   const [open, setOpen] = useState<boolean>(true);
   const [searchedMarkers, setSearchedMarkers] = useState<Marker[]>([]);
+  const [pagination, setPagination] = useState<kakao.maps.Pagination>();
+  const [page, setPage] = useState(1);
 
   const markerSelection = searchedMarkers.map((marker) => ({
     value: JSON.stringify(marker),
@@ -37,20 +39,59 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
     }),
   });
 
+  const search = useCallback(
+    (
+      keyword: string,
+      page: number,
+      callback: (markers: Marker[], pagination: kakao.maps.Pagination) => void
+    ) => {
+      const kakaoPlaces = new kakao.maps.services.Places();
+      kakaoPlaces.keywordSearch(
+        keyword,
+        (places, status, pagination) => {
+          if (status === kakao.maps.services.Status.OK) {
+            if (page > pagination.last) return;
+            callback(
+              places.map((place) => placeToMarker(place)),
+              pagination
+            );
+          }
+        },
+        {
+          page: page,
+        }
+      );
+    },
+    []
+  );
+
   useEffect(() => {
-    const _ = undefined;
-    if (marker.roadAddress)
-      searchMarkers(marker.roadAddress, _, _, _, setSearchedMarkers);
-    else {
-      if (marker.address)
-        searchMarkers(marker.address, _, _, _, setSearchedMarkers);
+    if (marker.roadAddress) {
+      search(marker.roadAddress, page, (markers, pagination) => {
+        setSearchedMarkers((prev) => [...prev, ...markers]);
+        setPagination(pagination);
+      });
+    } else {
+      if (marker.address) {
+        search(marker.address, page, (markers, pagination) => {
+          setSearchedMarkers((prev) => [...prev, ...markers]);
+          setPagination(pagination);
+        });
+      }
     }
-  }, [marker.address, marker.roadAddress]);
+  }, [marker, page, search]);
 
   if (marker.position) {
     return (
       <CustomOverlayMap clickable position={marker.position}>
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover
+          open={open}
+          onOpenChange={(open) => {
+            setOpen(open);
+            setSearchedMarkers([]);
+            setPage(1);
+          }}
+        >
           <PopoverTrigger
             onMouseOver={() => setOpen(true)}
             className="rounded-full cursor-pointer focus-visible:ring-0"
@@ -77,14 +118,30 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
             <Forms schema={MydotMarkerSchema}>
               <FormsSelect
                 name="marker"
-                items={markerSelection}
+                items={searchedMarkers.map((marker) => ({
+                  value: JSON.stringify(marker),
+                  label: marker.name,
+                }))}
                 placeholder={
                   searchedMarkers.length > 0
-                    ? "장소를 선택해주세요"
+                    ? `장소를 선택해주세요`
                     : "검색된 결과가 없습니다"
                 }
                 message={false}
-              />
+              >
+                {pagination && pagination.last > 1 && (
+                  <RippleButton
+                    disabled={page === pagination.last}
+                    variant="outline"
+                    className="w-full h-6 border-0 text-foreground/60 hover:bg-accent hover:text-accent-foreground/75"
+                    onClick={() => {
+                      if (page < pagination.last) setPage(page + 1);
+                    }}
+                  >
+                    {`더보기(${page}/${pagination.last})`}
+                  </RippleButton>
+                )}
+              </FormsSelect>
               <RippleButton>{marker.name}</RippleButton>
             </Forms>
           </PopoverContent>

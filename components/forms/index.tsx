@@ -101,7 +101,7 @@ const FormsItem = ({
                 {description && (
                   <FormDescription
                     className={cn(
-                      "mx-1 text-xs break-keep",
+                      "w-full px-1 text-end text-xs break-keep",
                       form.formState.errors.files ? "hidden" : ""
                     )}
                   >

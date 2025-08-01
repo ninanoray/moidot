@@ -13,12 +13,14 @@ const Dotmap = () => {
       <Forms
         schema={DotmapSchema}
         className="h-fit flex-row"
-        onSubmit={(value: typeof DotmapSchema._type) =>
-          setSearch(value.keyword)
-        }
+        onSubmit={(value: typeof DotmapSchema._type) => {
+          setSearch(value.keyword);
+        }}
       >
         <FormsInput name="keyword" autoFocus />
-        <RippleButton className="w-20">검색</RippleButton>
+        <RippleButton className="w-20" onClick={() => setSearch(undefined)}>
+          검색
+        </RippleButton>
       </Forms>
       <KakaoMap keyword={search} />
     </div>

@@ -24,6 +24,7 @@ const FormsSelect = ({
   items,
   label,
   placeholder = label ? label + " 정보를 선택해주세요" : "선택해주세요",
+  children,
   ...props
 }: FormsSelectProps & React.ComponentProps<typeof SelectPrimitive.Root>) => {
   return (
@@ -49,10 +50,11 @@ const FormsSelect = ({
             </FormControl>
             <SelectContent>
               {items.map((item, index) => (
-                <SelectItem key={index} value={item.value}>
+                <SelectItem key={index + item.value} value={item.value}>
                   {item.label}
                 </SelectItem>
               ))}
+              {children}
             </SelectContent>
           </Select>
         );
