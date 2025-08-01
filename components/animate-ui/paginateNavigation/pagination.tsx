@@ -5,10 +5,10 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { HTMLMotionProps, motion, Transition } from "motion/react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { RippleButton } from "../buttons/ripple";
 import {
   MotionHighlight,
   MotionHighlightItem,
@@ -72,130 +72,113 @@ function PaginationContent({
   const { highlightTransition, animateOnHover } = usePagination();
 
   return (
-    <motion.ul
+    <ul
       data-slot="pagination-content"
-      key="pagination-content"
       className={cn(
-        "z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] flex gap-1 rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]",
+        "p-1 flex items-center gap-1 border bg-popover text-popover-foreground rounded-lg shadow-md",
         className
       )}
-      initial={{
-        opacity: 0,
-        scale: 0.95,
-      }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-      }}
-      exit={{
-        opacity: 0,
-        scale: 0.95,
-      }}
-      transition={transition}
-      style={{ willChange: "opacity, transform" }}
       {...props}
     >
       <MotionHighlight
         hover
-        className="rounded-sm"
+        className="bg-primary rounded-md"
         controlledItems
         transition={highlightTransition}
         enabled={animateOnHover}
       >
         {children}
       </MotionHighlight>
-    </motion.ul>
+    </ul>
   );
 }
 
-function PaginationItem({ children, ...props }: React.ComponentProps<"li">) {
+function PaginationItem({
+  children,
+  ...props
+}: React.ComponentProps<"li"> & HTMLMotionProps<"li">) {
   return (
-    <MotionHighlightItem>
-      <motion.div
-        data-slot="dropdown-menu-sub-trigger"
-        whileTap={{ scale: 0.95 }}
-        className="[&:not([data-highlight])]:focus:bg-accent focus:text-accent-foreground cursor-default select-none outline-none"
+    <motion.li tabIndex={-1} whileTap={{ scale: 0.95 }} {...props}>
+      <MotionHighlightItem
+        data-slot="pagination-item"
+        className="rounded-md data-[active=true]:text-primary-foreground focus-within:bg-accent focus-within:text-accent-foreground trans-200"
       >
-        <li data-slot="pagination-item" {...props}>
-          <Ripple>{children}</Ripple>
-        </li>
-      </motion.div>
-    </MotionHighlightItem>
+        <Ripple>{children}</Ripple>
+      </MotionHighlightItem>
+    </motion.li>
   );
 }
 
 type PaginationLinkProps = {
+  href?: string;
   isActive?: boolean;
-} & React.ComponentProps<typeof Link> & {
-    inset?: boolean;
-    disabled?: boolean;
-  };
+} & React.ComponentProps<"button">;
 
 function PaginationLink({
-  className,
+  href,
   isActive,
+  className,
   children,
+  onClick,
   ...props
 }: {
   isActive?: boolean;
 } & PaginationLinkProps) {
+  const router = useRouter();
   return (
-    <Link
+    <button
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-active={isActive}
       className={cn(
-        "size-9 flex-center data-[active=true]:bg-primary data-[active=true]:text-primary-foreground",
+        "size-9 flex-center data-[active=true]:bg-primary data-[active=true]:text-primary-foreground cursor-pointer outline-0",
         className
       )}
+      onClick={href ? () => router.push(href) : onClick}
       {...props}
     >
       {children}
-    </Link>
+    </button>
   );
 }
 
 function PaginationPrevious({
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+}: React.ComponentProps<typeof RippleButton>) {
   return (
-    <PaginationLink
+    <RippleButton
       aria-label="Go to previous page"
+      variant="ghost"
       className={cn(
-        buttonVariants({
-          variant: "ghost",
-        }),
-        "w-auto gap-1 px-2.5 sm:pl-2.5",
+        "w-auto gap-1 px-2.5 sm:pl-2.5 hover:bg-accent hover:text-accent-foreground",
         className
       )}
       {...props}
     >
       <ChevronLeftIcon />
       <span className="hidden sm:block">이전</span>
-    </PaginationLink>
+    </RippleButton>
   );
 }
 
 function PaginationNext({
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+}: React.ComponentProps<typeof RippleButton>) {
   return (
-    <PaginationLink
+    <RippleButton
       aria-label="Go to next page"
+      variant="ghost"
       className={cn(
-        buttonVariants({
-          variant: "ghost",
-        }),
-        "w-auto gap-1 px-2.5 sm:pr-2.5",
+        "w-auto gap-1 px-2.5 sm:pr-2.5 hover:bg-accent hover:text-accent-foreground",
         className
       )}
       {...props}
     >
       <span className="hidden sm:block">다음</span>
       <ChevronRightIcon />
-    </PaginationLink>
+    </RippleButton>
   );
 }
 
