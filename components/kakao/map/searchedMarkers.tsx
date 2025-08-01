@@ -1,4 +1,4 @@
-import PaginateNavigation from "@/components/animate-ui/paginateNavigation";
+import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import {
   Popover,
   PopoverContent,
@@ -26,16 +26,23 @@ const SearchedMarkers = ({
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    searchMarkers(keyword, page, map, currentPos, (markers, pagination) => {
-      setMarkers(markers);
-      setPagination(pagination);
-    });
+    searchMarkers(
+      keyword,
+      page,
+      map,
+      currentPos,
+      (searchedMarkers, pagination) => {
+        setMarkers([...markers, ...searchedMarkers]);
+        setPagination(pagination);
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPos, keyword, map, page]);
 
   return (
     <>
-      {markers.map((marker) => (
-        <Fragment key={`marker-${marker.id}`}>
+      {markers.map((marker, index) => (
+        <Fragment key={`marker_${index}-${marker.id}`}>
           <MapMarker position={marker.position} />
           <CustomOverlayMap position={marker.position} clickable>
             <Popover>
@@ -81,14 +88,26 @@ const SearchedMarkers = ({
           </CustomOverlayMap>
         </Fragment>
       ))}
-      {pagination && (
-        <PaginateNavigation
-          currentPage={page}
-          updateCurrentPage={setPage}
-          total={pagination.last}
-          className="absolute bottom-2 left-0 z-1"
-        />
-      )}
+      {pagination &&
+        (page < pagination.last ? (
+          <RippleButton
+            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-1"
+            onClick={() => {
+              if (page < pagination.last) setPage(page + 1);
+            }}
+          >{`더보기(${page}/${pagination.last})`}</RippleButton>
+        ) : (
+          <RippleButton
+            variant="secondary"
+            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-1"
+            onClick={() => {
+              setPage(1);
+              setMarkers([]);
+            }}
+          >
+            초기화
+          </RippleButton>
+        ))}
     </>
   );
 };
