@@ -88,8 +88,6 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
           open={open}
           onOpenChange={(open) => {
             setOpen(open);
-            setSearchedMarkers([]);
-            setPage(1);
           }}
         >
           <PopoverTrigger

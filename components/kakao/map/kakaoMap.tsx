@@ -70,10 +70,13 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
   });
 
   const [clickedMarker, setClickedMaker] = useState<Marker>();
-  const [showClickedMarker, setShowClickedMarker] = useState<boolean>(false);
+  const [longClick, setLongClick] = useState<boolean>(false);
   const onLongPress = useLongPress(() => {}, {
-    onStart: () => setShowClickedMarker(false),
-    onFinish: () => setShowClickedMarker(true),
+    onStart: () => setLongClick(false),
+    onFinish: () => {
+      setClickedMaker(undefined);
+      setLongClick(true);
+    },
     threshold: 300,
     cancelOnMovement: true,
   });
@@ -97,8 +100,9 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         }}
         onCreate={setSearchedMap}
         {...onLongPress()}
+        disableDoubleClickZoom
         onClick={(_, mouseEvent) => {
-          if (showClickedMarker) {
+          if (longClick) {
             const mousePosLat = mouseEvent.latLng.getLat();
             const mousePosLng = mouseEvent.latLng.getLng();
 
@@ -118,7 +122,7 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
                     address: result[0].address.address_name,
                     roadAddress: result[0].road_address?.address_name,
                   });
-                } else setClickedMaker(undefined);
+                }
               }
             );
           }
