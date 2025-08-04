@@ -4,9 +4,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/animate-ui/radix/popover";
-import { Phone } from "lucide-react";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { CustomOverlayMap, MapMarker } from "react-kakao-maps-sdk";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { MapPin, Phone } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import { calcDistance, getLocalDistanceString } from "../util";
 import { Marker, MarkerCardLabelContent, Position } from "./kakaoMap";
 
@@ -30,8 +31,7 @@ const SearchedMarkers = ({
       keyword: string,
       page: number,
       map: kakao.maps.Map | undefined,
-      currentPosition: Position | undefined,
-      callback: (markers: Marker[], pagination: kakao.maps.Pagination) => void
+      currentPosition: Position | undefined
     ) => {
       const kakaoPlaces = new kakao.maps.services.Places(map);
       kakaoPlaces.keywordSearch(
@@ -51,15 +51,23 @@ const SearchedMarkers = ({
               if (map) bounds.extend(new kakao.maps.LatLng(lat, lng));
             });
 
-            callback(searchedMarkers, pagination);
-          }
+            setMarkers((prev) => [...prev, ...searchedMarkers]);
+            setPagination(pagination);
 
-          // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
-          if (map && !bounds.contain(map.getCenter())) map.setBounds(bounds);
+            // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
+            if (map && !bounds.contain(map.getCenter())) map.setBounds(bounds);
+          } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+            alert("검색 결과가 존재하지 않습니다.");
+            return;
+          } else if (status === kakao.maps.services.Status.ERROR) {
+            alert("검색 결과 중 오류가 발생했습니다.");
+            return;
+          }
         },
         {
           page: page,
-          useMapBounds: true,
+          // useMapBounds: true,
+          useMapCenter: true,
         }
       );
     },
@@ -67,60 +75,90 @@ const SearchedMarkers = ({
   );
 
   useEffect(() => {
-    search(keyword, page, map, currentPos, (searchedMarkers, pagination) => {
-      setMarkers((prev) => [...prev, ...searchedMarkers]);
-      setPagination(pagination);
-    });
+    search(keyword, page, map, currentPos);
   }, [currentPos, keyword, map, page, search]);
 
   return (
     <>
+      <div className="absolute top-2 left-2 z-1">
+        <ScrollArea className="h-120 p-4 bg-card/50 backdrop-blur-xs rounded-lg">
+          {markers.map((marker, index) => (
+            <div
+              key={`list_${index}-${marker.id}`}
+              onClick={() => {
+                if (map) {
+                  const bounds = map.getBounds();
+                  const markerLatLng = new kakao.maps.LatLng(
+                    marker.position.lat,
+                    marker.position.lng
+                  );
+                  if (!bounds.contain(markerLatLng))
+                    map.setCenter(markerLatLng);
+                }
+                document
+                  .getElementById(`marker_${index}-${marker.id}`)
+                  ?.click();
+              }}
+              className="max-w-60 p-2 whitespace-nowrap overflow-x-hidden overflow-ellipsis cursor-pointer"
+            >
+              {marker.name}
+            </div>
+          ))}
+        </ScrollArea>
+      </div>
+
       {markers.map((marker, index) => (
-        <Fragment key={`marker_${index}-${marker.id}`}>
-          <MapMarker position={marker.position} />
-          <CustomOverlayMap position={marker.position} clickable>
-            <Popover>
-              <PopoverTrigger className="w-7 h-10 bg-transparent absolute bottom-1/2 right-1/2 translate-x-1/2 rounded-full cursor-pointer" />
-              <PopoverContent
-                side="top"
-                className="w-fit p-4 flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
-              >
-                <div className="flex justify-between items-center gap-2">
-                  <h2>
-                    {marker.name}
-                    {marker.distance && (
-                      <span className="mx-1.5 text-xs font-light text-card-foreground/80">
-                        {getLocalDistanceString(marker.distance)}
-                      </span>
-                    )}
-                  </h2>
-                  {marker.group && (
-                    <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
-                      {marker.group}
-                    </p>
+        <CustomOverlayMap
+          key={`marker_${index}-${marker.id}`}
+          position={marker.position}
+          clickable
+        >
+          <Popover>
+            <PopoverTrigger
+              id={`marker_${index}-${marker.id}`}
+              className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
+            >
+              <MapPin className="size-7 fill-secondary stroke-1 stroke-primary group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
+            </PopoverTrigger>
+            <PopoverContent
+              side="top"
+              className="w-fit p-4 flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
+            >
+              <div className="flex justify-between items-center gap-2">
+                <h2>
+                  {marker.name}
+                  {marker.distance && (
+                    <span className="mx-1.5 text-xs font-light text-card-foreground/80">
+                      {getLocalDistanceString(marker.distance)}
+                    </span>
                   )}
-                </div>
-                <MarkerCardLabelContent label="지번" content={marker.address} />
-                <MarkerCardLabelContent
-                  label="도로명"
-                  content={marker.roadAddress}
-                />
-                <div className="flex items-center gap-1">
-                  <Phone className="size-3" />
-                  <p>{marker.phone}</p>
-                </div>
-                <a
-                  href={marker.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-card-foreground"
-                >
-                  카카오맵 바로가기
-                </a>
-              </PopoverContent>
-            </Popover>
-          </CustomOverlayMap>
-        </Fragment>
+                </h2>
+                {marker.group && (
+                  <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
+                    {marker.group}
+                  </p>
+                )}
+              </div>
+              <MarkerCardLabelContent label="지번" content={marker.address} />
+              <MarkerCardLabelContent
+                label="도로명"
+                content={marker.roadAddress}
+              />
+              <div className="flex items-center gap-1">
+                <Phone className="size-3" />
+                <p>{marker.phone}</p>
+              </div>
+              <a
+                href={marker.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-card-foreground"
+              >
+                카카오맵 바로가기
+              </a>
+            </PopoverContent>
+          </Popover>
+        </CustomOverlayMap>
       ))}
       {pagination &&
         pagination.last > 1 &&

@@ -216,6 +216,14 @@
   @apply size-full p-2 flex flex-col;
 }
 
+@utility no-scollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @theme inline {
   --animate-erase-draw: erase-draw 1.8s ease-in-out infinite;
   --animate-draw: draw 0.8s ease-in-out;
