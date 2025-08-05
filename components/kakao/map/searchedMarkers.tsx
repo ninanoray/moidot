@@ -187,7 +187,7 @@ const SearchedMarkers = ({
                   block: "nearest",
                   behavior: "smooth",
                 }); // 해당 요소가 목록에서 보이도록 목록을 스크롤
-              }
+              } else setRadioValue("");
             }}
           >
             <PopoverTrigger

@@ -127,12 +127,11 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
                 }
                 message={false}
               >
-                {pagination && pagination.last > 1 && (
+                {pagination && page < pagination.last && (
                   <RippleButton
-                    disabled={page === pagination.last}
                     variant="outline"
                     className="w-full h-6 border-0 text-foreground/60 hover:bg-accent hover:text-accent-foreground/75"
-                    onClick={() => {
+                    onViewportEnter={() => {
                       if (page < pagination.last) setPage(page + 1);
                     }}
                   >
