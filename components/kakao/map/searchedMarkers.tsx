@@ -11,40 +11,44 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { MapPin, Phone } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
-import { calcDistance, getLocalDistanceString } from "../util";
-import { Marker, MarkerCardLabelContent, Position } from "./kakaoMap";
+import { getLocalDistanceString } from "../util";
+import { Marker, MarkerCardLabelContent, placeToMarker } from "./kakaoMap";
 
 interface SearchedMarkersProps {
   keyword: string | undefined;
-  map: kakao.maps.Map | undefined;
-  currentPos?: Position;
+  mapRef: RefObject<kakao.maps.Map | null>;
+  currentPos?: kakao.maps.LatLng;
 }
 
 const SearchedMarkers = ({
   keyword,
-  map,
+  mapRef,
   currentPos,
 }: SearchedMarkersProps) => {
+  const map = mapRef.current;
+  // For Map Markers
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [pagination, setPagination] = useState<kakao.maps.Pagination>();
   const [page, setPage] = useState(1);
-
-  const [checkedValue, setCheckedValue] = useState<string>("");
+  // For Marker List
+  const markerRef = useRef<HTMLButtonElement[] | null[]>([]);
+  const radioRef = useRef<HTMLButtonElement[] | null[]>([]);
+  const [radioValue, setRadioValue] = useState<string>("");
 
   const search = useCallback(
     (
       keyword: string | undefined,
       page: number,
-      map: kakao.maps.Map | undefined,
-      currentPosition: Position | undefined
+      map: kakao.maps.Map | null,
+      currentPosition: kakao.maps.LatLng | undefined
     ) => {
-      if (!keyword) {
+      if (!keyword || !map) {
         setMarkers([]);
         setPagination(undefined);
         setPage(1);
-        setCheckedValue("");
+        setRadioValue("");
         return;
       }
       const kakaoPlaces = new kakao.maps.services.Places(map);
@@ -61,7 +65,13 @@ const SearchedMarkers = ({
               const lat = Number(place.y);
               const lng = Number(place.x);
 
-              searchedMarkers.push(placeToMarker(place, currentPosition));
+              if (currentPosition)
+                searchedMarkers.push(
+                  placeToMarker(place, {
+                    lat: currentPosition.getLat(),
+                    lng: currentPosition.getLng(),
+                  })
+                );
               if (map) bounds.extend(new kakao.maps.LatLng(lat, lng));
             });
 
@@ -94,40 +104,42 @@ const SearchedMarkers = ({
 
   return (
     <>
+      {/* 검색 List */}
       <div className="absolute top-2 left-2 z-1">
         <ScrollArea
-          id="searched-list"
           aria-label="scroll area"
           className={cn(
-            "w-48 bg-card/65 backdrop-blur-xs shadow-md rounded-md trans-300",
-            keyword ? "not-sr-only h-120 p-4" : "sr-only"
+            "w-68 bg-card/65 backdrop-blur-xs shadow-md rounded-md trans-300",
+            markers.length > 10 ? "h-120" : "h-auto",
+            keyword ? "not-sr-only p-4" : "sr-only"
           )}
         >
           <RadioGroup
-            value={checkedValue}
+            value={radioValue}
             onValueChange={(value) => {
-              setCheckedValue(value);
+              setRadioValue(value);
               if (map) {
-                const bounds = map.getBounds();
                 const markerLatLng = new kakao.maps.LatLng(
                   Number(value.split(",")[1]),
                   Number(value.split(",")[2])
                 );
-                if (!bounds.contain(markerLatLng)) map.panTo(markerLatLng);
+                map.panTo(markerLatLng);
               }
-              setTimeout(() => {
-                document
-                  .getElementById(`marker_${value.split(",")[0]}`)
-                  ?.click();
-              }, 200);
             }}
           >
             {markers.map((marker, index) => (
               <RadioGroupItem
                 key={`list_${index}-${marker.id}`}
-                id={`${index}-${marker.id}`}
+                ref={(el) => {
+                  radioRef.current[index] = el;
+                }}
                 value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
-                className="w-40 block"
+                className="w-60 block"
+                onClick={() => {
+                  setTimeout(() => {
+                    markerRef.current[index]?.click();
+                  }, 300);
+                }}
               >
                 <p className="text-inherit text-start whitespace-nowrap overflow-hidden overflow-ellipsis">
                   {marker.name}
@@ -136,23 +148,53 @@ const SearchedMarkers = ({
             ))}
           </RadioGroup>
         </ScrollArea>
+        {pagination &&
+          pagination.last > 1 &&
+          (page < pagination.last ? (
+            <RippleButton
+              className="w-full mt-1"
+              onClick={() => {
+                if (page < pagination.last) setPage((prev) => prev + 1);
+              }}
+            >{`더보기(${page}/${pagination.last})`}</RippleButton>
+          ) : (
+            <RippleButton
+              variant="secondary"
+              className="w-full mt-1"
+              onClick={() => {
+                setMarkers([]);
+                setPage(1);
+              }}
+            >
+              초기화
+            </RippleButton>
+          ))}
       </div>
-
+      {/* 검색 Markers */}
       {markers.map((marker, index) => (
         <CustomOverlayMap
           key={`marker_${index}-${marker.id}`}
           position={marker.position}
           clickable
         >
-          <Popover>
-            <PopoverTrigger
-              id={`marker_${marker.id}`}
-              className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
-              onClick={() => {
-                setCheckedValue(
+          <Popover
+            onOpenChange={(open) => {
+              if (open) {
+                setRadioValue(
                   `${marker.id},${marker.position.lat},${marker.position.lng}`
                 );
+                radioRef.current[index]?.scrollIntoView({
+                  block: "nearest",
+                  behavior: "smooth",
+                }); // 해당 요소가 목록에서 보이도록 목록을 스크롤
+              }
+            }}
+          >
+            <PopoverTrigger
+              ref={(el) => {
+                markerRef.current[index] = el;
               }}
+              className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
             >
               <MapPin className="size-7 fill-secondary stroke-1 stroke-primary hover:animate-jello group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
             </PopoverTrigger>
@@ -196,53 +238,8 @@ const SearchedMarkers = ({
           </Popover>
         </CustomOverlayMap>
       ))}
-      {pagination &&
-        pagination.last > 1 &&
-        (page < pagination.last ? (
-          <RippleButton
-            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-1"
-            onClick={() => {
-              if (page < pagination.last) setPage(page + 1);
-            }}
-          >{`더보기(${page}/${pagination.last})`}</RippleButton>
-        ) : (
-          <RippleButton
-            variant="secondary"
-            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-1"
-            onClick={() => {
-              setMarkers([]);
-              setPage(1);
-            }}
-          >
-            초기화
-          </RippleButton>
-        ))}
     </>
   );
 };
 
 export default SearchedMarkers;
-
-export function placeToMarker(
-  place: kakao.maps.services.PlacesSearchResultItem,
-  currentPosition?: Position | undefined
-): Marker {
-  const lat = Number(place.y);
-  const lng = Number(place.x);
-
-  return {
-    position: {
-      lat,
-      lng,
-    },
-    id: place.id,
-    name: place.place_name,
-    address: place.address_name,
-    roadAddress: place.road_address_name,
-    url: place.place_url,
-    phone: place.phone,
-    group: place.category_group_name,
-    category: place.category_name,
-    distance: calcDistance(currentPosition, { lat, lng }),
-  };
-}

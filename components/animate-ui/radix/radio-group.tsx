@@ -95,7 +95,7 @@ function RadioGroupItem({
       <MotionHighlightItem>
         <RadioGroupPrimitive.Item
           className={cn(
-            "w-full px-3 py-2 block rounded-md cursor-pointer trans-200 data-[state='checked']:bg-card-foreground/50 data-[state='checked']:text-card",
+            "w-full px-3 py-2 block rounded-md cursor-pointer trans-200 data-[state='checked']:bg-card-foreground/65 data-[state='checked']:text-card",
             className
           )}
           {...props}

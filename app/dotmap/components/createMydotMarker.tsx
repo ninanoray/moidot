@@ -8,8 +8,8 @@ import { Forms, FormsSelect } from "@/components/forms";
 import {
   Marker,
   MarkerCardLabelContent,
+  placeToMarker,
 } from "@/components/kakao/map/kakaoMap";
-import { placeToMarker } from "@/components/kakao/map/searchedMarkers";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useCallback, useEffect, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";

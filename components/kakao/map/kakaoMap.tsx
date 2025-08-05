@@ -4,15 +4,7 @@ import CreateMydotMarker from "@/app/dotmap/components/createMydotMarker";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Locate, Minus, Plus } from "lucide-react";
-import {
-  Dispatch,
-  RefObject,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
 import { useLongPress } from "use-long-press";
 import { RippleButton } from "../../animate-ui/buttons/ripple";
@@ -20,15 +12,22 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "../../animate-ui/radix/toggle-group";
+import { calcDistance } from "../util";
 import SearchedMarkers from "./searchedMarkers";
 
 type MapType = "ROADMAP" | "HYBRID";
 
-export type Position = {
+/**
+ * WGS84 위치 좌표
+ */
+export interface Position {
   lat: number;
   lng: number;
-};
+}
 
+/**
+ * 카카오맵 위에 표시되는 위치 마커
+ */
 export interface Marker {
   position: Position;
   id?: string;
@@ -72,13 +71,8 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
   const mapRef = useRef<kakao.maps.Map>(null);
   const [mapType, setMapType] = useState<MapType>("ROADMAP");
 
-  const [centerPostion, setCenterPosition] = useState(CENTER_INIT);
-
-  const [currentPosition, setCurrentPosition] = useState<CurrentPosition>({
-    position: CENTER_INIT,
-    errMsg: null,
-    isLoading: true,
-  });
+  // 현위치
+  const [currentPosition, setCurrentPosition] = useState<kakao.maps.LatLng>();
 
   const [clickedMarker, setClickedMaker] = useState<Marker>();
   const [longClick, setLongClick] = useState<boolean>(false);
@@ -92,7 +86,20 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
     cancelOnMovement: true,
   });
 
-  const [searchedMap, setSearchedMap] = useState<kakao.maps.Map>();
+  // 위치 좌표를 주소로 변환
+  function positionToAdress(postition: Position) {
+    const geocoder = new kakao.maps.services.Geocoder();
+    geocoder.coord2Address(postition.lng, postition.lat, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        setClickedMaker({
+          name: "마이닷",
+          position: postition,
+          address: result[0].address.address_name,
+          roadAddress: result[0].road_address?.address_name,
+        });
+      }
+    });
+  }
 
   return (
     <div className="relative size-full rounded-lg overflow-hidden select-none">
@@ -101,56 +108,30 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         level={3} // 지도의 확대 레벨
         isPanto // 지도 부드럽게 이동
         mapTypeId={mapType} // 맵뷰
-        center={centerPostion}
-        onCenterChanged={(map) => {
-          const centerPos = map.getCenter();
-          setCenterPosition({
-            lat: centerPos.getLat(),
-            lng: centerPos.getLng(),
-          });
-        }}
-        onCreate={setSearchedMap}
+        center={CENTER_INIT}
+        className={cn("size-full", className)}
         {...onLongPress()}
         disableDoubleClickZoom
         onClick={(_, mouseEvent) => {
           if (longClick) {
-            const mousePosLat = mouseEvent.latLng.getLat();
-            const mousePosLng = mouseEvent.latLng.getLng();
-
-            // 좌표를 주소로 변환
-            const geocoder = new kakao.maps.services.Geocoder();
-            geocoder.coord2Address(
-              mousePosLng,
-              mousePosLat,
-              (result, status) => {
-                if (status === kakao.maps.services.Status.OK) {
-                  setClickedMaker({
-                    name: "마이닷",
-                    position: {
-                      lat: mousePosLat,
-                      lng: mousePosLng,
-                    },
-                    address: result[0].address.address_name,
-                    roadAddress: result[0].road_address?.address_name,
-                  });
-                }
-              }
-            );
+            positionToAdress({
+              lat: mouseEvent.latLng.getLat(),
+              lng: mouseEvent.latLng.getLng(),
+            });
           }
         }}
-        className={cn("size-full", className)}
       >
-        <MapController ref={mapRef} type={mapType} setType={setMapType} />
+        <MapController mapRef={mapRef} type={mapType} setType={setMapType} />
         <SearchedMarkers
-          map={searchedMap}
+          mapRef={mapRef}
           keyword={keyword}
-          currentPos={currentPosition.position}
+          currentPos={currentPosition}
         />
         {clickedMarker && <CreateMydotMarker marker={clickedMarker} />}
         <CurrentMarker
+          mapRef={mapRef}
           currentPos={currentPosition}
           setCurrentPos={setCurrentPosition}
-          setCenterPos={setCenterPosition}
         />
       </Map>
     </div>
@@ -160,20 +141,20 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
 export default KakaoMap;
 
 interface MapControllerProps {
-  ref: RefObject<kakao.maps.Map | null>;
+  mapRef: RefObject<kakao.maps.Map | null>;
   type: MapType;
   setType: (type: MapType) => void;
 }
 
-const MapController = ({ ref, type, setType }: MapControllerProps) => {
+const MapController = ({ mapRef, type, setType }: MapControllerProps) => {
   const zoomIn = () => {
-    const map = ref.current;
+    const map = mapRef.current;
     if (!map) return;
     map.setLevel(map.getLevel() - 1);
   };
 
   const zoomOut = () => {
-    const map = ref.current;
+    const map = mapRef.current;
     if (!map) return;
     map.setLevel(map.getLevel() + 1);
   };
@@ -213,23 +194,19 @@ const MapController = ({ ref, type, setType }: MapControllerProps) => {
   );
 };
 
-interface CurrentPosition {
-  position: Position;
-  errMsg: string | null;
-  isLoading: boolean;
-}
-
 interface CurrentMarkerProps {
-  currentPos: CurrentPosition;
-  setCurrentPos: Dispatch<SetStateAction<CurrentPosition>>;
-  setCenterPos: (pos: Position) => void;
+  mapRef: RefObject<kakao.maps.Map | null>;
+  currentPos: kakao.maps.LatLng | undefined;
+  setCurrentPos: (latlng: kakao.maps.LatLng | undefined) => void;
 }
 
 const CurrentMarker = ({
+  mapRef,
   currentPos,
   setCurrentPos,
-  setCenterPos,
 }: CurrentMarkerProps) => {
+  const map = mapRef.current;
+
   const updateCurrentPostition = useCallback(() => {
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
@@ -237,37 +214,27 @@ const CurrentMarker = ({
         (position) => {
           const lat = position.coords.latitude; // 위도
           const lng = position.coords.longitude; // 경도
-          setCurrentPos((prev) => ({
-            ...prev,
-            position: { lat, lng },
-            isLoading: false,
-          }));
+          setCurrentPos(new kakao.maps.LatLng(lat, lng));
           // 지도 중앙 위치 업데이트
-          setCenterPos({ lat, lng });
+          map?.setCenter(new kakao.maps.LatLng(lat, lng));
         },
         (err) => {
-          setCurrentPos((prev) => ({
-            ...prev,
-            errMsg: err.message,
-            isLoading: false,
-          }));
+          setCurrentPos(undefined);
+          alert(err.message);
         }
       );
     } else {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      setCurrentPos((prev) => ({
-        ...prev,
-        errMsg: "현위치를 찾을 수 없습니다.",
-        isLoading: true,
-      }));
+      setCurrentPos(undefined);
+      alert("GeoLocation을 사용할 수 없습니다.");
     }
-  }, [setCenterPos, setCurrentPos]);
+  }, [map, setCurrentPos]);
 
   useEffect(() => {
     updateCurrentPostition();
   }, [updateCurrentPostition]);
 
-  if (!currentPos.isLoading)
+  if (map && currentPos)
     return (
       <>
         {/* 현위치로 이동하기 버튼 */}
@@ -275,13 +242,22 @@ const CurrentMarker = ({
           size="icon"
           className="absolute z-1 right-1.5 bottom-1.5"
           onClick={() => {
-            setCenterPos(currentPos.position);
+            map.panTo(currentPos);
+            if (map.getLevel() !== 3)
+              setTimeout(() => {
+                map.setLevel(3, {
+                  animate: true,
+                  anchor: currentPos,
+                });
+              }, 300);
           }}
         >
           <Locate />
         </RippleButton>
         {/* 현위치 마커 */}
-        <CustomOverlayMap position={currentPos.position}>
+        <CustomOverlayMap
+          position={{ lat: currentPos.getLat(), lng: currentPos.getLng() }}
+        >
           <div className="size-16 flex-center rounded-full">
             <DotLottieReact
               src="images/kakao-map/current-location-secondary.lottie"
@@ -321,3 +297,32 @@ export const MarkerCardLabelContent = ({
     </div>
   );
 };
+
+/**
+ * 카카오 장소 정보를 Marker 정보로 변환한다.
+ * @param place 장소 정보
+ * @param position 장소 정보와의 거리를 계산할 기준 Position
+ */
+export function placeToMarker(
+  place: kakao.maps.services.PlacesSearchResultItem,
+  position?: Position | undefined
+): Marker {
+  const lat = Number(place.y);
+  const lng = Number(place.x);
+
+  return {
+    position: {
+      lat,
+      lng,
+    },
+    id: place.id,
+    name: place.place_name,
+    address: place.address_name,
+    roadAddress: place.road_address_name,
+    url: place.place_url,
+    phone: place.phone,
+    group: place.category_group_name,
+    category: place.category_name,
+    distance: calcDistance(position, { lat, lng }),
+  };
+}
