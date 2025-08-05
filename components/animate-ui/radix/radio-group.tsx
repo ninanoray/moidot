@@ -19,7 +19,12 @@ type RadioGroupProps = React.ComponentProps<typeof RadioGroupPrimitive.Root> & {
   transition?: Transition;
 };
 
-function RadioGroup({ className, children, ...props }: RadioGroupProps) {
+function RadioGroup({
+  className,
+  transition = { type: "spring", stiffness: 350, damping: 30 },
+  children,
+  ...props
+}: RadioGroupProps) {
   return (
     <RadioGroupPrimitive.Root
       data-slot="radio-group"
@@ -31,7 +36,7 @@ function RadioGroup({ className, children, ...props }: RadioGroupProps) {
         enabled
         className="bg-card-foreground/25 rounded-md"
         controlledItems
-        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+        transition={transition}
       >
         {children}
       </MotionHighlight>
@@ -89,7 +94,10 @@ function RadioGroupItem({
     return (
       <MotionHighlightItem>
         <RadioGroupPrimitive.Item
-          className="w-60 px-3 py-2 block rounded-md cursor-pointer trans-200 data-[state='checked']:bg-card-foreground/50 data-[state='checked']:text-card"
+          className={cn(
+            "w-full px-3 py-2 block rounded-md cursor-pointer trans-200 data-[state='checked']:bg-card-foreground/50 data-[state='checked']:text-card",
+            className
+          )}
           {...props}
         >
           {children}

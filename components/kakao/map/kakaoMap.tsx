@@ -24,10 +24,10 @@ import SearchedMarkers from "./searchedMarkers";
 
 type MapType = "ROADMAP" | "HYBRID";
 
-export interface Position {
+export type Position = {
   lat: number;
   lng: number;
-}
+};
 
 export interface Marker {
   position: Position;
@@ -37,8 +37,19 @@ export interface Marker {
   roadAddress?: string;
   url?: string;
   phone?: string;
+  /**
+   * 중요 카테고리만 그룹핑한 카테고리 그룹명
+   * 예) 음식점
+   */
   group?: string;
+  /**
+   * 카테고리 이름
+   * 예) 음식점 > 치킨
+   */
   category?: string;
+  /**
+   * 현재 위치와 마커 사이의 거리
+   */
   distance?: number;
 }
 
@@ -130,13 +141,11 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         className={cn("size-full", className)}
       >
         <MapController ref={mapRef} type={mapType} setType={setMapType} />
-        {keyword && (
-          <SearchedMarkers
-            map={searchedMap}
-            keyword={keyword}
-            currentPos={currentPosition.position}
-          />
-        )}
+        <SearchedMarkers
+          map={searchedMap}
+          keyword={keyword}
+          currentPos={currentPosition.position}
+        />
         {clickedMarker && <CreateMydotMarker marker={clickedMarker} />}
         <CurrentMarker
           currentPos={currentPosition}

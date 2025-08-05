@@ -9,6 +9,7 @@ import {
   RadioGroupItem,
 } from "@/components/animate-ui/radix/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 import { MapPin, Phone } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
@@ -16,7 +17,7 @@ import { calcDistance, getLocalDistanceString } from "../util";
 import { Marker, MarkerCardLabelContent, Position } from "./kakaoMap";
 
 interface SearchedMarkersProps {
-  keyword: string;
+  keyword: string | undefined;
   map: kakao.maps.Map | undefined;
   currentPos?: Position;
 }
@@ -32,11 +33,17 @@ const SearchedMarkers = ({
 
   const search = useCallback(
     (
-      keyword: string,
+      keyword: string | undefined,
       page: number,
       map: kakao.maps.Map | undefined,
       currentPosition: Position | undefined
     ) => {
+      if (!keyword) {
+        setMarkers([]);
+        setPagination(undefined);
+        setPage(1);
+        return;
+      }
       const kakaoPlaces = new kakao.maps.services.Places(map);
       kakaoPlaces.keywordSearch(
         keyword,
@@ -85,7 +92,12 @@ const SearchedMarkers = ({
   return (
     <>
       <div className="absolute top-2 left-2 z-1">
-        <ScrollArea className="h-120 p-4 bg-card/65 backdrop-blur-xs shadow-md rounded-md">
+        <ScrollArea
+          className={cn(
+            "w-48 bg-card/65 backdrop-blur-xs shadow-md rounded-md trans-300",
+            keyword ? "not-sr-only h-120 p-4" : "sr-only"
+          )}
+        >
           <RadioGroup
             onValueChange={(value) => {
               if (map) {
@@ -100,17 +112,16 @@ const SearchedMarkers = ({
             }}
           >
             {markers.map((marker, index) => (
-              <div key={`list_${index}-${marker.id}`}>
-                <RadioGroupItem
-                  id={`${index}-${marker.id}`}
-                  value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
-                  className="hidden data-[state='checked']:[&~label]:bg-card-foreground/50 data-[state='checked']:[&~label]:text-card"
-                >
-                  <p className="text-inherit text-start whitespace-nowrap overflow-hidden overflow-ellipsis">
-                    {marker.name}
-                  </p>
-                </RadioGroupItem>
-              </div>
+              <RadioGroupItem
+                key={`list_${index}-${marker.id}`}
+                id={`${index}-${marker.id}`}
+                value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
+                className="w-40 block"
+              >
+                <p className="text-inherit text-start whitespace-nowrap overflow-hidden overflow-ellipsis">
+                  {marker.name}
+                </p>
+              </RadioGroupItem>
             ))}
           </RadioGroup>
         </ScrollArea>
@@ -127,7 +138,7 @@ const SearchedMarkers = ({
               id={`marker_${marker.id}`}
               className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
             >
-              <MapPin className="size-7 fill-secondary stroke-1 stroke-primary group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
+              <MapPin className="size-7 fill-secondary stroke-1 stroke-primary hover:animate-jello group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
             </PopoverTrigger>
             <PopoverContent
               side="top"
@@ -216,6 +227,6 @@ export function placeToMarker(
     phone: place.phone,
     group: place.category_group_name,
     category: place.category_name,
-    distance: calcDistance(currentPosition, { lat, lng }), // 현재 위치와 마커 사이의 거리
+    distance: calcDistance(currentPosition, { lat, lng }),
   };
 }
