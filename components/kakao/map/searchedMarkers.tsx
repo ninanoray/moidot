@@ -31,6 +31,8 @@ const SearchedMarkers = ({
   const [pagination, setPagination] = useState<kakao.maps.Pagination>();
   const [page, setPage] = useState(1);
 
+  const [checkedValue, setCheckedValue] = useState<string>("");
+
   const search = useCallback(
     (
       keyword: string | undefined,
@@ -42,6 +44,7 @@ const SearchedMarkers = ({
         setMarkers([]);
         setPagination(undefined);
         setPage(1);
+        setCheckedValue("");
         return;
       }
       const kakaoPlaces = new kakao.maps.services.Places(map);
@@ -66,7 +69,7 @@ const SearchedMarkers = ({
             setPagination(pagination);
 
             // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
-            if (map && !bounds.contain(map.getCenter())) map.setBounds(bounds);
+            if (map && !bounds.contain(map.getCenter())) map.panTo(bounds);
           } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
             alert("검색 결과가 존재하지 않습니다.");
             return;
@@ -93,22 +96,30 @@ const SearchedMarkers = ({
     <>
       <div className="absolute top-2 left-2 z-1">
         <ScrollArea
+          id="searched-list"
+          aria-label="scroll area"
           className={cn(
             "w-48 bg-card/65 backdrop-blur-xs shadow-md rounded-md trans-300",
             keyword ? "not-sr-only h-120 p-4" : "sr-only"
           )}
         >
           <RadioGroup
+            value={checkedValue}
             onValueChange={(value) => {
+              setCheckedValue(value);
               if (map) {
                 const bounds = map.getBounds();
                 const markerLatLng = new kakao.maps.LatLng(
                   Number(value.split(",")[1]),
                   Number(value.split(",")[2])
                 );
-                if (!bounds.contain(markerLatLng)) map.setCenter(markerLatLng);
+                if (!bounds.contain(markerLatLng)) map.panTo(markerLatLng);
               }
-              document.getElementById(`marker_${value.split(",")[0]}`)?.click();
+              setTimeout(() => {
+                document
+                  .getElementById(`marker_${value.split(",")[0]}`)
+                  ?.click();
+              }, 200);
             }}
           >
             {markers.map((marker, index) => (
@@ -137,6 +148,11 @@ const SearchedMarkers = ({
             <PopoverTrigger
               id={`marker_${marker.id}`}
               className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
+              onClick={() => {
+                setCheckedValue(
+                  `${marker.id},${marker.position.lat},${marker.position.lng}`
+                );
+              }}
             >
               <MapPin className="size-7 fill-secondary stroke-1 stroke-primary hover:animate-jello group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
             </PopoverTrigger>
