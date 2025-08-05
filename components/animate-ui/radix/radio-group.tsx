@@ -10,18 +10,32 @@ import {
 } from "motion/react";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import * as React from "react";
+import {
+  MotionHighlight,
+  MotionHighlightItem,
+} from "../effects/motion-highlight";
 
 type RadioGroupProps = React.ComponentProps<typeof RadioGroupPrimitive.Root> & {
   transition?: Transition;
 };
 
-function RadioGroup({ className, ...props }: RadioGroupProps) {
+function RadioGroup({ className, children, ...props }: RadioGroupProps) {
   return (
     <RadioGroupPrimitive.Root
       data-slot="radio-group"
       className={cn("grid gap-2.5", className)}
       {...props}
-    />
+    >
+      <MotionHighlight
+        hover
+        enabled
+        className="bg-card-foreground/25 rounded-md"
+        controlledItems
+        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+      >
+        {children}
+      </MotionHighlight>
+    </RadioGroupPrimitive.Root>
   );
 }
 
@@ -68,27 +82,40 @@ type RadioGroupItemProps = React.ComponentProps<
 function RadioGroupItem({
   className,
   transition = { type: "spring", stiffness: 200, damping: 16 },
+  children,
   ...props
 }: RadioGroupItemProps) {
-  return (
-    <RadioGroupPrimitive.Item asChild {...props}>
-      <motion.button
-        data-slot="radio-group-item"
-        className={cn(
-          "aspect-square size-5 rounded-full flex items-center justify-center border border-input text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        {...props}
-      >
-        <RadioGroupIndicator
-          data-slot="radio-group-item-indicator"
-          transition={transition}
-        />
-      </motion.button>
-    </RadioGroupPrimitive.Item>
-  );
+  if (!!children)
+    return (
+      <MotionHighlightItem>
+        <RadioGroupPrimitive.Item
+          className="w-60 px-3 py-2 block rounded-md cursor-pointer trans-200 data-[state='checked']:bg-card-foreground/50 data-[state='checked']:text-card"
+          {...props}
+        >
+          {children}
+        </RadioGroupPrimitive.Item>
+      </MotionHighlightItem>
+    );
+  else
+    return (
+      <RadioGroupPrimitive.Item asChild {...props}>
+        <motion.button
+          data-slot="radio-group-item"
+          className={cn(
+            "aspect-square size-5 rounded-full flex items-center justify-center border border-input text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            className
+          )}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          {...props}
+        >
+          <RadioGroupIndicator
+            data-slot="radio-group-item-indicator"
+            transition={transition}
+          />
+        </motion.button>
+      </RadioGroupPrimitive.Item>
+    );
 }
 
 export {

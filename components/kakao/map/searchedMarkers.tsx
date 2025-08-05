@@ -4,6 +4,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/animate-ui/radix/popover";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/components/animate-ui/radix/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MapPin, Phone } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -81,29 +85,34 @@ const SearchedMarkers = ({
   return (
     <>
       <div className="absolute top-2 left-2 z-1">
-        <ScrollArea className="h-120 p-4 bg-card/50 backdrop-blur-xs rounded-lg">
-          {markers.map((marker, index) => (
-            <div
-              key={`list_${index}-${marker.id}`}
-              onClick={() => {
-                if (map) {
-                  const bounds = map.getBounds();
-                  const markerLatLng = new kakao.maps.LatLng(
-                    marker.position.lat,
-                    marker.position.lng
-                  );
-                  if (!bounds.contain(markerLatLng))
-                    map.setCenter(markerLatLng);
-                }
-                document
-                  .getElementById(`marker_${index}-${marker.id}`)
-                  ?.click();
-              }}
-              className="max-w-60 p-2 whitespace-nowrap overflow-x-hidden overflow-ellipsis cursor-pointer"
-            >
-              {marker.name}
-            </div>
-          ))}
+        <ScrollArea className="h-120 p-4 bg-card/65 backdrop-blur-xs shadow-md rounded-md">
+          <RadioGroup
+            onValueChange={(value) => {
+              if (map) {
+                const bounds = map.getBounds();
+                const markerLatLng = new kakao.maps.LatLng(
+                  Number(value.split(",")[1]),
+                  Number(value.split(",")[2])
+                );
+                if (!bounds.contain(markerLatLng)) map.setCenter(markerLatLng);
+              }
+              document.getElementById(`marker_${value.split(",")[0]}`)?.click();
+            }}
+          >
+            {markers.map((marker, index) => (
+              <div key={`list_${index}-${marker.id}`}>
+                <RadioGroupItem
+                  id={`${index}-${marker.id}`}
+                  value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
+                  className="hidden data-[state='checked']:[&~label]:bg-card-foreground/50 data-[state='checked']:[&~label]:text-card"
+                >
+                  <p className="text-inherit text-start whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    {marker.name}
+                  </p>
+                </RadioGroupItem>
+              </div>
+            ))}
+          </RadioGroup>
         </ScrollArea>
       </div>
 
@@ -115,7 +124,7 @@ const SearchedMarkers = ({
         >
           <Popover>
             <PopoverTrigger
-              id={`marker_${index}-${marker.id}`}
+              id={`marker_${marker.id}`}
               className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
             >
               <MapPin className="size-7 fill-secondary stroke-1 stroke-primary group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
