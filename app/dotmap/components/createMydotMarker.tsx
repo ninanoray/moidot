@@ -107,12 +107,10 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
             className="w-fit p-2 flex flex-col gap-2 whitespace-nowrap cursor-auto select-text"
           >
             <MarkerCardLabelContent label="지번" content={marker.address} />
-            {marker.roadAddress && (
-              <MarkerCardLabelContent
-                label="도로명"
-                content={marker.roadAddress}
-              />
-            )}
+            <MarkerCardLabelContent
+              label="도로명"
+              content={marker.roadAddress}
+            />
             <Forms schema={MydotMarkerSchema}>
               <FormsSelect
                 name="marker"

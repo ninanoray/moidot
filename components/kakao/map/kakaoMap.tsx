@@ -284,19 +284,20 @@ export const MarkerCardLabelContent = ({
   content,
   className,
 }: MarkerCardLabelContentProps) => {
-  return (
-    <div className="flex items-center gap-1">
-      <div
-        className={cn(
-          "mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm",
-          className
-        )}
-      >
-        {label}
+  if (content)
+    return (
+      <div className="flex items-center gap-1">
+        <div
+          className={cn(
+            "mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm",
+            className
+          )}
+        >
+          {label}
+        </div>
+        <p>{content}</p>
       </div>
-      <p>{content}</p>
-    </div>
-  );
+    );
 };
 
 /**

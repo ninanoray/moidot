@@ -45,6 +45,7 @@ const SearchedMarkers = ({
       map: kakao.maps.Map | null,
       currentPosition: kakao.maps.LatLng | undefined
     ) => {
+      // 초기화
       if (!keyword || !map) {
         setMarkers([]);
         setPagination(undefined);
@@ -52,7 +53,9 @@ const SearchedMarkers = ({
         setRadioValue("");
         return;
       }
+
       const kakaoPlaces = new kakao.maps.services.Places(map);
+      const isExpanded = map.getLevel() < 3;
       kakaoPlaces.keywordSearch(
         keyword,
         (places, status, pagination) => {
@@ -82,7 +85,18 @@ const SearchedMarkers = ({
             // 지도의 중심이 검색 영역 범위를 벗어나면 지도 범위를 재설정합니다
             if (map && !bounds.contain(map.getCenter())) map.panTo(bounds);
           } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-            alert("검색 결과가 존재하지 않습니다.");
+            if (isExpanded) {
+              const ok = confirm(
+                "현재 영역 내에 검색 결과가 존재하지 않습니다.\n지도를 원래대로 되돌릴까요?"
+              );
+              if (ok) map.setLevel(3);
+            } else alert("검색 결과가 존재하지 않습니다.");
+            setMarkers([
+              {
+                name: "검색 결과가 존재하지 않습니다.",
+                position: { lat: 0, lng: 0 },
+              },
+            ]);
             return;
           } else if (status === kakao.maps.services.Status.ERROR) {
             alert("검색 결과 중 오류가 발생했습니다.");
@@ -90,9 +104,9 @@ const SearchedMarkers = ({
           }
         },
         {
-          page: page,
-          // useMapBounds: true,
-          useMapCenter: true,
+          page,
+          useMapBounds: isExpanded,
+          useMapCenter: !isExpanded,
         }
       );
     },
@@ -110,9 +124,8 @@ const SearchedMarkers = ({
         <ScrollArea
           aria-label="scroll area"
           className={cn(
-            "w-68 bg-card/40 backdrop-blur-xs shadow-md rounded-md trans-300",
-            markers.length > 10 ? "h-120" : "h-auto",
-            keyword ? "not-sr-only p-4" : "sr-only"
+            keyword ? "not-sr-only p-4" : "sr-only",
+            "w-68 bg-card/40 backdrop-blur-xs shadow-md rounded-md trans-300 [&>*]:max-h-[50vh]"
           )}
         >
           <RadioGroup
@@ -135,6 +148,7 @@ const SearchedMarkers = ({
                   radioRef.current[index] = el;
                 }}
                 value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
+                disabled={marker.position.lat === 0}
                 className="w-60 block data-[state='checked']:[&_p]:text-card"
                 onClick={() => {
                   setTimeout(() => {
@@ -167,7 +181,7 @@ const SearchedMarkers = ({
                 setPage(1);
               }}
             >
-              초기화
+              다시 검색
             </RippleButton>
           ))}
       </div>
@@ -224,7 +238,7 @@ const SearchedMarkers = ({
                 content={marker.roadAddress}
               />
               <div className="inline-flex items-center gap-1">
-                <Phone className="size-4" />
+                <Phone className="m-0.5 size-4" />
                 <p>{marker.phone}</p>
               </div>
               <a
@@ -237,7 +251,7 @@ const SearchedMarkers = ({
                   <Image
                     src="/images/kakao-map/kakaomap-logo.png"
                     alt="카카오맵"
-                    sizes="50px"
+                    sizes="30px"
                     fill
                     className="object-cover"
                   />
