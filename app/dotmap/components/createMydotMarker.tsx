@@ -11,13 +11,14 @@ import {
   placeToMarker,
 } from "@/components/kakao/map/kakaoMap";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { MapPinOff } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import z from "zod";
 
 interface CreateMydotMarkerProps {
   marker: Marker;
-  updateMarker: (marker: Marker) => void;
+  updateMarker: (marker: Marker | undefined) => void;
 }
 
 const CreateMydotMarker = ({
@@ -150,7 +151,16 @@ const CreateMydotMarker = ({
                   </RippleButton>
                 )}
               </FormsSelect>
-              <RippleButton>{`${marker.name}에 마이닷`}</RippleButton>
+              <div className="w-full flex gap-1">
+                <RippleButton className="flex-auto">{`${marker.name}에 마이닷`}</RippleButton>
+                <RippleButton
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => updateMarker(undefined)}
+                >
+                  <MapPinOff />
+                </RippleButton>
+              </div>
             </Forms>
           </PopoverContent>
         </Popover>
