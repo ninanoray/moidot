@@ -17,9 +17,13 @@ import z from "zod";
 
 interface CreateMydotMarkerProps {
   marker: Marker;
+  updateMarker: (marker: Marker) => void;
 }
 
-const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
+const CreateMydotMarker = ({
+  marker,
+  updateMarker,
+}: CreateMydotMarkerProps) => {
   const [open, setOpen] = useState<boolean>(true);
   const [searchedMarkers, setSearchedMarkers] = useState<Marker[]>([]);
   const [pagination, setPagination] = useState<kakao.maps.Pagination>();
@@ -79,7 +83,8 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
         });
       }
     }
-  }, [marker, page, search]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, search]);
 
   if (marker.position) {
     return (
@@ -92,7 +97,7 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
         >
           <PopoverTrigger
             onMouseOver={() => setOpen(true)}
-            className="rounded-full cursor-pointer focus-visible:ring-0"
+            className="-translate-y-[35%] rounded-full cursor-pointer focus-visible:ring-0"
           >
             <DotLottieReact
               src="images/kakao-map/clicked-location.lottie"
@@ -113,6 +118,7 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
             />
             <Forms schema={MydotMarkerSchema}>
               <FormsSelect
+                message={false}
                 name="marker"
                 items={searchedMarkers.map((marker) => ({
                   value: JSON.stringify(marker),
@@ -123,7 +129,9 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
                     ? `장소를 선택해주세요`
                     : "검색된 결과가 없습니다"
                 }
-                message={false}
+                onValueChange={(value) => {
+                  updateMarker(JSON.parse(value));
+                }}
               >
                 {pagination && page < pagination.last && (
                   <RippleButton
@@ -137,7 +145,7 @@ const CreateMydotMarker = ({ marker }: CreateMydotMarkerProps) => {
                   </RippleButton>
                 )}
               </FormsSelect>
-              <RippleButton>{marker.name}</RippleButton>
+              <RippleButton>{`${marker.name}에 마이닷`}</RippleButton>
             </Forms>
           </PopoverContent>
         </Popover>

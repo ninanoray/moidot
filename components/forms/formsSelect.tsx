@@ -24,6 +24,7 @@ const FormsSelect = ({
   items,
   label,
   placeholder = label ? label + " 정보를 선택해주세요" : "선택해주세요",
+  onValueChange,
   children,
   ...props
 }: FormsSelectProps & React.ComponentProps<typeof SelectPrimitive.Root>) => {
@@ -34,7 +35,13 @@ const FormsSelect = ({
         const values = items.map((item) => item.value);
         const value = values.includes(field.value) ? field.value : "";
         return (
-          <Select onValueChange={field.onChange} value={value}>
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              if (onValueChange) onValueChange(value);
+            }}
+            value={value}
+          >
             <FormControl>
               <SelectTrigger
                 className={cn(

@@ -78,22 +78,25 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
   const [longClick, setLongClick] = useState<boolean>(false);
   const onLongPress = useLongPress(() => {}, {
     onStart: () => setLongClick(false),
-    onFinish: () => {
-      setClickedMaker(undefined);
-      setLongClick(true);
-    },
-    threshold: 300,
+    onFinish: () => setLongClick(true),
+    threshold: 200,
     cancelOnMovement: true,
   });
 
-  // 위치 좌표를 주소로 변환
-  function positionToAdress(postition: Position) {
+  /**
+   * 위치 좌표를 주소로 변환
+   * @param latlng 카카오맵 WGS84 좌표
+   * @param name 마커 이름
+   */
+  function positionToAdress(latlng: kakao.maps.LatLng, name = "여기") {
+    const lat = latlng.getLat();
+    const lng = latlng.getLng();
     const geocoder = new kakao.maps.services.Geocoder();
-    geocoder.coord2Address(postition.lng, postition.lat, (result, status) => {
+    geocoder.coord2Address(lng, lat, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         setClickedMaker({
-          name: "마이닷",
-          position: postition,
+          name: name,
+          position: { lat, lng },
           address: result[0].address.address_name,
           roadAddress: result[0].road_address?.address_name,
         });
@@ -114,10 +117,8 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         disableDoubleClickZoom
         onClick={(_, mouseEvent) => {
           if (longClick) {
-            positionToAdress({
-              lat: mouseEvent.latLng.getLat(),
-              lng: mouseEvent.latLng.getLng(),
-            });
+            setClickedMaker(undefined);
+            positionToAdress(mouseEvent.latLng);
           }
         }}
       >
@@ -127,7 +128,12 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
           keyword={keyword}
           currentPos={currentPosition}
         />
-        {clickedMarker && <CreateMydotMarker marker={clickedMarker} />}
+        {clickedMarker && (
+          <CreateMydotMarker
+            marker={clickedMarker}
+            updateMarker={setClickedMaker}
+          />
+        )}
         <CurrentMarker
           mapRef={mapRef}
           currentPos={currentPosition}
