@@ -92,10 +92,11 @@ function RadioGroupItem({
 }: RadioGroupItemProps) {
   if (!!children)
     return (
-      <MotionHighlightItem>
+      <MotionHighlightItem className="active:scale-95 trans-200">
         <RadioGroupPrimitive.Item
+          data-slot="radio-group-item"
           className={cn(
-            "w-full px-3 py-2 block rounded-md cursor-pointer trans-200 data-[state='checked']:bg-card-foreground/55 data-[state='checked']:text-card",
+            "w-full px-3 py-2 rounded-md cursor-pointer data-[state='checked']:bg-card-foreground/50 data-[state='checked']:text-card",
             className
           )}
           {...props}

@@ -105,11 +105,11 @@ const SearchedMarkers = ({
   return (
     <>
       {/* 검색 List */}
-      <div className="absolute top-2 left-2 z-1">
+      <div className="absolute top-1.5 left-1.5 z-1">
         <ScrollArea
           aria-label="scroll area"
           className={cn(
-            "w-68 bg-card/65 backdrop-blur-xs shadow-md rounded-md trans-300",
+            "w-68 bg-card/40 backdrop-blur-xs shadow-md rounded-md trans-300",
             markers.length > 10 ? "h-120" : "h-auto",
             keyword ? "not-sr-only p-4" : "sr-only"
           )}
@@ -134,14 +134,14 @@ const SearchedMarkers = ({
                   radioRef.current[index] = el;
                 }}
                 value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
-                className="w-60 block"
+                className="w-60 block data-[state='checked']:[&_p]:text-card"
                 onClick={() => {
                   setTimeout(() => {
                     markerRef.current[index]?.click();
                   }, 300);
                 }}
               >
-                <p className="text-inherit text-start whitespace-nowrap overflow-hidden overflow-ellipsis">
+                <p className="text-card-foreground text-start whitespace-nowrap overflow-hidden overflow-ellipsis">
                   {marker.name}
                 </p>
               </RadioGroupItem>
