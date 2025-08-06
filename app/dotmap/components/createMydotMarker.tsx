@@ -116,7 +116,12 @@ const CreateMydotMarker = ({
               label="도로명"
               content={marker.roadAddress}
             />
-            <Forms schema={MydotMarkerSchema}>
+            <Forms
+              schema={MydotMarkerSchema}
+              onSubmit={(data: typeof MydotMarkerSchema._type) => {
+                if (data?.marker) console.log(JSON.parse(data.marker));
+              }}
+            >
               <FormsSelect
                 message={false}
                 name="marker"
