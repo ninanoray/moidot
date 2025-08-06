@@ -17,17 +17,17 @@ import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import { getLocalDistanceString } from "../util";
 import { Marker, MarkerCardLabelContent, placeToMarker } from "./kakaoMap";
 
-interface SearchedMarkersProps {
+interface SearchInterfaceProps {
   keyword: string | undefined;
   mapRef: RefObject<kakao.maps.Map | null>;
   currentPos?: kakao.maps.LatLng;
 }
 
-const SearchedMarkers = ({
+const SearchInterface = ({
   keyword,
   mapRef,
   currentPos,
-}: SearchedMarkersProps) => {
+}: SearchInterfaceProps) => {
   const map = mapRef.current;
   // For Map Markers
   const [markers, setMarkers] = useState<Marker[]>([]);
@@ -186,6 +186,31 @@ const SearchedMarkers = ({
           ))}
       </div>
       {/* 검색 Markers */}
+      <SearchedMarkers
+        markers={markers}
+        markerRef={markerRef}
+        listItemRef={radioRef}
+        updateListItem={setRadioValue}
+      />
+    </>
+  );
+};
+
+interface SearchedMarkersProps {
+  markers: Marker[];
+  markerRef: RefObject<HTMLButtonElement[] | null[]>;
+  listItemRef: RefObject<any>;
+  updateListItem: (value: string) => void;
+}
+
+const SearchedMarkers = ({
+  markers,
+  markerRef,
+  listItemRef,
+  updateListItem,
+}: SearchedMarkersProps) => {
+  return (
+    <>
       {markers.map((marker, index) => (
         <CustomOverlayMap
           key={`marker_${index}-${marker.id}`}
@@ -195,14 +220,14 @@ const SearchedMarkers = ({
           <Popover
             onOpenChange={(open) => {
               if (open) {
-                setRadioValue(
+                updateListItem(
                   `${marker.id},${marker.position.lat},${marker.position.lng}`
                 );
-                radioRef.current[index]?.scrollIntoView({
+                listItemRef.current[index]?.scrollIntoView({
                   block: "nearest",
                   behavior: "smooth",
                 }); // 해당 요소가 목록에서 보이도록 목록을 스크롤
-              } else setRadioValue("");
+              } else updateListItem("");
             }}
           >
             <PopoverTrigger
@@ -266,4 +291,4 @@ const SearchedMarkers = ({
   );
 };
 
-export default SearchedMarkers;
+export { SearchInterface };

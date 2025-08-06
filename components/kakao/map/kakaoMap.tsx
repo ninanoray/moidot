@@ -13,7 +13,7 @@ import {
   ToggleGroupItem,
 } from "../../animate-ui/radix/toggle-group";
 import { calcDistance } from "../util";
-import SearchedMarkers from "./searchedMarkers";
+import { SearchInterface } from "./searchInterface";
 
 type MapType = "ROADMAP" | "HYBRID";
 
@@ -122,7 +122,7 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
         }}
       >
         <MapController mapRef={mapRef} type={mapType} setType={setMapType} />
-        <SearchedMarkers
+        <SearchInterface
           mapRef={mapRef}
           keyword={keyword}
           currentPos={currentPosition}
