@@ -11,6 +11,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { MapPin, Phone } from "lucide-react";
+import Image from "next/image";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import { getLocalDistanceString } from "../util";
@@ -222,17 +223,26 @@ const SearchedMarkers = ({
                 label="도로명"
                 content={marker.roadAddress}
               />
-              <div className="flex items-center gap-1">
-                <Phone className="size-3" />
+              <div className="inline-flex items-center gap-1">
+                <Phone className="size-4" />
                 <p>{marker.phone}</p>
               </div>
               <a
                 href={marker.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-card-foreground"
+                className="w-fit inline-flex items-center gap-1 text-xs text-card-foreground hover:font-semibold"
               >
-                카카오맵 바로가기
+                <div className="relative size-5 rounded-sm overflow-hidden">
+                  <Image
+                    src="/images/kakao-map/kakaomap-logo.png"
+                    alt="카카오맵"
+                    sizes="50px"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <span>카카오맵 바로가기</span>
               </a>
             </PopoverContent>
           </Popover>
