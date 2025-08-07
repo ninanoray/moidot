@@ -8,7 +8,16 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/animate-ui/radix/radio-group";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { MapPin, Phone } from "lucide-react";
 import Image from "next/image";
@@ -69,13 +78,16 @@ const SearchInterface = ({
               const lat = Number(place.y);
               const lng = Number(place.x);
 
-              if (currentPosition)
-                searchedMarkers.push(
-                  placeToMarker(place, {
+              searchedMarkers.push(
+                placeToMarker(
+                  place,
+                  currentPosition && {
                     lat: currentPosition.getLat(),
                     lng: currentPosition.getLng(),
-                  })
-                );
+                  }
+                )
+              );
+
               if (map) bounds.extend(new kakao.maps.LatLng(lat, lng));
             });
 
@@ -124,7 +136,7 @@ const SearchInterface = ({
         <ScrollArea
           aria-label="scroll area"
           className={cn(
-            keyword ? "not-sr-only p-4" : "sr-only",
+            keyword ? "not-sr-only p-3" : "sr-only",
             "bg-card/40 backdrop-blur-xs shadow-md rounded-md trans-300 md:[&>*]:max-h-[50vh] [&>*]:max-h-[25vh]"
           )}
         >
@@ -209,6 +221,8 @@ const SearchedMarkers = ({
   listItemRef,
   updateListItem,
 }: SearchedMarkersProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <>
       {markers.map((marker, index) => (
@@ -217,72 +231,156 @@ const SearchedMarkers = ({
           position={marker.position}
           clickable
         >
-          <Popover
-            onOpenChange={(open) => {
-              if (open) {
-                updateListItem(
-                  `${marker.id},${marker.position.lat},${marker.position.lng}`
-                );
-                listItemRef.current[index]?.scrollIntoView({
-                  block: "nearest",
-                  behavior: "smooth",
-                }); // 해당 요소가 목록에서 보이도록 목록을 스크롤
-              } else updateListItem("");
-            }}
-          >
-            <PopoverTrigger
-              ref={(el) => {
-                markerRef.current[index] = el;
+          {!isMobile ? (
+            <Popover
+              onOpenChange={(open) => {
+                if (open) {
+                  updateListItem(
+                    `${marker.id},${marker.position.lat},${marker.position.lng}`
+                  );
+                  listItemRef.current[index]?.scrollIntoView({
+                    block: "nearest",
+                    behavior: "smooth",
+                  }); // 해당 요소가 목록에서 보이도록 목록을 스크롤
+                } else updateListItem("");
               }}
-              className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
             >
-              <MapPin className="size-7 fill-secondary stroke-1 stroke-primary hover:animate-jello group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
-            </PopoverTrigger>
-            <PopoverContent
-              side="top"
-              className="w-fit flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
-            >
-              <h2 className="my-0">{marker.name}</h2>
-              <div className="mb-1.5 flex items-center gap-2">
-                {marker.group && (
-                  <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
-                    {marker.group}
-                  </p>
-                )}
-                {marker.distance && (
-                  <p className="text-xs font-light text-card-foreground/80">
-                    {getLocalDistanceString(marker.distance)}
-                  </p>
-                )}
-              </div>
-              <MarkerCardLabelContent label="지번" content={marker.address} />
-              <MarkerCardLabelContent
-                label="도로명"
-                content={marker.roadAddress}
-              />
-              <div className="inline-flex items-center gap-1">
-                <Phone className="m-0.5 size-4" />
-                <p>{marker.phone}</p>
-              </div>
-              <a
-                href={marker.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-fit inline-flex items-center gap-1 text-xs text-card-foreground hover:font-semibold"
+              <PopoverTrigger
+                ref={(el) => {
+                  markerRef.current[index] = el;
+                }}
+                className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
               >
-                <div className="relative size-5 rounded-sm overflow-hidden">
-                  <Image
-                    src="/images/kakao-map/kakaomap-logo.png"
-                    alt="카카오맵"
-                    sizes="30px"
-                    fill
-                    className="object-cover"
-                  />
+                <MapPin className="size-7 fill-secondary stroke-1 stroke-primary hover:animate-jello group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
+              </PopoverTrigger>
+              <PopoverContent
+                side="top"
+                className="w-fit flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
+              >
+                <h2 className="my-0">{marker.name}</h2>
+                <div className="mb-1.5 flex items-center gap-2">
+                  {marker.group && (
+                    <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
+                      {marker.group}
+                    </p>
+                  )}
+                  {marker.distance && (
+                    <p className="text-xs font-light text-card-foreground/80">
+                      {getLocalDistanceString(marker.distance)}
+                    </p>
+                  )}
                 </div>
-                <span>카카오맵 바로가기</span>
-              </a>
-            </PopoverContent>
-          </Popover>
+                <MarkerCardLabelContent label="지번" content={marker.address} />
+                <MarkerCardLabelContent
+                  label="도로명"
+                  content={marker.roadAddress}
+                />
+                <div className="inline-flex items-center gap-1">
+                  <Phone className="m-0.5 size-4" />
+                  <p>{marker.phone}</p>
+                </div>
+                <a
+                  href={marker.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-fit inline-flex items-center gap-1 text-xs text-card-foreground hover:font-semibold"
+                >
+                  <div className="relative size-5 rounded-sm overflow-hidden">
+                    <Image
+                      src="/images/kakao-map/kakaomap-logo.png"
+                      alt="카카오맵"
+                      sizes="30px"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <span>카카오맵 바로가기</span>
+                </a>
+                <RippleButton className="mt-2">마이닷</RippleButton>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Drawer
+              onOpenChange={(open) => {
+                if (open) {
+                  updateListItem(
+                    `${marker.id},${marker.position.lat},${marker.position.lng}`
+                  );
+                  listItemRef.current[index]?.scrollIntoView({
+                    block: "nearest",
+                    behavior: "smooth",
+                  }); // 해당 요소가 목록에서 보이도록 목록을 스크롤
+                } else updateListItem("");
+              }}
+            >
+              <DrawerTrigger
+                ref={(el) => {
+                  markerRef.current[index] = el;
+                }}
+                className="group/popover absolute bottom-1/2 right-1/2 translate-x-1/2 cursor-pointer"
+              >
+                <MapPin className="size-7 fill-secondary stroke-1 stroke-primary hover:animate-jello group-data-[state='open']/popover:fill-primary group-data-[state='open']/popover:stroke-secondary group-data-[state='open']/popover:animate-jello" />
+              </DrawerTrigger>
+              <DrawerContent>
+                <div className="mx-auto w-full max-w-sm">
+                  <DrawerHeader>
+                    <div className="flex justify-around items-center gap-4">
+                      {marker.group && (
+                        <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium whitespace-nowrap rounded-sm">
+                          {marker.group}
+                        </p>
+                      )}
+                      <DrawerTitle className="break-keep">
+                        {marker.name}
+                      </DrawerTitle>
+                      <p className="text-xs font-light whitespace-nowrap text-card-foreground/80">
+                        {marker.distance
+                          ? getLocalDistanceString(marker.distance)
+                          : "???m"}
+                      </p>
+                    </div>
+                  </DrawerHeader>
+                  <div className="px-4 flex flex-col gap-1">
+                    <MarkerCardLabelContent
+                      label="지번"
+                      content={marker.address}
+                    />
+                    <MarkerCardLabelContent
+                      label="도로명"
+                      content={marker.roadAddress}
+                    />
+                    <div className="inline-flex items-center gap-1">
+                      <Phone className="m-0.5 size-4" />
+                      <p>{marker.phone}</p>
+                    </div>
+                    <a
+                      href={marker.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-fit inline-flex items-center gap-1 text-xs text-card-foreground hover:font-semibold"
+                    >
+                      <div className="relative size-5 rounded-sm overflow-hidden">
+                        <Image
+                          src="/images/kakao-map/kakaomap-logo.png"
+                          alt="카카오맵"
+                          sizes="30px"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <span>카카오맵 바로가기</span>
+                    </a>
+                  </div>
+                  <DrawerFooter>
+                    <RippleButton>마이닷</RippleButton>
+                    {/* <DrawerClose asChild>
+                      <RippleButton variant="outline">닫기</RippleButton>
+                    </DrawerClose> */}
+                  </DrawerFooter>
+                </div>
+              </DrawerContent>
+            </Drawer>
+          )}
         </CustomOverlayMap>
       ))}
     </>
