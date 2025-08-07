@@ -149,7 +149,7 @@ const SearchInterface = ({
                 }}
                 value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
                 disabled={marker.position.lat === 0}
-                className="md:w-60 w-40 data-[state='checked']:[&_p]:text-card"
+                className="md:w-60 w-40 data-[state='checked']:[&_p]:text-primary-foreground data-[state='checked']:bg-primary"
                 onClick={() => {
                   setTimeout(() => {
                     markerRef.current[index]?.click();

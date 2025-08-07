@@ -170,8 +170,8 @@ const MapController = ({ mapRef, type, setType }: MapControllerProps) => {
       {/* 맵뷰 타입 */}
       <ToggleGroup
         type="single"
-        className="p-1 bg-card/40 backdrop-blur-xs shadow-md rounded-md [&_span]:data-[state=on]:text-card [&_span]:font-normal [&_span]:hover:text-card-foreground/80"
-        activeClassName="bg-card-foreground/50"
+        className="p-1 bg-card/40 backdrop-blur-xs shadow-md rounded-md [&_span]:data-[state=on]:text-primary-foreground [&_span]:font-normal [&_span]:hover:text-card-foreground"
+        activeClassName="bg-primary"
         value={type}
         onValueChange={setType}
       >
