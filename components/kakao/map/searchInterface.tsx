@@ -125,7 +125,7 @@ const SearchInterface = ({
           aria-label="scroll area"
           className={cn(
             keyword ? "not-sr-only p-4" : "sr-only",
-            "w-68 bg-card/40 backdrop-blur-xs shadow-md rounded-md trans-300 [&>*]:max-h-[50vh]"
+            "bg-card/40 backdrop-blur-xs shadow-md rounded-md trans-300 md:[&>*]:max-h-[50vh] [&>*]:max-h-[25vh]"
           )}
         >
           <RadioGroup
@@ -149,7 +149,7 @@ const SearchInterface = ({
                 }}
                 value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
                 disabled={marker.position.lat === 0}
-                className="w-60 block data-[state='checked']:[&_p]:text-card"
+                className="md:w-60 w-40 data-[state='checked']:[&_p]:text-card"
                 onClick={() => {
                   setTimeout(() => {
                     markerRef.current[index]?.click();
@@ -240,20 +240,18 @@ const SearchedMarkers = ({
             </PopoverTrigger>
             <PopoverContent
               side="top"
-              className="w-fit p-4 flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
+              className="w-fit flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
             >
-              <div className="flex justify-between items-center gap-2">
-                <h2>
-                  {marker.name}
-                  {marker.distance && (
-                    <span className="mx-1.5 text-xs font-light text-card-foreground/80">
-                      {getLocalDistanceString(marker.distance)}
-                    </span>
-                  )}
-                </h2>
+              <h2 className="my-0">{marker.name}</h2>
+              <div className="mb-1.5 flex items-center gap-2">
                 {marker.group && (
                   <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
                     {marker.group}
+                  </p>
+                )}
+                {marker.distance && (
+                  <p className="text-xs font-light text-card-foreground/80">
+                    {getLocalDistanceString(marker.distance)}
                   </p>
                 )}
               </div>
