@@ -27,7 +27,7 @@ export async function SidebarWrapper({
       <SidebarProvider defaultOpen={defaultOpen} className="min-h-dvh">
         <HomeSidebar session={session} />
         <SidebarInset>
-          {/* <SidebarTrigger /> */}
+          {/* <SidebarTrigger className="absolute z-1" /> */}
           {children}
         </SidebarInset>
       </SidebarProvider>
