@@ -208,41 +208,17 @@ const SearchInterface = ({
           />
         </CollapsibleTrigger>
       </Collapsible>
-      {/* 더보기 */}
-      {pagination && pagination.last > 1 && (
-        <div className="absolute z-1 bottom-1.5 left-1/2 -translate-x-1/2">
-          {page < pagination.last ? (
-            <RippleButton
-              size={!isMobile ? "default" : "sm"}
-              onClick={() => {
-                if (page < pagination.last) setPage((prev) => prev + 1);
-              }}
-            >
-              {!isMobile ? (
-                `더보기(${page}/${pagination.last})`
-              ) : (
-                <>
-                  <MapPlus />
-                  {`(${page}/${pagination.last})`}
-                </>
-              )}
-            </RippleButton>
-          ) : (
-            <RippleButton
-              variant="secondary"
-              size={!isMobile ? "default" : "sm"}
-              className="md:aspect-auto aspect-square"
-              onClick={() => {
-                setMarkers([]);
-                setPage(1);
-              }}
-            >
-              {!isMobile ? "다시 검색" : <RefreshCw />}
-            </RippleButton>
-          )}
-        </div>
+      {pagination && (
+        <SearchMoreButton
+          currentPage={page}
+          total={pagination.last}
+          updatePage={() => setPage((prev) => prev + 1)}
+          refresh={() => {
+            setMarkers([]);
+            setPage(1);
+          }}
+        />
       )}
-      {/* 검색 Markers */}
       <SearchedMarkers
         markers={markers}
         markerRef={markerRef}
@@ -253,13 +229,78 @@ const SearchInterface = ({
   );
 };
 
+interface SearchMoreButtonProps {
+  currentPage: number;
+  total: number;
+  updatePage: () => void;
+  refresh: () => void;
+}
+/**
+ * 장소 검색 더보기 버튼.
+ * 마지막 페이지에서는 현재 화면에서 다시 검색 버튼으로 바뀜.
+ */
+const SearchMoreButton = ({
+  currentPage,
+  total,
+  updatePage,
+  refresh,
+}: SearchMoreButtonProps) => {
+  const isMobile = useIsMobile();
+
+  const moreButtonContent = useCallback(
+    (mobile: boolean) => {
+      if (mobile) {
+        return <>{`더보기(${currentPage}/${total})`}</>;
+      } else {
+        return (
+          <>
+            <MapPlus />
+            {`(${currentPage}/${total})`}
+          </>
+        );
+      }
+    },
+    [currentPage, total]
+  );
+
+  const refreshButtonContent = useCallback((mobile: boolean) => {
+    if (mobile) {
+      return <>다시 검색</>;
+    } else {
+      return <RefreshCw />;
+    }
+  }, []);
+
+  if (total > 1)
+    return (
+      <div className="absolute z-1 bottom-1.5 left-1/2 -translate-x-1/2">
+        <RippleButton
+          variant="secondary"
+          size={!isMobile ? "default" : "sm"}
+          className="rounded-full"
+          onClick={() => {
+            if (currentPage < total) updatePage();
+            else refresh();
+          }}
+        >
+          {currentPage < total
+            ? moreButtonContent(!isMobile)
+            : refreshButtonContent(!isMobile)}
+        </RippleButton>
+      </div>
+    );
+};
+
 interface SearchedMarkersProps {
   markers: Marker[];
   markerRef: RefObject<HTMLButtonElement[] | null[]>;
   listItemRef: RefObject<any>;
   updateListItem: (value: string) => void;
 }
-
+/**
+ * 검색된 장소들의 맵 Markers.
+ * 클릭하면 상세 정보 팝업 출력.
+ */
 const SearchedMarkers = ({
   markers,
   markerRef,

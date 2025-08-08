@@ -64,7 +64,7 @@ const ExpandToggleButton = ({
               type: "spring",
               stiffness: 200,
               damping: 20,
-              delay: 0.5,
+              delay: 0.3,
             }}
             animate={
               isExpanded

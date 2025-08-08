@@ -1,9 +1,10 @@
 "use client";
 
 import CreateMydotMarker from "@/app/dotmap/components/createMydotMarker";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Locate, Minus, Plus } from "lucide-react";
+import { Locate, MapIcon, Minus, Plus, SwitchCamera } from "lucide-react";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
 import { useLongPress } from "use-long-press";
@@ -155,6 +156,8 @@ interface MapControllerProps {
 }
 
 const MapController = ({ mapRef, type, setType }: MapControllerProps) => {
+  const isMobile = useIsMobile();
+
   const zoomIn = () => {
     const map = mapRef.current;
     if (!map) return;
@@ -167,40 +170,75 @@ const MapController = ({ mapRef, type, setType }: MapControllerProps) => {
     map.setLevel(map.getLevel() + 1, { animate: true });
   };
 
-  return (
-    <div className="absolute top-1.5 right-1.5 z-1 flex flex-col items-end gap-2">
-      {/* 맵뷰 타입 */}
+  if (!isMobile)
+    return (
+      <div className="absolute top-1.5 right-1.5 z-1 flex flex-col items-end gap-2">
+        {/* 맵뷰 타입 */}
+        <ToggleGroup
+          type="single"
+          className="p-1 bg-card/40 backdrop-blur-xs shadow-md rounded-md [&_span]:data-[state=on]:text-primary-foreground [&_span]:font-normal [&_span]:hover:text-card-foreground"
+          activeClassName="bg-primary"
+          value={type}
+          onValueChange={setType}
+        >
+          <ToggleGroupItem value="ROADMAP">지도</ToggleGroupItem>
+          <ToggleGroupItem value="HYBRID">스카이뷰</ToggleGroupItem>
+        </ToggleGroup>
+        {/* 확대/축소 */}
+        <div className="flex flex-col bg-card/40 backdrop-blur-xs shadow-md rounded-md">
+          <RippleButton
+            size="icon"
+            variant="ghost"
+            onClick={zoomIn}
+            className="rounded-b-none"
+          >
+            <Plus />
+          </RippleButton>
+          <RippleButton
+            size="icon"
+            variant="ghost"
+            onClick={zoomOut}
+            className="rounded-t-none"
+          >
+            <Minus />
+          </RippleButton>
+        </div>
+      </div>
+    );
+  else
+    return (
       <ToggleGroup
         type="single"
-        className="p-1 bg-card/40 backdrop-blur-xs shadow-md rounded-md [&_span]:data-[state=on]:text-primary-foreground [&_span]:font-normal [&_span]:hover:text-card-foreground"
+        size="sm"
+        className="absolute bottom-12 right-1.5 z-1 p-1 flex-col bg-card/40 backdrop-blur-xs shadow-md rounded-md [&_span]:data-[state=on]:text-primary-foreground [&_span]:font-normal [&_span]:hover:text-card-foreground"
         activeClassName="bg-primary"
         value={type}
         onValueChange={setType}
       >
-        <ToggleGroupItem value="ROADMAP">지도</ToggleGroupItem>
-        <ToggleGroupItem value="HYBRID">스카이뷰</ToggleGroupItem>
-      </ToggleGroup>
-      {/* 확대/축소 */}
-      <div className="flex flex-col bg-card/40 backdrop-blur-xs shadow-md rounded-md">
         <RippleButton
-          size="icon"
+          size="sm"
           variant="ghost"
           onClick={zoomIn}
-          className="border-0 rounded-b-none"
+          className="aspect-square"
         >
           <Plus />
         </RippleButton>
         <RippleButton
-          size="icon"
+          size="sm"
           variant="ghost"
           onClick={zoomOut}
-          className="border-0 rounded-t-none"
+          className="aspect-square"
         >
           <Minus />
         </RippleButton>
-      </div>
-    </div>
-  );
+        <ToggleGroupItem value="HYBRID">
+          {!isMobile ? "스카이뷰" : <SwitchCamera />}
+        </ToggleGroupItem>
+        <ToggleGroupItem value="ROADMAP">
+          {!isMobile ? "지도" : <MapIcon />}
+        </ToggleGroupItem>
+      </ToggleGroup>
+    );
 };
 
 interface CurrentMarkerProps {
@@ -249,7 +287,7 @@ const CurrentMarker = ({
         {/* 현위치로 이동하기 버튼 */}
         <RippleButton
           size="icon"
-          className="absolute z-1 right-1.5 bottom-1.5"
+          className="absolute z-1 md:right-1.5 right-2 bottom-1.5"
           onClick={() => {
             map.panTo(currentPos);
             if (map.getLevel() !== 3)
