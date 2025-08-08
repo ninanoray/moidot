@@ -92,7 +92,7 @@ function RadioGroupItem({
 }: RadioGroupItemProps) {
   if (!!children)
     return (
-      <MotionHighlightItem className="active:scale-95 trans-200">
+      <MotionHighlightItem className="max-w-full active:scale-95 trans-200 overflow-hidden">
         <RadioGroupPrimitive.Item
           data-slot="radio-group-item"
           className={cn(

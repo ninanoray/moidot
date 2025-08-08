@@ -3,11 +3,14 @@
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import { Forms, FormsInput } from "@/components/forms";
 import KakaoMap from "@/components/kakao/map/kakaoMap";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DotmapSchema } from "./schema";
 
 const Dotmap = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [search, setSearch] = useState<string>();
+
   return (
     <div className="bg-layout gap-2">
       <Forms
@@ -17,12 +20,12 @@ const Dotmap = () => {
           setSearch(value.keyword);
         }}
       >
-        <FormsInput name="keyword" autoFocus />
+        <FormsInput ref={inputRef} name="keyword" />
         <RippleButton className="w-20" onClick={() => setSearch(undefined)}>
           검색
         </RippleButton>
       </Forms>
-      <KakaoMap keyword={search} />
+      <KakaoMap keyword={search} onClick={() => inputRef.current?.blur()} />
     </div>
   );
 };

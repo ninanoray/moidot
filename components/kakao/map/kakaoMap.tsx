@@ -52,12 +52,11 @@ export interface Marker {
   distance?: number;
 }
 
-interface KakaoMapProps {
+interface KakaoMapProps extends React.ComponentProps<"div"> {
   keyword?: string | undefined;
-  className?: string | undefined;
 }
 
-const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
+const KakaoMap = ({ keyword, className, ...props }: KakaoMapProps) => {
   const CENTER_INIT = {
     lat: 33.450701,
     lng: 126.570667,
@@ -105,7 +104,10 @@ const KakaoMap = ({ keyword, className }: KakaoMapProps) => {
   }
 
   return (
-    <div className="relative size-full rounded-lg overflow-hidden select-none">
+    <div
+      className="relative size-full rounded-lg overflow-hidden select-none"
+      {...props}
+    >
       <Map
         ref={mapRef}
         level={3} // 지도의 확대 레벨

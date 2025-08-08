@@ -9,19 +9,19 @@ export type Ripple = {
 };
 
 export type RippleDivProps = HTMLMotionProps<"div"> & {
-  children?: React.ReactNode;
   rippleClassName?: string;
   scale?: number;
   transition?: Transition;
+  children?: React.ReactNode;
 };
 
 const Ripple = ({
   ref,
-  children,
-  className,
-  rippleClassName,
   scale = 10,
   transition = { duration: 0.6, ease: "easeOut" },
+  className,
+  rippleClassName,
+  children,
   ...props
 }: RippleDivProps) => {
   const [ripples, setRipples] = React.useState<Ripple[]>([]);

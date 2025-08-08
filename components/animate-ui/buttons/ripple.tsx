@@ -11,13 +11,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:brightness-120",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-destructive text-destructive-foreground hover:brightness-115 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input dark:hover:brightness-115",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+          "bg-secondary text-secondary-foreground hover:brightness-110",
         ghost: "hover:bg-primary/90 hover:text-primary-foreground",
       },
       size: {
@@ -39,7 +39,7 @@ const rippleVariants = cva("absolute rounded-full size-5 pointer-events-none", {
     variant: {
       default: "bg-primary-foreground",
       destructive: "bg-destructive-foreground",
-      outline: "bg-input",
+      outline: "bg-foreground/25 dark:bg-foreground/75",
       secondary: "bg-secondary-foreground",
       ghost: "bg-primary-foreground",
     },

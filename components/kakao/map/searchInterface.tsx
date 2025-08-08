@@ -1,4 +1,10 @@
+import ExpandToggleButton from "@/components/animate-ui/buttons/expandToggleButton";
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/animate-ui/radix/collapsible";
 import {
   Popover,
   PopoverContent,
@@ -11,6 +17,7 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -46,6 +53,7 @@ const SearchInterface = ({
   const markerRef = useRef<HTMLButtonElement[] | null[]>([]);
   const radioRef = useRef<HTMLButtonElement[] | null[]>([]);
   const [radioValue, setRadioValue] = useState<string>("");
+  const [isListOpen, setIsListOpen] = useState<boolean>(true);
 
   const search = useCallback(
     (
@@ -132,70 +140,87 @@ const SearchInterface = ({
   return (
     <>
       {/* 검색 List */}
-      <div className="absolute top-1.5 left-1.5 z-1">
-        <ScrollArea
-          aria-label="scroll area"
-          className={cn(
-            keyword ? "not-sr-only p-3" : "sr-only",
-            "bg-card/40 backdrop-blur-xs shadow-md rounded-md trans-300 md:[&>*]:max-h-[50vh] [&>*]:max-h-[25vh]"
-          )}
+      <div
+        className={cn(
+          "absolute top-1.5 left-1.5 z-1 trans-300",
+          keyword ? "not-sr-only" : "sr-only"
+        )}
+      >
+        <Collapsible
+          open={isListOpen}
+          onOpenChange={setIsListOpen}
+          className="md:w-60 w-40"
         >
-          <RadioGroup
-            value={radioValue}
-            onValueChange={(value) => {
-              setRadioValue(value);
-              if (map) {
-                const markerLatLng = new kakao.maps.LatLng(
-                  Number(value.split(",")[1]),
-                  Number(value.split(",")[2])
-                );
-                map.panTo(markerLatLng);
-              }
-            }}
-          >
-            {markers.map((marker, index) => (
-              <RadioGroupItem
-                key={`list_${index}-${marker.id}`}
-                ref={(el) => {
-                  radioRef.current[index] = el;
-                }}
-                value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
-                disabled={marker.position.lat === 0}
-                className="md:w-60 w-40 data-[state='checked']:[&_p]:text-primary-foreground data-[state='checked']:bg-primary"
-                onClick={() => {
-                  setTimeout(() => {
-                    markerRef.current[index]?.click();
-                  }, 300);
+          <CollapsibleTrigger asChild className="w-full">
+            <ExpandToggleButton
+              label={isListOpen ? "닫기" : "펼치기"}
+              isExpanded={isListOpen}
+              maxWidth="100%"
+              className="bg-card/40 backdrop-blur-xs shadow-md mb-1"
+            />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="flex flex-col gap-1">
+            <ScrollArea
+              aria-label="scroll area"
+              className="p-2 bg-card/40 backdrop-blur-xs shadow-md rounded-md md:[&>*]:max-h-[50vh] [&>*]:max-h-[25vh]"
+            >
+              <RadioGroup
+                value={radioValue}
+                onValueChange={(value) => {
+                  setRadioValue(value);
+                  if (map) {
+                    const markerLatLng = new kakao.maps.LatLng(
+                      Number(value.split(",")[1]),
+                      Number(value.split(",")[2])
+                    );
+                    map.panTo(markerLatLng);
+                  }
                 }}
               >
-                <p className="text-card-foreground text-start whitespace-nowrap overflow-hidden overflow-ellipsis">
-                  {marker.name}
-                </p>
-              </RadioGroupItem>
-            ))}
-          </RadioGroup>
-        </ScrollArea>
-        {pagination &&
-          pagination.last > 1 &&
-          (page < pagination.last ? (
-            <RippleButton
-              className="w-full mt-1"
-              onClick={() => {
-                if (page < pagination.last) setPage((prev) => prev + 1);
-              }}
-            >{`더보기(${page}/${pagination.last})`}</RippleButton>
-          ) : (
-            <RippleButton
-              variant="secondary"
-              className="w-full mt-1"
-              onClick={() => {
-                setMarkers([]);
-                setPage(1);
-              }}
-            >
-              다시 검색
-            </RippleButton>
-          ))}
+                {markers.map((marker, index) => (
+                  <RadioGroupItem
+                    key={`list_${index}-${marker.id}`}
+                    ref={(el) => {
+                      radioRef.current[index] = el;
+                    }}
+                    value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
+                    disabled={marker.position.lat === 0}
+                    className="max-w-full flex data-[state='checked']:[&_p]:text-primary-foreground data-[state='checked']:bg-primary"
+                    onClick={() => {
+                      setTimeout(() => {
+                        markerRef.current[index]?.click();
+                      }, 300);
+                    }}
+                  >
+                    <p className="text-card-foreground text-start whitespace-nowrap truncate">
+                      {marker.name}
+                    </p>
+                  </RadioGroupItem>
+                ))}
+              </RadioGroup>
+            </ScrollArea>
+            {markers.length > 0 &&
+              pagination &&
+              pagination.last > 1 &&
+              (page < pagination.last ? (
+                <RippleButton
+                  onClick={() => {
+                    if (page < pagination.last) setPage((prev) => prev + 1);
+                  }}
+                >{`더보기(${page}/${pagination.last})`}</RippleButton>
+              ) : (
+                <RippleButton
+                  variant="secondary"
+                  onClick={() => {
+                    setMarkers([]);
+                    setPage(1);
+                  }}
+                >
+                  다시 검색
+                </RippleButton>
+              ))}
+          </CollapsibleContent>
+        </Collapsible>
       </div>
       {/* 검색 Markers */}
       <SearchedMarkers
@@ -326,18 +351,22 @@ const SearchedMarkers = ({
                   <DrawerHeader>
                     <div className="flex justify-around items-center gap-4">
                       {marker.group && (
-                        <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium whitespace-nowrap rounded-sm">
-                          {marker.group}
-                        </p>
+                        <DrawerDescription asChild>
+                          <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium whitespace-nowrap rounded-sm">
+                            {marker.group}
+                          </p>
+                        </DrawerDescription>
                       )}
                       <DrawerTitle className="break-keep">
                         {marker.name}
                       </DrawerTitle>
-                      <p className="text-xs font-light whitespace-nowrap text-card-foreground/80">
-                        {marker.distance
-                          ? getLocalDistanceString(marker.distance)
-                          : "???m"}
-                      </p>
+                      <DrawerDescription asChild>
+                        <p className="text-xs font-light whitespace-nowrap text-card-foreground/80">
+                          {marker.distance
+                            ? getLocalDistanceString(marker.distance)
+                            : "???m"}
+                        </p>
+                      </DrawerDescription>
                     </div>
                   </DrawerHeader>
                   <div className="px-4 flex flex-col gap-1">

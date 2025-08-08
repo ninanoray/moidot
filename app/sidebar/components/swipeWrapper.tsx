@@ -49,8 +49,6 @@ const SwipeWrapper: React.FC<SwipeWrapperProps> = ({
 
   function onTouchMove(e: React.TouchEvent<HTMLDivElement>) {
     if (!allowSwipe.current) return;
-
-    e.preventDefault();
     touchEndX.current = e.targetTouches[0].clientX;
   }
 
