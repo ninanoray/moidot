@@ -41,7 +41,7 @@ export default function CalendarWithTime({
 }: ComponentProps<typeof DayPicker> & CalendarWithTimeProps) {
   return (
     <Card className="w-fit py-4 gap-3 border-0 rounded-lg">
-      <CardContent className="px-4">
+      <CardContent className="px-4 grid justify-center">
         <Calendar
           locale={ko}
           components={{
@@ -99,13 +99,14 @@ export default function CalendarWithTime({
           }}
           classNames={{
             dropdowns: "w-full flex-center flex-row-reverse z-1",
+            today: "bg-secondary text-secondary-foreground rounded-full",
           }}
           className={cn("p-0", className)}
           {...props}
         />
       </CardContent>
       {timeString && onTimeStringChange && (
-        <CardFooter className="flex gap-2 border-t px-4 !pt-4 *:[div]:w-full">
+        <CardFooter className="flex gap-2 border-t px-4 !pt-3 *:[div]:w-full">
           <Label
             htmlFor="time-from"
             className={cn(
@@ -125,7 +126,7 @@ export default function CalendarWithTime({
                 from: event.target.value,
               })
             }
-            className="border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            className="text-sm border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
           {props.mode === "range" && (
             <>
@@ -140,7 +141,7 @@ export default function CalendarWithTime({
                     to: event.target.value,
                   })
                 }
-                className="border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                className="text-sm border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
               />
             </>
           )}

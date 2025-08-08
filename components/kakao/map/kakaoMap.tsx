@@ -67,6 +67,7 @@ const KakaoMap = ({ keyword, className, ...props }: KakaoMapProps) => {
   //   appkey: KAKAO_JAVASCRIPT_KEY,
   //   libraries: ["clusterer", "services"],
   // });
+  const isMobile = useIsMobile();
 
   const mapRef = useRef<kakao.maps.Map>(null);
   const [mapType, setMapType] = useState<MapType>("ROADMAP");
@@ -117,7 +118,7 @@ const KakaoMap = ({ keyword, className, ...props }: KakaoMapProps) => {
         center={CENTER_INIT}
         className={cn("size-full", className)}
         {...onLongPress()}
-        disableDoubleClickZoom
+        disableDoubleClickZoom={!isMobile}
         onClick={(_, mouseEvent) => {
           if (longClick) {
             setClickedMaker(undefined);

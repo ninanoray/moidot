@@ -13,7 +13,6 @@ import { HomeSchema, TypeSelection } from "../schema";
 const Test = () => {
   return (
     <>
-      {" "}
       <div className="w-100 max-w-full">
         <Forms schema={HomeSchema}>
           <FormsInput type="password" name="password" label="비밀번호" />
@@ -31,7 +30,7 @@ const Test = () => {
         <RippleButton variant="destructive">버튼</RippleButton>
         <RippleButton variant="outline">버튼</RippleButton>
         <RippleButton variant="ghost">버튼</RippleButton>
-        <h1>h1: 다람쥐 헌 쳇바퀴에 타고파</h1>s
+        <h1>h1: 다람쥐 헌 쳇바퀴에 타고파</h1>
         <h2>h2: 다람쥐 헌 쳇바퀴에 타고파</h2>
         <h3>h3: 다람쥐 헌 쳇바퀴에 타고파</h3>
         <h4>h4: 다람쥐 헌 쳇바퀴에 타고파</h4>

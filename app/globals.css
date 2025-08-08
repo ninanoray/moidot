@@ -149,13 +149,13 @@
     @apply bg-background text-foreground;
   }
   h1 {
-    @apply text-2xl sm:text-3xl my-2 font-bold text-foreground;
+    @apply md:text-3xl text-2xl my-2 font-bold text-foreground;
   }
   h2 {
-    @apply text-xl sm:text-2xl my-1.5 font-semibold text-foreground;
+    @apply md:text-2xl text-xl my-1.5 font-semibold text-foreground;
   }
   h3 {
-    @apply text-lg sm:text-xl my-1 font-medium text-foreground/90;
+    @apply md:text-xl text-lg my-1 font-medium text-foreground/90;
   }
   h4 {
     @apply text-base font-normal my-0.5 text-foreground/90;
