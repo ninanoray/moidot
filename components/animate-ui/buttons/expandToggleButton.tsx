@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
-import { ArrowDownToLine } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { HTMLMotionProps, motion, Transition } from "motion/react";
 import Ripple from "../effects/motion-ripple";
 
 interface ExpandButtonProps extends HTMLMotionProps<"button"> {
   label: string;
+  icon: LucideIcon;
   isExpanded?: boolean;
   maxWidth?: string;
   transition?: Transition;
@@ -13,6 +14,7 @@ interface ExpandButtonProps extends HTMLMotionProps<"button"> {
 
 const ExpandToggleButton = ({
   label,
+  icon: Icon,
   isExpanded,
   maxWidth = "140px",
   transition = { type: "spring", stiffness: 250, damping: 25 },
@@ -76,7 +78,7 @@ const ExpandToggleButton = ({
                   }
             }
           >
-            <ArrowDownToLine />
+            <Icon />
           </motion.div>
           <motion.span
             variants={{

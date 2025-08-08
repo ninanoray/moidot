@@ -26,7 +26,14 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { MapPin, Phone } from "lucide-react";
+import {
+  ArrowDownFromLine,
+  ArrowUpFromLine,
+  MapPin,
+  MapPlus,
+  Phone,
+  RefreshCw,
+} from "lucide-react";
 import Image from "next/image";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
@@ -45,6 +52,8 @@ const SearchInterface = ({
   currentPos,
 }: SearchInterfaceProps) => {
   const map = mapRef.current;
+
+  const isMobile = useIsMobile();
   // For Map Markers
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [pagination, setPagination] = useState<kakao.maps.Pagination>();
@@ -140,88 +149,99 @@ const SearchInterface = ({
   return (
     <>
       {/* 검색 List */}
-      <div
+      <Collapsible
+        open={isListOpen}
+        onOpenChange={setIsListOpen}
         className={cn(
-          "absolute top-1.5 left-1.5 z-1 trans-300",
+          "md:w-60 w-40 absolute md:top-1.5 bottom-1.5 left-1.5 z-1 trans-300",
           keyword ? "not-sr-only" : "sr-only"
         )}
       >
-        <Collapsible
-          open={isListOpen}
-          onOpenChange={setIsListOpen}
-          className="md:w-60 w-40"
-        >
-          <CollapsibleTrigger asChild className="w-full">
-            <ExpandToggleButton
-              label={isListOpen ? "닫기" : "펼치기"}
-              isExpanded={isListOpen}
-              maxWidth="100%"
-              className="bg-card/40 backdrop-blur-xs shadow-md mb-1"
-            />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="flex flex-col gap-1">
-            <ScrollArea
-              aria-label="scroll area"
-              className="p-2 bg-card/40 backdrop-blur-xs shadow-md rounded-md md:[&>*]:max-h-[50vh] [&>*]:max-h-[25vh]"
+        <CollapsibleContent>
+          <ScrollArea
+            aria-label="scroll area"
+            className="mb-1.5 p-2 bg-card/40 backdrop-blur-xs shadow-md rounded-md md:[&>*]:max-h-[50vh] [&>*]:max-h-[25vh]"
+          >
+            <RadioGroup
+              value={radioValue}
+              onValueChange={(value) => {
+                setRadioValue(value);
+                if (map) {
+                  const markerLatLng = new kakao.maps.LatLng(
+                    Number(value.split(",")[1]),
+                    Number(value.split(",")[2])
+                  );
+                  map.panTo(markerLatLng);
+                }
+              }}
             >
-              <RadioGroup
-                value={radioValue}
-                onValueChange={(value) => {
-                  setRadioValue(value);
-                  if (map) {
-                    const markerLatLng = new kakao.maps.LatLng(
-                      Number(value.split(",")[1]),
-                      Number(value.split(",")[2])
-                    );
-                    map.panTo(markerLatLng);
-                  }
-                }}
-              >
-                {markers.map((marker, index) => (
-                  <RadioGroupItem
-                    key={`list_${index}-${marker.id}`}
-                    ref={(el) => {
-                      radioRef.current[index] = el;
-                    }}
-                    value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
-                    disabled={marker.position.lat === 0}
-                    className="max-w-full flex data-[state='checked']:[&_p]:text-primary-foreground data-[state='checked']:bg-primary"
-                    onClick={() => {
-                      setTimeout(() => {
-                        markerRef.current[index]?.click();
-                      }, 300);
-                    }}
-                  >
-                    <p className="text-card-foreground text-start whitespace-nowrap truncate">
-                      {marker.name}
-                    </p>
-                  </RadioGroupItem>
-                ))}
-              </RadioGroup>
-            </ScrollArea>
-            {markers.length > 0 &&
-              pagination &&
-              pagination.last > 1 &&
-              (page < pagination.last ? (
-                <RippleButton
-                  onClick={() => {
-                    if (page < pagination.last) setPage((prev) => prev + 1);
+              {markers.map((marker, index) => (
+                <RadioGroupItem
+                  key={`list_${index}-${marker.id}`}
+                  ref={(el) => {
+                    radioRef.current[index] = el;
                   }}
-                >{`더보기(${page}/${pagination.last})`}</RippleButton>
-              ) : (
-                <RippleButton
-                  variant="secondary"
+                  value={`${marker.id},${marker.position.lat},${marker.position.lng}`}
+                  disabled={marker.position.lat === 0}
+                  className="max-w-full flex data-[state='checked']:[&_p]:text-primary-foreground data-[state='checked']:bg-primary"
                   onClick={() => {
-                    setMarkers([]);
-                    setPage(1);
+                    setTimeout(() => {
+                      markerRef.current[index]?.click();
+                    }, 300);
                   }}
                 >
-                  다시 검색
-                </RippleButton>
+                  <p className="text-card-foreground text-start whitespace-nowrap truncate">
+                    {marker.name}
+                  </p>
+                </RadioGroupItem>
               ))}
-          </CollapsibleContent>
-        </Collapsible>
-      </div>
+            </RadioGroup>
+          </ScrollArea>
+        </CollapsibleContent>
+        <CollapsibleTrigger asChild className="w-full">
+          <ExpandToggleButton
+            label={isListOpen ? "닫기" : "펼치기"}
+            icon={!isMobile ? ArrowDownFromLine : ArrowUpFromLine}
+            isExpanded={isListOpen}
+            maxWidth={!isMobile ? "100%" : "fit-content"}
+            className="bg-card/40 backdrop-blur-xs shadow-md"
+          />
+        </CollapsibleTrigger>
+      </Collapsible>
+      {/* 더보기 */}
+      {pagination && pagination.last > 1 && (
+        <div className="absolute z-1 bottom-1.5 left-1/2 -translate-x-1/2">
+          {page < pagination.last ? (
+            <RippleButton
+              size={!isMobile ? "default" : "sm"}
+              onClick={() => {
+                if (page < pagination.last) setPage((prev) => prev + 1);
+              }}
+            >
+              {!isMobile ? (
+                `더보기(${page}/${pagination.last})`
+              ) : (
+                <>
+                  <MapPlus />
+                  {`(${page}/${pagination.last})`}
+                </>
+              )}
+            </RippleButton>
+          ) : (
+            <RippleButton
+              variant="secondary"
+              size={!isMobile ? "default" : "sm"}
+              className="md:aspect-auto aspect-square"
+              onClick={() => {
+                setMarkers([]);
+                setPage(1);
+              }}
+            >
+              {!isMobile ? "다시 검색" : <RefreshCw />}
+            </RippleButton>
+          )}
+        </div>
+      )}
       {/* 검색 Markers */}
       <SearchedMarkers
         markers={markers}

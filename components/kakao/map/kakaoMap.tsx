@@ -158,13 +158,13 @@ const MapController = ({ mapRef, type, setType }: MapControllerProps) => {
   const zoomIn = () => {
     const map = mapRef.current;
     if (!map) return;
-    map.setLevel(map.getLevel() - 1);
+    map.setLevel(map.getLevel() - 1, { animate: true });
   };
 
   const zoomOut = () => {
     const map = mapRef.current;
     if (!map) return;
-    map.setLevel(map.getLevel() + 1);
+    map.setLevel(map.getLevel() + 1, { animate: true });
   };
 
   return (
