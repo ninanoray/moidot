@@ -55,7 +55,7 @@ export async function postSocialLogin({
   if (setCookie) {
     const tokenCookie = parseSetCookie(setCookie[0]);
     const cookieStore = await cookies();
-    cookieStore.set("refreshToken", tokenCookie.refreshToken, {
+    cookieStore.set("m_refreshToken", tokenCookie.refreshToken, {
       maxAge: Number(tokenCookie["max-age"]),
       expires: new Date(tokenCookie.expires),
       httpOnly: true,
