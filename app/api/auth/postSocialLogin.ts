@@ -48,14 +48,14 @@ export async function postSocialLogin({
 
   // access token
   const resHeaders = response.headers;
-  axios.defaults.headers.common["Authorization"] = resHeaders["authorizaion"];
+  axios.defaults.headers.common["Authorization"] = resHeaders["authorization"];
 
   // refresh token
   const setCookie = resHeaders["set-cookie"];
   if (setCookie) {
     const tokenCookie = parseSetCookie(setCookie[0]);
-    const coockieStore = await cookies();
-    coockieStore.set("refreshToken", tokenCookie.refreshToken, {
+    const cookieStore = await cookies();
+    cookieStore.set("refreshToken", tokenCookie.refreshToken, {
       maxAge: Number(tokenCookie["max-age"]),
       expires: new Date(tokenCookie.expires),
       httpOnly: true,
