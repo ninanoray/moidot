@@ -1,9 +1,9 @@
 import { SERVER_URL } from "@/constants/keys";
 import axios from "axios";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 
 interface PostSocialLogin {
-  email: string | undefined;
+  accessToken: string | undefined;
   provider: string | undefined;
 }
 
@@ -11,32 +11,32 @@ interface LoginResponse {
   email: string;
 }
 
-function parseSetCookie(setCookieStr: string): Record<string, string> {
-  const parts = setCookieStr.split(";").map((part) => part.trim());
-  const [nameValue, ...attributes] = parts;
+// function parseSetCookie(setCookieStr: string): Record<string, string> {
+//   const parts = setCookieStr.split(";").map((part) => part.trim());
+//   const [nameValue, ...attributes] = parts;
 
-  const [name, value] = nameValue.split("=");
+//   const [name, value] = nameValue.split("=");
 
-  const cookieObj: Record<string, string> = {
-    [name]: value,
-  };
+//   const cookieObj: Record<string, string> = {
+//     [name]: value,
+//   };
 
-  for (const attr of attributes) {
-    const [attrName, attrValue = true] = attr.split("=");
-    cookieObj[attrName.toLowerCase()] = attrValue === true ? "" : attrValue;
-  }
+//   for (const attr of attributes) {
+//     const [attrName, attrValue = true] = attr.split("=");
+//     cookieObj[attrName.toLowerCase()] = attrValue === true ? "" : attrValue;
+//   }
 
-  return cookieObj;
-}
+//   return cookieObj;
+// }
 
 export async function postSocialLogin({
-  email,
+  accessToken,
   provider,
 }: PostSocialLogin): Promise<LoginResponse> {
   const url = SERVER_URL + "/api/auth/social-login";
   const data = {
     provider: provider,
-    email: email,
+    accessToken: accessToken,
   };
 
   // axios.defaults.withCredentials = true;
@@ -48,19 +48,19 @@ export async function postSocialLogin({
 
   // access token
   const resHeaders = response.headers;
-  axios.defaults.headers.common["Authorization"] = resHeaders["authorizaion"];
+  axios.defaults.headers.common["Authorization"] = resHeaders["authorization"];
 
   // refresh token
-  const setCookie = resHeaders["set-cookie"];
-  if (setCookie) {
-    const tokenCookie = parseSetCookie(setCookie[0]);
-    const coockieStore = await cookies();
-    coockieStore.set("refreshToken", tokenCookie.refreshToken, {
-      maxAge: Number(tokenCookie["max-age"]),
-      expires: new Date(tokenCookie.expires),
-      httpOnly: true,
-    });
-  }
+  // const setCookie = resHeaders["set-cookie"];
+  // if (setCookie) {
+  //   const tokenCookie = parseSetCookie(setCookie[0]);
+  //   const coockieStore = await cookies();
+  //   coockieStore.set("refreshToken", tokenCookie.refreshToken, {
+  //     maxAge: Number(tokenCookie["max-age"]),
+  //     expires: new Date(tokenCookie.expires),
+  //     httpOnly: true,
+  //   });
+  // }
 
   return response.data;
 }
