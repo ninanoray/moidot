@@ -29,16 +29,16 @@ const usePopover = (): PopoverContextType => {
 
 type Side = "top" | "bottom" | "left" | "right";
 
-const getInitialPosition = (side: Side) => {
+const getInitialPosition = (side: Side, translate) => {
   switch (side) {
     case "top":
-      return { y: 15 };
+      return { y: translate };
     case "bottom":
-      return { y: -15 };
+      return { y: -translate };
     case "left":
-      return { x: 15 };
+      return { x: translate };
     case "right":
-      return { x: -15 };
+      return { x: -translate };
   }
 };
 
@@ -87,6 +87,7 @@ type PopoverContentProps = React.ComponentProps<
 > &
   HTMLMotionProps<"div"> & {
     transition?: Transition;
+    translateOffset?: number;
   };
 
 function PopoverContent({
@@ -94,12 +95,13 @@ function PopoverContent({
   align = "center",
   side = "bottom",
   sideOffset = 4,
+  translateOffset = 50,
   transition = { type: "spring", stiffness: 300, damping: 25 },
   children,
   ...props
 }: PopoverContentProps) {
   const { isOpen } = usePopover();
-  const initialPosition = getInitialPosition(side);
+  const initialPosition = getInitialPosition(side, translateOffset);
 
   return (
     <AnimatePresence>

@@ -71,7 +71,12 @@ export default function DatePicker({
           <ChevronDownIcon />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-auto p-0 rounded-lg">
+      <PopoverContent
+        side="bottom"
+        align="end"
+        translateOffset={100}
+        className="w-auto p-0 rounded-lg"
+      >
         <CalendarWithTime
           mode="single"
           captionLayout="dropdown"
@@ -80,7 +85,7 @@ export default function DatePicker({
             onChange(date);
             if (!useTime) setOpen(false);
           }}
-          timeString={useTime && { from: dateTime }}
+          timeString={useTime ? { from: dateTime } : undefined}
           onTimeStringChange={(range) => setDateTime(range.from)}
         />
       </PopoverContent>

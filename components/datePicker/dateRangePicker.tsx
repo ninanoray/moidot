@@ -85,13 +85,18 @@ export default function DateRangePicker({
           <ChevronDownIcon />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-auto p-0 rounded-lg">
+      <PopoverContent
+        side="bottom"
+        align="end"
+        translateOffset={100}
+        className="w-auto p-0 rounded-lg"
+      >
         <CalendarWithTime
           mode="range"
           captionLayout="dropdown"
           selected={value}
           onSelect={onChange}
-          timeString={useTime && rangeTime}
+          timeString={useTime ? rangeTime : undefined}
           onTimeStringChange={setRangeTime}
         />
       </PopoverContent>
