@@ -4,13 +4,13 @@ import { ChevronDownIcon } from "lucide-react";
 import { type DateRange } from "react-day-picker";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useCallback, useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { useCallback, useEffect, useState } from "react";
+} from "../animate-ui/radix/popover";
 import CalendarWithTime, { DateRangeString } from "./calendarWIthTime";
 import { getDateString, getDateTimeString, getTimeString } from "./util";
 
