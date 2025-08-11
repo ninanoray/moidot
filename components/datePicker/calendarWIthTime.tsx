@@ -145,43 +145,63 @@ interface TimeInputProps {
 }
 
 const TimeInput = ({ mode, timeString, updateTimeString }: TimeInputProps) => {
-  return (
-    <>
-      <Label
-        htmlFor="time-from"
-        className={cn("mr-2 whitespace-nowrap", mode !== "single" && "sr-only")}
-      >
-        시간
-      </Label>
-      <Input
-        id="time-from"
-        type="time"
-        defaultValue={timeString?.from}
-        onChange={(event) =>
-          updateTimeString({
-            ...timeString,
-            from: event.target.value,
-          })
-        }
-        className="text-sm border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-      />
-      {mode === "range" && (
-        <>
-          <span>~</span>
+  if (mode === "single")
+    return (
+      <>
+        <Label htmlFor="time-from" className="mr-2 whitespace-nowrap">
+          시간
+        </Label>
+        <Input
+          id="time-from"
+          type="time"
+          defaultValue={timeString.from}
+          onChange={(event) =>
+            updateTimeString({
+              ...timeString,
+              from: event.target.value,
+            })
+          }
+          className="text-sm border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+        />
+      </>
+    );
+  else if (mode === "range")
+    return (
+      <>
+        <div>
+          <Label htmlFor="time-from" className="mb-1 text-xs whitespace-nowrap">
+            시작일
+          </Label>
+          <Input
+            id="time-from"
+            type="time"
+            defaultValue={timeString.from}
+            onChange={(event) =>
+              updateTimeString({
+                ...timeString,
+                from: event.target.value,
+              })
+            }
+            className="text-sm border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none rounded-r-none"
+          />
+        </div>
+        <div>
+          <Label htmlFor="time-to" className="mb-1 text-xs whitespace-nowrap">
+            종료일
+          </Label>
           <Input
             id="time-to"
             type="time"
-            defaultValue={timeString?.to}
+            defaultValue={timeString.to}
             onChange={(event) =>
               updateTimeString({
                 ...timeString,
                 to: event.target.value,
               })
             }
-            className="text-sm border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            className="text-sm border-0 bg-accent dark:bg-accent/80 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none rounded-l-none"
           />
-        </>
-      )}
-    </>
-  );
+        </div>
+      </>
+    );
 };
