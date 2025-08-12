@@ -69,6 +69,10 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <head>
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta
+          name="naver-site-verification"
+          content="2db1528ec78dfc8e3acf3290937f74ae7428d414"
+        />
         <link
           rel="manifest"
           href={META.base + "/manifest.webmanifest"}
