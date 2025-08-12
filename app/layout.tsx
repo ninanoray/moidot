@@ -71,7 +71,7 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta
           name="google-site-verification"
-          content="L5cawfFJA5mPAt7_OVu931bDJ6OeXBs9nq9jzv0LLHc"
+          content="2BOUz65gs1f9_eR-sFrM1pSVBwWzG5dpIBJvkefNtt0"
         />
         <meta
           name="naver-site-verification"
