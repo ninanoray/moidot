@@ -341,13 +341,15 @@ const SearchedMarkers = ({
               </PopoverTrigger>
               <PopoverContent
                 side="top"
-                className="w-fit flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
+                className="w-fit max-w-80 flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
               >
-                <h2 className="my-0">{marker.name}</h2>
+                <h2 className="my-0 whitespace-normal break-keep">
+                  {marker.name}
+                </h2>
                 <div className="mb-1.5 flex items-center gap-2">
-                  {marker.group && (
+                  {marker.category && (
                     <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-sm">
-                      {marker.group}
+                      {marker.category}
                     </p>
                   )}
                   {marker.distance && (
@@ -411,10 +413,10 @@ const SearchedMarkers = ({
                 <div className="mx-auto w-full max-w-sm">
                   <DrawerHeader>
                     <div className="flex justify-around items-center gap-4">
-                      {marker.group && (
+                      {marker.category && (
                         <DrawerDescription asChild>
                           <p className="m-0 px-1.5 py-1 bg-secondary text-secondary-foreground text-xs font-medium whitespace-nowrap rounded-sm">
-                            {marker.group}
+                            {marker.category}
                           </p>
                         </DrawerDescription>
                       )}

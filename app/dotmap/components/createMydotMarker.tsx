@@ -110,7 +110,7 @@ const CreateMydotMarker = ({
           <PopoverContent
             side="top"
             sideOffset={4}
-            className="w-fit p-2 flex flex-col gap-2 whitespace-nowrap cursor-auto select-text"
+            className="w-fit md:max-w-80 max-w-60 p-2 flex flex-col gap-2 whitespace-nowrap cursor-auto select-text"
           >
             <MarkerCardLabelContent label="지번" content={marker.address} />
             <MarkerCardLabelContent
@@ -152,7 +152,9 @@ const CreateMydotMarker = ({
                 )}
               </FormsSelect>
               <div className="w-full flex gap-1">
-                <RippleButton className="flex-auto">{`${marker.name}에 마이닷`}</RippleButton>
+                <RippleButton className="flex-auto gap-0">
+                  여기에 마이닷
+                </RippleButton>
                 <RippleButton
                   size="icon"
                   variant="destructive"

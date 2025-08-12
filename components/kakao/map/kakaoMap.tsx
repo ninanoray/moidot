@@ -41,12 +41,15 @@ export interface Marker {
    * 중요 카테고리만 그룹핑한 카테고리 그룹명
    * 예) 음식점
    */
-  group?: string;
+  category?: string;
   /**
    * 카테고리 이름
    * 예) 음식점 > 치킨
    */
-  category?: string;
+  keywords?: string;
+  categoryCode?:
+    | `${kakao.maps.CategoryCode}`
+    | `${Exclude<kakao.maps.CategoryCode, "">}`[];
   /**
    * 현재 위치와 마커 사이의 거리
    */
@@ -370,8 +373,9 @@ export function placeToMarker(
     roadAddress: place.road_address_name,
     url: place.place_url,
     phone: place.phone,
-    group: place.category_group_name,
-    category: place.category_name,
+    category: place.category_group_name,
+    categoryCode: place.category_group_code,
+    keywords: place.category_name,
     distance: calcDistance(position, { lat, lng }),
   };
 }

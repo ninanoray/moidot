@@ -11,13 +11,13 @@ import {
   SelectValue,
 } from "../ui/select";
 
-export interface FormsSelection {
+export interface Selection {
   value: any;
   label: string;
 }
 
 interface FormsSelectProps extends FormsItemsProps {
-  items: FormsSelection[];
+  items: Selection[];
 }
 
 const FormsSelect = ({
@@ -52,7 +52,11 @@ const FormsSelect = ({
                   !field.value && "text-muted-foreground"
                 )}
               >
-                <SelectValue placeholder={placeholder} />
+                <SelectValue placeholder={placeholder}>
+                  <span className="truncate">
+                    {items.find((item) => item.value === field.value)?.label}
+                  </span>
+                </SelectValue>
               </SelectTrigger>
             </FormControl>
             <SelectContent>
