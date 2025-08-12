@@ -11,6 +11,7 @@ import {
   placeToMarker,
   Position,
 } from "@/components/kakao/map/kakaoMap";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { MapPinOff } from "lucide-react";
 import { User } from "next-auth";
@@ -72,6 +73,7 @@ const CreateMydotMarker = ({
   const [pagination, setPagination] = useState<kakao.maps.Pagination>();
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState<string>();
+  const [tab, setTab] = useState<string>("place");
 
   const markerSelection = searchedMarkers.map((marker) => ({
     value: JSON.stringify(marker),
@@ -156,17 +158,7 @@ const CreateMydotMarker = ({
               className="size-12"
             />
           </PopoverTrigger>
-          <PopoverContent
-            side="top"
-            sideOffset={4}
-            className="w-fit md:max-w-80 max-w-60 p-2 flex flex-col gap-2 whitespace-nowrap cursor-auto select-text"
-          >
-            <MarkerCardLabelContent label="지번">
-              <p>{marker.address}</p>
-            </MarkerCardLabelContent>
-            <MarkerCardLabelContent label="도로명">
-              <p>{marker.roadAddress}</p>
-            </MarkerCardLabelContent>
+          <PopoverContent side="top" sideOffset={4} className="w-auto p-2">
             <Forms
               schema={MydotMarkerSchema}
               onSubmit={(data: typeof MydotMarkerSchema._type) => {
@@ -185,52 +177,97 @@ const CreateMydotMarker = ({
                 } as Dot;
                 console.log(dot);
               }}
-              className="gap-1"
             >
-              {category && (
-                <MarkerCardLabelContent label="카테고리">
-                  <p>{category}</p>
-                </MarkerCardLabelContent>
-              )}
-              <FormsSelect
-                message={false}
-                name="marker"
-                items={markerSelection}
-                placeholder={
-                  searchedMarkers.length > 0
-                    ? `장소를 선택해주세요`
-                    : "검색된 결과가 없습니다"
-                }
-                onValueChange={(value) => {
-                  const marker = JSON.parse(value) as Marker;
-                  updateMarker(marker);
-                  setCategory(marker.category);
-                }}
+              <Tabs
+                value={tab}
+                onValueChange={setTab}
+                className="w-fit md:max-w-80 max-w-64"
               >
-                {pagination && page < pagination.last && (
-                  <RippleButton
-                    variant="outline"
-                    className="w-full h-6 border-0 text-foreground/60 hover:bg-accent hover:text-accent-foreground/75"
-                    onViewportEnter={() => {
-                      if (page < pagination.last) setPage(page + 1);
+                <TabsContent
+                  value="place"
+                  className="flex flex-col gap-1 whitespace-nowrap cursor-auto select-text"
+                >
+                  <MarkerCardLabelContent label="지번">
+                    <p>{marker.address}</p>
+                  </MarkerCardLabelContent>
+                  {marker.roadAddress && (
+                    <MarkerCardLabelContent label="도로명">
+                      <p>{marker.roadAddress}</p>
+                    </MarkerCardLabelContent>
+                  )}
+                  {category && (
+                    <MarkerCardLabelContent label="카테고리">
+                      <p>{category}</p>
+                    </MarkerCardLabelContent>
+                  )}
+                  <FormsSelect
+                    message={false}
+                    name="marker"
+                    items={markerSelection}
+                    placeholder={
+                      searchedMarkers.length > 0
+                        ? `장소를 선택해주세요`
+                        : "검색된 결과가 없습니다"
+                    }
+                    onValueChange={(value) => {
+                      const marker = JSON.parse(value) as Marker;
+                      updateMarker(marker);
+                      setCategory(marker.category);
                     }}
                   >
-                    {`더보기(${page}/${pagination.last})`}
+                    {pagination && page < pagination.last && (
+                      <RippleButton
+                        variant="outline"
+                        className="w-full h-6 border-0 text-foreground/60 hover:bg-accent hover:text-accent-foreground/75"
+                        onViewportEnter={() => {
+                          if (page < pagination.last) setPage(page + 1);
+                        }}
+                      >
+                        {`더보기(${page}/${pagination.last})`}
+                      </RippleButton>
+                    )}
+                  </FormsSelect>
+                </TabsContent>
+                <TabsContent value="category">
+                  <FormsSelect
+                    label="카테고리를 동록하시겠습니까?"
+                    message={false}
+                    name="category"
+                    items={categorySelection}
+                    placeholder="카테고리를 선택해주세요"
+                  />
+                </TabsContent>
+                <div className="w-full flex gap-1">
+                  <TabsList className="w-full">
+                    {tab === "category" && (
+                      <TabsTrigger
+                        value="place"
+                        onClick={() => setCategory(undefined)}
+                      >
+                        뒤로
+                      </TabsTrigger>
+                    )}
+                    {category !== "" || tab === "category" ? (
+                      <RippleButton className="w-full shrink">
+                        여기에 마이닷
+                      </RippleButton>
+                    ) : (
+                      <TabsTrigger type="button" value="category" asChild>
+                        <RippleButton className="w-full h-9 text-primary-foreground">
+                          여기에 마이닷
+                        </RippleButton>
+                      </TabsTrigger>
+                    )}
+                  </TabsList>
+                  <RippleButton
+                    size="icon"
+                    variant="destructive"
+                    onClick={() => updateMarker(undefined)}
+                  >
+                    <MapPinOff />
                   </RippleButton>
-                )}
-              </FormsSelect>
-              <div className="w-full flex gap-1">
-                <RippleButton className="flex-auto gap-0">
-                  여기에 마이닷
-                </RippleButton>
-                <RippleButton
-                  size="icon"
-                  variant="destructive"
-                  onClick={() => updateMarker(undefined)}
-                >
-                  <MapPinOff />
-                </RippleButton>
-              </div>
+                </div>
+              </Tabs>
             </Forms>
           </PopoverContent>
         </Popover>

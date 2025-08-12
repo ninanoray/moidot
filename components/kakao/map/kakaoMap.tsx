@@ -345,7 +345,7 @@ export const MarkerCardLabelContent = ({
     <div className="flex items-center gap-1">
       <div
         className={cn(
-          "mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm",
+          "shrink-0 mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm",
           className
         )}
       >
