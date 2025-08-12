@@ -278,7 +278,7 @@ const CurrentMarker = ({
         },
         (err) => {
           setCurrentPos(undefined);
-          alert(err.message);
+          alert(`${err.code}: ${err.message}`);
         }
       );
     } else {
