@@ -358,11 +358,12 @@ const SearchedMarkers = ({
                     </p>
                   )}
                 </div>
-                <MarkerCardLabelContent label="지번" content={marker.address} />
-                <MarkerCardLabelContent
-                  label="도로명"
-                  content={marker.roadAddress}
-                />
+                <MarkerCardLabelContent label="지번">
+                  <p>{marker.address}</p>
+                </MarkerCardLabelContent>
+                <MarkerCardLabelContent label="도로명">
+                  <p>{marker.roadAddress}</p>
+                </MarkerCardLabelContent>
                 <div className="inline-flex items-center gap-1">
                   <Phone className="m-0.5 size-4" />
                   <p>{marker.phone}</p>
@@ -433,14 +434,12 @@ const SearchedMarkers = ({
                     </div>
                   </DrawerHeader>
                   <div className="px-4 flex flex-col gap-1">
-                    <MarkerCardLabelContent
-                      label="지번"
-                      content={marker.address}
-                    />
-                    <MarkerCardLabelContent
-                      label="도로명"
-                      content={marker.roadAddress}
-                    />
+                    <MarkerCardLabelContent label="지번">
+                      <p>{marker.address}</p>
+                    </MarkerCardLabelContent>
+                    <MarkerCardLabelContent label="도로명">
+                      <p>{marker.roadAddress}</p>
+                    </MarkerCardLabelContent>
                     <div className="inline-flex items-center gap-1">
                       <Phone className="m-0.5 size-4" />
                       <p>{marker.phone}</p>

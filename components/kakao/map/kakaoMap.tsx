@@ -5,7 +5,14 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Locate, MapIcon, Minus, Plus, SwitchCamera } from "lucide-react";
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import {
+  ReactNode,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { CustomOverlayMap, Map } from "react-kakao-maps-sdk";
 import { useLongPress } from "use-long-press";
 import { RippleButton } from "../../animate-ui/buttons/ripple";
@@ -42,14 +49,14 @@ export interface Marker {
    * 예) 음식점
    */
   category?: string;
+  categoryCode?:
+    | `${kakao.maps.CategoryCode}`
+    | `${Exclude<kakao.maps.CategoryCode, "">}`[];
   /**
    * 카테고리 이름
    * 예) 음식점 > 치킨
    */
   keywords?: string;
-  categoryCode?:
-    | `${kakao.maps.CategoryCode}`
-    | `${Exclude<kakao.maps.CategoryCode, "">}`[];
   /**
    * 현재 위치와 마커 사이의 거리
    */
@@ -325,29 +332,28 @@ const CurrentMarker = ({
 
 interface MarkerCardLabelContentProps {
   label: string;
-  content: string | undefined;
+  children: ReactNode;
   className?: string | undefined;
 }
 
 export const MarkerCardLabelContent = ({
   label,
-  content,
+  children,
   className,
 }: MarkerCardLabelContentProps) => {
-  if (content)
-    return (
-      <div className="flex items-center gap-1">
-        <div
-          className={cn(
-            "mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm",
-            className
-          )}
-        >
-          {label}
-        </div>
-        <p>{content}</p>
+  return (
+    <div className="flex items-center gap-1">
+      <div
+        className={cn(
+          "mr-1 w-12 py-0.5 flex-center bg-accent text-accent-foreground text-xs font-semibold rounded-sm",
+          className
+        )}
+      >
+        {label}
       </div>
-    );
+      {children}
+    </div>
+  );
 };
 
 /**

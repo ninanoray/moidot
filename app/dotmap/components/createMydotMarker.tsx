@@ -9,12 +9,52 @@ import {
   Marker,
   MarkerCardLabelContent,
   placeToMarker,
+  Position,
 } from "@/components/kakao/map/kakaoMap";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { MapPinOff } from "lucide-react";
+import { User } from "next-auth";
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 import z from "zod";
+
+export type Dot = {
+  id: string;
+  kakaoMapId: string;
+  name: string;
+  position: Position;
+  category: string;
+  categoryCode: string;
+  creator: User;
+  dulitsCount: number;
+  likesCount: number;
+};
+
+export enum CategoryCode {
+  대형마트 = "MT1",
+  편의점 = "CS2",
+  "어린이집, 유치원" = "PS3",
+  학교 = "SC4",
+  학원 = "AC5",
+  주차장 = "PK6",
+  "주유소, 충전소" = "OL7",
+  지하철역 = "SW8",
+  은행 = "BK9",
+  문화시설 = "CT1",
+  중개업소 = "AG2",
+  공공기관 = "PO3",
+  관광명소 = "AT4",
+  숙박 = "AD5",
+  음식점 = "FD6",
+  카페 = "CE7",
+  병원 = "HP8",
+  약국 = "PM9",
+  전시회 = "XH1",
+  방탈출 = "RX2",
+  보드게임 = "BG3",
+  "스포츠, 레져" = "SP4",
+}
 
 interface CreateMydotMarkerProps {
   marker: Marker;
@@ -25,10 +65,13 @@ const CreateMydotMarker = ({
   marker,
   updateMarker,
 }: CreateMydotMarkerProps) => {
+  const { data: session } = useSession();
+
   const [open, setOpen] = useState<boolean>(true);
   const [searchedMarkers, setSearchedMarkers] = useState<Marker[]>([]);
   const [pagination, setPagination] = useState<kakao.maps.Pagination>();
   const [page, setPage] = useState(1);
+  const [category, setCategory] = useState<string>();
 
   const markerSelection = searchedMarkers.map((marker) => ({
     value: JSON.stringify(marker),
@@ -38,10 +81,16 @@ const CreateMydotMarker = ({
     (marker) => marker.value
   ) as unknown as readonly [string, ...string[]];
 
+  const categorySelection = Object.entries(CategoryCode).map((item) => ({
+    value: item[1],
+    label: item[0],
+  }));
+
   const MydotMarkerSchema = z.object({
     marker: z.enum(markerEnum, {
       required_error: "장소를 선택해주세요.",
     }),
+    category: z.nativeEnum(CategoryCode).optional(),
   });
 
   const search = useCallback(
@@ -112,31 +161,50 @@ const CreateMydotMarker = ({
             sideOffset={4}
             className="w-fit md:max-w-80 max-w-60 p-2 flex flex-col gap-2 whitespace-nowrap cursor-auto select-text"
           >
-            <MarkerCardLabelContent label="지번" content={marker.address} />
-            <MarkerCardLabelContent
-              label="도로명"
-              content={marker.roadAddress}
-            />
+            <MarkerCardLabelContent label="지번">
+              <p>{marker.address}</p>
+            </MarkerCardLabelContent>
+            <MarkerCardLabelContent label="도로명">
+              <p>{marker.roadAddress}</p>
+            </MarkerCardLabelContent>
             <Forms
               schema={MydotMarkerSchema}
               onSubmit={(data: typeof MydotMarkerSchema._type) => {
-                if (data?.marker) console.log(JSON.parse(data.marker));
+                const marker = JSON.parse(data.marker) as Marker;
+                const dot = {
+                  kakaoMapId: marker.id,
+                  name: marker.name,
+                  position: marker.position,
+                  category: marker.category || data.category,
+                  categoryCode:
+                    marker.categoryCode ||
+                    categorySelection.find(
+                      (item) => item.value === data.category
+                    )?.label,
+                  creator: session?.user,
+                } as Dot;
+                console.log(dot);
               }}
+              className="gap-1"
             >
+              {category && (
+                <MarkerCardLabelContent label="카테고리">
+                  <p>{category}</p>
+                </MarkerCardLabelContent>
+              )}
               <FormsSelect
                 message={false}
                 name="marker"
-                items={searchedMarkers.map((marker) => ({
-                  value: JSON.stringify(marker),
-                  label: marker.name,
-                }))}
+                items={markerSelection}
                 placeholder={
                   searchedMarkers.length > 0
                     ? `장소를 선택해주세요`
                     : "검색된 결과가 없습니다"
                 }
                 onValueChange={(value) => {
-                  updateMarker(JSON.parse(value));
+                  const marker = JSON.parse(value) as Marker;
+                  updateMarker(marker);
+                  setCategory(marker.category);
                 }}
               >
                 {pagination && page < pagination.last && (
