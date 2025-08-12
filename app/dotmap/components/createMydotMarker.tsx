@@ -12,6 +12,7 @@ import {
   Position,
 } from "@/components/kakao/map/kakaoMap";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { MapPinOff } from "lucide-react";
 import { User } from "next-auth";
@@ -237,18 +238,22 @@ const CreateMydotMarker = ({
                     placeholder="카테고리를 선택해주세요"
                   />
                 </TabsContent>
-                <div className="w-full flex gap-1">
+                <div className="flex gap-1">
                   <TabsList className="w-full">
-                    {tab === "category" && (
-                      <TabsTrigger
-                        value="place"
-                        onClick={() => setCategory(undefined)}
-                      >
-                        뒤로
-                      </TabsTrigger>
-                    )}
+                    <TabsTrigger
+                      value="place"
+                      onClick={() => setCategory(undefined)}
+                      className={cn(
+                        "cursor-pointer",
+                        tab === "category"
+                          ? "not-sr-only h-full"
+                          : "sr-only h-full"
+                      )}
+                    >
+                      뒤로
+                    </TabsTrigger>
                     {category !== "" || tab === "category" ? (
-                      <RippleButton className="w-full shrink">
+                      <RippleButton className="flex-auto">
                         여기에 마이닷
                       </RippleButton>
                     ) : (
