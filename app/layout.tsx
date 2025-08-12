@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     type: "website",
     url: META.url,
-    //images: [{ url: META.ogImage, alt: META.title }],
+    images: [{ url: META.ogImage, alt: META.title }],
   },
 };
 

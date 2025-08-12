@@ -10,7 +10,7 @@ export const META = {
   base: BASE_URL,
   url: BASE_URL,
   favicon: BASE_URL + "/favicon.ico",
-  ogImage: BASE_URL + "/images/moidot/moidot.png",
+  ogImage: "/images/moidot/moidot.png",
   color: "#085E51",
   bgclor: "#F8F6F1",
 } as const;
