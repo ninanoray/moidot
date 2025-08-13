@@ -31,6 +31,7 @@ export const metadata: Metadata = {
   title: META.title,
   description: META.description,
   keywords: [...META.keywords],
+  applicationName: META.siteName,
   openGraph: {
     title: META.title,
     description: META.description,
