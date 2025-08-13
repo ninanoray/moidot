@@ -40,6 +40,13 @@ export const metadata: Metadata = {
     url: META.url,
     images: [{ url: META.ogImage, alt: META.title }],
   },
+  verification: {
+    google: "2BOUz65gs1f9_eR-sFrM1pSVBwWzG5dpIBJvkefNtt0",
+    other: {
+      "naver-site-verification": "2db1528ec78dfc8e3acf3290937f74ae7428d414",
+    },
+  },
+  appleWebApp: { capable: true },
 };
 
 export const viewport: Viewport = {
@@ -70,15 +77,7 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta
-          name="google-site-verification"
-          content="2BOUz65gs1f9_eR-sFrM1pSVBwWzG5dpIBJvkefNtt0"
-        />
-        <meta
-          name="naver-site-verification"
-          content="2db1528ec78dfc8e3acf3290937f74ae7428d414"
-        />
+        {/* <meta name="mobile-web-app-capable" content="yes" /> */}
         <link
           rel="manifest"
           href={META.base + "/manifest.webmanifest"}
