@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/providers/themeProvider";
 import JsonLdScript from "@/script/JsonLdScript";
 import KakaoScript from "@/script/KakaoScript";
 import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
@@ -101,6 +102,8 @@ export default function RootLayout({
       </body>
       <JsonLdScript />
       <KakaoScript />
+      <GoogleTagManager gtmId={`${process.env.GTM_ID}`} />
+      <GoogleAnalytics gaId={`${process.env.GA_ID}`} />
     </html>
   );
 }
