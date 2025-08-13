@@ -1,4 +1,4 @@
-import { META } from "@/constants/metadata";
+import { APPLE_ICONS, META, STARTUP_IMAGES } from "@/constants/metadata";
 import NextAuthProvider from "@/providers/nexthAuthProvider";
 import QueryProvider from "@/providers/reactQuery/queryProvider";
 import { ThemeProvider } from "@/providers/themeProvider";
@@ -34,6 +34,10 @@ export const metadata: Metadata = {
   description: META.description,
   keywords: [...META.keywords],
   applicationName: META.siteName,
+  icons: {
+    icon: META.favicon,
+    apple: APPLE_ICONS,
+  },
   openGraph: {
     title: META.title,
     description: META.description,
@@ -43,13 +47,21 @@ export const metadata: Metadata = {
     url: META.url,
     images: [{ url: META.ogImage, alt: META.title }],
   },
+  twitter: {
+    card: "summary",
+    images: [{ url: META.ogImage, alt: META.title }],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    startupImage: STARTUP_IMAGES,
+  },
   verification: {
     google: "2BOUz65gs1f9_eR-sFrM1pSVBwWzG5dpIBJvkefNtt0",
     other: {
       "naver-site-verification": "2db1528ec78dfc8e3acf3290937f74ae7428d414",
     },
   },
-  appleWebApp: { capable: true },
 };
 
 export const viewport: Viewport = {
