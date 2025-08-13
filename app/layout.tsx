@@ -4,6 +4,8 @@ import QueryProvider from "@/providers/reactQuery/queryProvider";
 import { ThemeProvider } from "@/providers/themeProvider";
 import KakaoScript from "@/script/KakaoScript";
 import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
@@ -93,6 +95,8 @@ export default function RootLayout({
             </ThemeProvider>
           </QueryProvider>
         </NextAuthProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
       <KakaoScript />
     </html>
