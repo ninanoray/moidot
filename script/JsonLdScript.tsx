@@ -1,8 +1,9 @@
 import { BASE_URL } from "@/constants/keys";
 import { META } from "@/constants/metadata";
+import Script from "next/script";
 import { Organization, WithContext } from "schema-dts";
 
-const JsonLd = () => {
+const JsonLdScript = () => {
   const structuredData: WithContext<Organization> = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -16,13 +17,16 @@ const JsonLd = () => {
     sameAs: ["https://github.com/ninanoray/moidot"],
   };
   return (
-    <script
+    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
+    <Script
+      id="structured-data"
       type="application/ld+json"
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
       }}
+      strategy="beforeInteractive"
     />
   );
 };
 
-export default JsonLd;
+export default JsonLdScript;

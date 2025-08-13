@@ -2,6 +2,7 @@ import { META } from "@/constants/metadata";
 import NextAuthProvider from "@/providers/nexthAuthProvider";
 import QueryProvider from "@/providers/reactQuery/queryProvider";
 import { ThemeProvider } from "@/providers/themeProvider";
+import JsonLdScript from "@/script/JsonLdScript";
 import KakaoScript from "@/script/KakaoScript";
 import { BeforeInstallPromptEvent } from "@/types/BeforeInstallPromptEvent";
 import { Analytics } from "@vercel/analytics/next";
@@ -98,6 +99,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
       </body>
+      <JsonLdScript />
       <KakaoScript />
     </html>
   );
