@@ -1,5 +1,4 @@
 import { BASE_URL } from "@/constants/keys";
-import { META } from "@/constants/metadata";
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,7 +8,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
-      images: [BASE_URL + META.ogImage],
+    },
+    {
+      url: BASE_URL + "/login",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
   ];
 }
