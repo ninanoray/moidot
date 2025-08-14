@@ -12,10 +12,10 @@ const Dotmap = () => {
   const [search, setSearch] = useState<string>();
 
   return (
-    <div className="bg-layout p-2 gap-2 md:flex-col flex-col-reverse">
+    <div className="bg-layout md:p-2 p-0 gap-2 md:flex-col flex-col-reverse">
       <Forms
         schema={DotmapSchema}
-        className="h-fit flex-row"
+        className="md:static absolute z-10 md:p-0 px-2 pb-4 h-fit flex-row"
         onSubmit={(value: typeof DotmapSchema._type) => {
           setSearch(value.keyword);
         }}
@@ -25,7 +25,11 @@ const Dotmap = () => {
           검색
         </RippleButton>
       </Forms>
-      <KakaoMap keyword={search} onClick={() => inputRef.current?.blur()} />
+      <KakaoMap
+        keyword={search}
+        onClick={() => inputRef.current?.blur()}
+        className="relative z-1"
+      />
     </div>
   );
 };

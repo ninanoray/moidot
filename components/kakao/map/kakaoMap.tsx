@@ -117,7 +117,7 @@ const KakaoMap = ({ keyword, className, ...props }: KakaoMapProps) => {
 
   return (
     <div
-      className="relative size-full rounded-lg overflow-hidden select-none"
+      className="relative size-full md:rounded-md overflow-hidden select-none"
       {...props}
     >
       <Map
@@ -221,7 +221,7 @@ const MapController = ({ mapRef, type, setType }: MapControllerProps) => {
       <ToggleGroup
         type="single"
         size="sm"
-        className="absolute bottom-12 right-1.5 z-1 p-1 flex-col bg-card/40 backdrop-blur-xs shadow-md rounded-md [&_span]:data-[state=on]:text-primary-foreground [&_span]:font-normal [&_span]:hover:text-card-foreground"
+        className="absolute bottom-28 right-1.5 z-1 p-1 flex-col bg-card/40 backdrop-blur-xs shadow-md rounded-md [&_span]:data-[state=on]:text-primary-foreground [&_span]:font-normal [&_span]:hover:text-card-foreground"
         activeClassName="bg-primary"
         value={type}
         onValueChange={setType}
@@ -298,7 +298,7 @@ const CurrentMarker = ({
         {/* 현위치로 이동하기 버튼 */}
         <RippleButton
           size="icon"
-          className="absolute z-1 md:right-1.5 right-2 bottom-1.5"
+          className="absolute z-1 md:right-1.5 right-2 md:bottom-1.5 bottom-18"
           onClick={() => {
             map.panTo(currentPos);
             if (map.getLevel() !== 3)
