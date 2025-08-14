@@ -83,6 +83,10 @@
   --sidebar-ring: oklch(0.8348 0.1302 160.908);
   --kakao: oklch(0.9139 0.1909 101.37);
   --kakao-foreground: oklch(0 0 0 / 85%);
+  --sat: env(safe-area-inset-top);
+  --sab: env(safe-area-inset-bottom);
+  --sar: env(safe-area-inset-right);
+  --sal: env(safe-area-inset-left);
 }
 
 .dark {
@@ -213,7 +217,7 @@
 }
 
 @utility bg-layout {
-  @apply size-full p-2 flex flex-col;
+  @apply size-full p-2 flex flex-col pt-[sat];
 }
 
 @utility no-scollbar {
