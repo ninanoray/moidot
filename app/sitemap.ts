@@ -5,11 +5,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: BASE_URL,
-      priority: 1,
+      lastModified: new Date(),
     },
     {
       url: BASE_URL + "/login",
-      priority: 0.8,
+      lastModified: new Date(),
     },
   ];
 }
