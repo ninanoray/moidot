@@ -24,6 +24,10 @@ const Login = () => {
           priority
           className="rounded-full mobile drag-none"
         />
+        <h3 className="text-center">잇고 모여서, 계속 이어지는 모임</h3>
+        <h5 className="mb-4 italic">
+          Connect the Dots, draw the Dules, and gather into the Moim
+        </h5>
       </div>
       <LoginForm />
       <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

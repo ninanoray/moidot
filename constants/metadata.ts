@@ -6,7 +6,7 @@ export const META = {
   title: "모이닷 | Moidot",
   siteName: "모이닷",
   description:
-    "잇고 모여서, 계속 이어지는 모임. | Connect the Dots, draw the Dules, and gather into a Moim.",
+    "잇고 모여서, 계속 이어지는 모임. | Connect the Dots, draw the Dules, and gather into the Moim.",
   keywords: ["모이닷", "moidot"],
   base: BASE_URL,
   url: BASE_URL,
