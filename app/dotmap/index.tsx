@@ -15,12 +15,16 @@ const Dotmap = () => {
     <div className="bg-layout md:p-2 p-0 gap-2 md:flex-col flex-col-reverse">
       <Forms
         schema={DotmapSchema}
-        className="md:static absolute z-10 md:p-0 px-2 pb-4 h-fit flex-row"
+        className="md:static absolute z-10 md:p-0 px-2 pb-6 h-fit flex-row"
         onSubmit={(value: typeof DotmapSchema._type) => {
           setSearch(value.keyword);
         }}
       >
-        <FormsInput ref={inputRef} name="keyword" />
+        <FormsInput
+          ref={inputRef}
+          name="keyword"
+          className="bg-background/25 backdrop-blur-xs rounded-md md:border border-0"
+        />
         <RippleButton className="w-20" onClick={() => setSearch(undefined)}>
           검색
         </RippleButton>
