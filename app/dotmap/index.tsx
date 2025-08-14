@@ -23,7 +23,7 @@ const Dotmap = () => {
         <FormsInput
           ref={inputRef}
           name="keyword"
-          className="md:bg-transparent bg-card/40 md:backdrop-blur-none backdrop-blur-xs md:shadow-none shadow-md rounded-md md:border border-0"
+          className="md:bg-transparent bg-card/20 md:backdrop-blur-none backdrop-blur-xs md:shadow-none shadow-sm rounded-md md:border border-0 [&_*]:bg-transparent dark:[&_*]:bg-transparent"
         />
         <RippleButton className="w-20" onClick={() => setSearch(undefined)}>
           검색
