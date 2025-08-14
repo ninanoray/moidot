@@ -101,7 +101,12 @@ export function HomeSidebar({ session, ...props }: Props) {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" className="select-none sat" {...props}>
+    <Sidebar
+      collapsible="icon"
+      className="select-none"
+      containerClassName="sat"
+      {...props}
+    >
       <SidebarHeader>
         <MoimSwitcher moims={data.moims} />
       </SidebarHeader>
