@@ -219,7 +219,7 @@
 }
 
 @utility bg-layout {
-  @apply size-full p-2 flex flex-col sat;
+  @apply size-full p-0 px-2 sat flex flex-col;
 }
 
 @utility no-scollbar {

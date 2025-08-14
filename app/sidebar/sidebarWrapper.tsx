@@ -24,7 +24,7 @@ export async function SidebarWrapper({
     const session = await getServerSession(authOptions);
 
     return (
-      <SidebarProvider defaultOpen={defaultOpen} className="min-h-dvh">
+      <SidebarProvider defaultOpen={defaultOpen} className="h-screen">
         <HomeSidebar session={session} />
         <SidebarInset>
           {/* <SidebarTrigger className="absolute z-1" /> */}
