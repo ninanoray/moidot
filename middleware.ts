@@ -13,14 +13,20 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
+  // 1. 로그인 페이지 접근
   if (pathname.startsWith("/login")) {
-    if (token) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  } else {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+    if (token) return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.next({ headers: reqHeaders });
+  }
+
+  // 2. 메인 페이지("/")는 로그인 없어도 허용
+  if (pathname === "/") {
+    return NextResponse.next({ headers: reqHeaders });
+  }
+
+  // 3. 그 외 모든 페이지 → 로그인 필요
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next({ headers: reqHeaders });
