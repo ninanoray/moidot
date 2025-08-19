@@ -219,7 +219,10 @@
 }
 
 @utility bg-layout {
-  @apply size-full min-h-screen p-0 px-2 sat flex flex-col;
+  @apply size-full min-h-[100dvh] p-0 px-2 sat flex flex-col;
+  @media (display-mode: fullscreen) : {
+    @apply min-h-screen;
+  }
 }
 
 @utility bg-moidot {
