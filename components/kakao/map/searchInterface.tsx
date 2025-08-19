@@ -273,7 +273,7 @@ const SearchMoreButton = ({
 
   if (total > 1)
     return (
-      <div className="absolute z-1 bottom-1.5 left-1/2 -translate-x-1/2">
+      <div className="absolute z-1 md:bottom-1.5 bottom-16 left-1/2 -translate-x-1/2">
         <RippleButton
           variant="secondary"
           size={!isMobile ? "default" : "sm"}
