@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronsUpDown, LogOut, User2 } from "lucide-react";
+import { Bell, ChevronsUpDown, LogInIcon, LogOut, User2 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Session } from "next-auth";
@@ -27,6 +27,25 @@ interface Props {
 export function NavUser({ user }: Props) {
   const { isMobile } = useSidebar();
 
+  if (!user)
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            size="lg"
+            tooltip="시작하기"
+            className="cursor-pointer"
+            onClick={() => window.location.replace("/login")}
+          >
+            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg cursor-pointer [&>*]:size-4">
+              <LogInIcon />
+            </div>
+            <span>모이닷 시작하기</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -37,14 +56,14 @@ export function NavUser({ user }: Props) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user?.image} alt={user?.name} />
+                <AvatarImage src={user.image} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
-                  {user?.name[0]}
+                  {user.name[0]}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user?.name} 님</span>
-                <span className="truncate text-xs">{user?.email}</span>
+                <span className="truncate font-medium">{user.name} 님</span>
+                <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -58,12 +77,12 @@ export function NavUser({ user }: Props) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user?.image} alt={user?.name} />
+                  <AvatarImage src={user.image} alt={user.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user?.name} 님</span>
-                  <span className="truncate text-xs">{user?.email}</span>
+                  <span className="truncate font-medium">{user.name} 님</span>
+                  <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

@@ -222,6 +222,10 @@
   @apply size-full p-0 px-2 sat flex flex-col;
 }
 
+@utility bg-moidot {
+  @apply bg-[url('/images/moidot/icon.png')] dark:bg-[url('/images/moidot/icon-dark.png')] bg-center bg-contain;
+}
+
 @utility no-scollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

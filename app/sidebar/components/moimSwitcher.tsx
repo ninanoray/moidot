@@ -1,6 +1,8 @@
 "use client";
 
 import { ChevronsUpDown, Plus } from "lucide-react";
+import { Session } from "next-auth";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { JSX } from "react";
@@ -19,15 +21,16 @@ import {
   useSidebar,
 } from "../../../components/animate-ui/radix/sidebar";
 
-export function MoimSwitcher({
-  moims,
-}: {
+interface MoimSwitcherProps {
+  user: Session["user"] | undefined;
   moims: {
     name: string;
     icon: JSX.Element;
     count: number;
   }[];
-}) {
+}
+
+export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
 
@@ -36,6 +39,32 @@ export function MoimSwitcher({
   if (!activeMoim) {
     return null;
   }
+
+  if (!user)
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            size="lg"
+            tooltip="홈"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
+            onClick={() => router.push("/")}
+          >
+            <div className="relative shrink-0 border-2 aspect-square size-8 rounded-md overflow-hidden">
+              <Image
+                src="/images/moidot/icon.png"
+                alt="icon"
+                priority
+                fill
+                sizes="20vw"
+                className="object-contain mobile"
+              />
+            </div>
+            <span className="font-semibold">모이닷</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
 
   return (
     <SidebarMenu>

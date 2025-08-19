@@ -108,11 +108,11 @@ export function HomeSidebar({ session, ...props }: Props) {
       {...props}
     >
       <SidebarHeader>
-        <MoimSwitcher moims={data.moims} />
+        <MoimSwitcher user={session?.user} moims={data.moims} />
       </SidebarHeader>
       <SidebarContent onClick={toggleSidebar}>
-        <NavDule dules={data.navDule} />
-        <NavMenu menu={data.menu} />
+        {session && <NavDule dules={data.navDule} />}
+        <NavMenu user={session?.user} menu={data.menu} />
       </SidebarContent>
       <SidebarFooter>
         <ThemeSwitch className="mx-2 group-data-[collapsible=icon]:m-0!" />

@@ -3,12 +3,9 @@
 import KakaoLoginButton from "@/components/kakao/kakaoLoginButton";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { LoginForm } from "./components/loginForm";
 
 const Login = () => {
-  const router = useRouter();
-
   async function kakaoLogin() {
     await signIn("kakao", {
       redirect: true,
