@@ -179,7 +179,6 @@
   @apply w-dvw min-h-dvh;
   @media all and (display-mode: fullscreen) : {
     width: 100vw;
-    height: 100vh;
     min-height: 100vh;
   }
 }
@@ -223,7 +222,7 @@
 }
 
 @utility bg-layout {
-  @apply md:size-full mscreen px-2 sat flex flex-col;
+  @apply md:size-full mscreen flex-1 px-2 sat flex flex-col;
 }
 
 @utility bg-moidot {
