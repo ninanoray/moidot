@@ -219,7 +219,16 @@
 }
 
 @utility bg-layout {
-  @apply mscreen w-full h-full p-0 px-2 sat flex flex-col;
+  /* @apply mscreen w-full h-full p-0 px-2 sat flex flex-col; */
+  width: 100%;
+  min-height: 100dvh;
+  padding: 0 8px;
+  padding-top: max(env(safe-area-inset-top), 6px);
+  display: flex;
+  flex-direction: column;
+  @media (display-mode: fullscreen) : {
+    min-height: 100vh;
+  }
 }
 
 @utility bg-moidot {
