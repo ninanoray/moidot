@@ -31,7 +31,7 @@ interface MoimSwitcherProps {
 }
 
 export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
-  const { isMobile } = useSidebar();
+  const { isMobile, setOpen, setOpenMobile } = useSidebar();
   const router = useRouter();
 
   const [activeMoim, setActiveMoim] = React.useState(moims[0]);
@@ -48,7 +48,10 @@ export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
             size="lg"
             tooltip="홈"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
-            onClick={() => router.push("/")}
+            onClick={() => {
+              setOpenMobile(false);
+              router.push("/");
+            }}
           >
             <div className="relative shrink-0 border-2 aspect-square size-8 rounded-md overflow-hidden">
               <Image
@@ -75,7 +78,10 @@ export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
           <div
-            onClick={() => router.push("/")}
+            onClick={() => {
+              setOpenMobile(false);
+              router.push("/");
+            }}
             className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg cursor-pointer [&>*]:size-4 hover:[&>*]:animate-jello"
           >
             {activeMoim.icon}
@@ -106,6 +112,7 @@ export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
                   key={moim.name}
                   onClick={() => {
                     setActiveMoim(moim);
+                    setOpenMobile(false);
                     router.push("/");
                   }}
                   className="gap-2 p-2"
