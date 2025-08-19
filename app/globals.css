@@ -219,9 +219,9 @@
 }
 
 @utility bg-layout {
-  @apply flex-1 px-2 sat flex flex-col;
+  @apply size-full px-2 sat flex flex-col;
   @media all and (display-mode: fullscreen) : {
-    @apply min-h-screen;
+    min-height: 100vh;
   }
 }
 
