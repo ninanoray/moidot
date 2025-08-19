@@ -28,7 +28,7 @@ export async function SidebarWrapper({
   return (
     <SidebarProvider defaultOpen={defaultOpen} className="mscreen">
       <HomeSidebar session={session} />
-      <SidebarInset className="mscreen">{children}</SidebarInset>
+      <SidebarInset className="min-h-max">{children}</SidebarInset>
     </SidebarProvider>
   );
 }
