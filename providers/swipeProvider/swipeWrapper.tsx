@@ -1,34 +1,80 @@
 "use client";
 
 import { Slot } from "@radix-ui/react-slot";
-import React, { useRef } from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 
-interface SwipeWrapperProps {
-  /**
-   * 최소 스와이프 거리(px)
-   */
-  threshold?: number;
+type SwipeContextType = {
   /**
    * 가장 자리 크기 값(px)
    * 값이 있으면 화면 가장 자리에서만 스와이프 동작
    */
-  edge?: number;
-  className?: string | undefined;
-  onSwipeLeft?: () => void;
-  onSwipeRight?: () => void;
+  edge: number | undefined;
+  setEdge: (size: number | undefined) => void;
+};
+
+const SwipeContext = React.createContext<SwipeContextType | undefined>(
+  undefined
+);
+
+const useSwipe = (): SwipeContextType => {
+  const context = React.useContext(SwipeContext);
+  if (!context) {
+    throw new Error("useSwipe must be used within an SwipeProvider");
+  }
+  return context;
+};
+
+type SwipeProviderProps = {
   asChild?: boolean;
   children: React.ReactNode;
+  onSwipeLeft?: () => void;
+  onSwipeRight?: () => void;
+};
+
+const SwipeProvider = ({
+  asChild,
+  onSwipeLeft,
+  onSwipeRight,
+  children,
+}: SwipeProviderProps) => {
+  const [edge, setEdge] = useState<number>();
+  return (
+    <SwipeContext.Provider value={{ edge, setEdge }}>
+      <SwipeWrapper
+        asChild={asChild}
+        onSwipeLeft={onSwipeLeft}
+        onSwipeRight={onSwipeRight}
+      >
+        {children}
+      </SwipeWrapper>
+    </SwipeContext.Provider>
+  );
+};
+
+interface SwipeWrapperProps extends SwipeProviderProps {
+  /**
+   * 최소 스와이프 거리(px)
+   */
+  threshold?: number;
+  className?: string | undefined;
 }
 
 const SwipeWrapper: React.FC<SwipeWrapperProps> = ({
   threshold = 70,
-  edge = 50,
   onSwipeLeft = () => console.log("👈 Swipe Left"),
   onSwipeRight = () => console.log("👉 Swipe Right"),
   className,
   asChild,
   children,
 }) => {
+  const pathname = usePathname();
+  const { edge, setEdge } = useSwipe();
+  useEffect(() => {
+    if (["/dotmap"].includes(pathname)) setEdge(50);
+    else setEdge(undefined);
+  }, [pathname, setEdge]);
+
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const allowSwipe = useRef<boolean>(true); // edgeOnly 체크용
@@ -42,9 +88,7 @@ const SwipeWrapper: React.FC<SwipeWrapperProps> = ({
       const isLeftEdge = x <= edge;
       const isRightEdge = x >= screenWidth - edge;
       allowSwipe.current = isLeftEdge || isRightEdge;
-    } else {
-      allowSwipe.current = true;
-    }
+    } else allowSwipe.current = true;
   }
 
   function onTouchMove(e: React.TouchEvent<HTMLDivElement>) {
@@ -58,7 +102,6 @@ const SwipeWrapper: React.FC<SwipeWrapperProps> = ({
       touchStartX.current === null ||
       touchEndX.current === null
     ) {
-      // 초기화
       resetTouch();
       return;
     }
@@ -70,7 +113,6 @@ const SwipeWrapper: React.FC<SwipeWrapperProps> = ({
     } else if (delta < -threshold) {
       onSwipeRight?.();
     }
-
     resetTouch();
   }
 
@@ -94,4 +136,4 @@ const SwipeWrapper: React.FC<SwipeWrapperProps> = ({
   );
 };
 
-export default SwipeWrapper;
+export { SwipeProvider, SwipeWrapper, useSwipe };

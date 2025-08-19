@@ -6,7 +6,6 @@ import { type Transition } from "motion/react";
 import { Slot } from "radix-ui";
 import * as React from "react";
 
-import SwipeWrapper from "@/app/sidebar/components/swipeWrapper";
 import {
   MotionHighlight,
   MotionHighlightItem,
@@ -30,6 +29,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { SwipeProvider } from "@/providers/swipeProvider/swipeWrapper";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -354,11 +354,7 @@ function SidebarInset({ className, ...props }: SidebarInsetProps) {
   const { setOpenMobile } = useSidebar();
 
   return (
-    <SwipeWrapper
-      asChild
-      onSwipeRight={() => setOpenMobile(true)}
-      // onSwipeLeft={() => setOpenMobile(false)}
-    >
+    <SwipeProvider asChild onSwipeRight={() => setOpenMobile(true)}>
       <main
         data-slot="sidebar-inset"
         className={cn(
@@ -368,7 +364,7 @@ function SidebarInset({ className, ...props }: SidebarInsetProps) {
         )}
         {...props}
       />
-    </SwipeWrapper>
+    </SwipeProvider>
   );
 }
 
