@@ -222,7 +222,10 @@
 }
 
 @utility bg-layout {
-  @apply md:size-full mscreen flex-1 px-2 sat flex flex-col;
+  @apply size-full px-2 sat flex flex-col;
+  @media all and (display-mode: fullscreen) : {
+    @apply h-screen;
+  }
 }
 
 @utility bg-moidot {
