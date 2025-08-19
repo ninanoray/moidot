@@ -11,5 +11,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: BASE_URL + "/login",
       lastModified: new Date(),
     },
+    {
+      url: BASE_URL + "/dotmap",
+      lastModified: new Date(),
+    },
   ];
 }
