@@ -31,7 +31,7 @@ interface MoimSwitcherProps {
 }
 
 export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
-  const { isMobile, setOpen, setOpenMobile } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
   const router = useRouter();
 
   const [activeMoim, setActiveMoim] = React.useState(moims[0]);
