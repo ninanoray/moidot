@@ -1,5 +1,6 @@
 "use client";
 
+import { EdgeSwipePages } from "@/constants";
 import { Slot } from "@radix-ui/react-slot";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -71,7 +72,7 @@ const SwipeWrapper: React.FC<SwipeWrapperProps> = ({
   const pathname = usePathname();
   const { edge, setEdge } = useSwipe();
   useEffect(() => {
-    if (["/dotmap"].includes(pathname)) setEdge(50);
+    if (EdgeSwipePages.includes(pathname)) setEdge(50);
     else setEdge(undefined);
   }, [pathname, setEdge]);
 

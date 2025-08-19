@@ -1,5 +1,6 @@
 "use client";
 
+import { PublicPages } from "@/constants";
 import { Session } from "next-auth";
 import { JSX } from "react";
 import {
@@ -20,8 +21,8 @@ interface NavMenuProps {
 }
 
 export function NavMenu({ user, menu }: NavMenuProps) {
-  const publicMenu = ["닷맵"];
-  const hasAuth = (menu: string) => (!!user ? true : publicMenu.includes(menu));
+  const hasAuth = (menu: string) =>
+    !!user ? true : PublicPages.includes(menu);
 
   return (
     <SidebarGroup
@@ -32,7 +33,7 @@ export function NavMenu({ user, menu }: NavMenuProps) {
       <SidebarGroupLabel>메뉴</SidebarGroupLabel>
       <SidebarMenu>
         {menu.map((item) => {
-          if (hasAuth(item.name))
+          if (hasAuth(item.url))
             return (
               <SidebarMenuItem key={item.name}>
                 <SidebarMenuButton asChild tooltip={item.name}>
