@@ -17,13 +17,14 @@ const JsonLdScript = () => {
     sameAs: ["https://github.com/ninanoray/moidot"],
   };
   return (
+    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
     <Script
       id="structured-data"
       type="application/ld+json"
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
       }}
-      // strategy="beforeInteractive"
+      strategy="beforeInteractive"
     />
   );
 };
