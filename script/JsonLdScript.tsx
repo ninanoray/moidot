@@ -7,14 +7,12 @@ const JsonLdScript = () => {
   const structuredData: WithContext<Organization> = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Moidot",
     url: BASE_URL,
+    sameAs: ["https://moidot.com", "https://github.com/ninanoray/moidot"],
     logo: BASE_URL + META.ogImage,
-    founder: [
-      { "@type": "Person", name: "김무준" },
-      { "@type": "Person", name: "김범수" },
-    ],
-    sameAs: ["https://github.com/ninanoray/moidot"],
+    name: "Moidot",
+    description: META.description,
+    email: "hiru2128@gmail.com",
   };
   return (
     // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
