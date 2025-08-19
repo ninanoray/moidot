@@ -224,7 +224,7 @@
 }
 
 @utility bg-moidot {
-  @apply bg-[url('/images/moidot/icon.png')] dark:bg-[url('/images/moidot/icon-dark.png')] bg-center bg-contain;
+  @apply bg-[url('/images/moidot/logo.png')] dark:bg-[url('/images/moidot/logo-dark.png')] bg-center bg-contain;
 }
 
 @utility no-scollbar {

@@ -10,6 +10,7 @@ export const META = {
   keywords: ["모이닷", "moidot"],
   base: BASE_URL,
   url: BASE_URL,
+  icon: BASE_URL + "/images/moidot/icon.png",
   favicon: BASE_URL + "/favicon.ico",
   ogImage: "/images/moidot/moidot.png",
   color: "#085E51",

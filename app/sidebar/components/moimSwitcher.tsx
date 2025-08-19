@@ -55,7 +55,7 @@ export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
           >
             <div className="relative shrink-0 border-2 aspect-square size-8 rounded-md overflow-hidden">
               <Image
-                src="/images/moidot/icon.png"
+                src="/images/moidot/logo.png"
                 alt="icon"
                 priority
                 fill
