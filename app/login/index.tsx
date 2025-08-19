@@ -14,8 +14,8 @@ const Login = () => {
   }
 
   return (
-    <div className="max-w-sm flex-center flex-col gap-6">
-      <div className="flex flex-col items-center gap-2">
+    <div className="max-w-sm flex-center flex-col gap-2">
+      <div>
         <Image
           src="/images/moidot/moidot.png"
           alt="moidot"
@@ -25,19 +25,19 @@ const Login = () => {
           className="rounded-full mobile drag-none cursor-pointer"
           onClick={() => window.location.replace("/")}
         />
+      </div>
+      <div className="md:not-sr-only md:mb-8 sr-only">
         <h3 className="text-center">잇고 모여서, 계속 이어지는 모임</h3>
-        <h5 className="mb-4 italic">
+        <h5 className="text-center italic">
           Connect the Dots, draw the Dules, and gather into the Moim
         </h5>
       </div>
       <LoginForm />
-      <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-        <span className="bg-background text-muted-foreground relative z-10 px-2">
-          혹은
-        </span>
-      </div>
+      <span className="bg-background text-muted-foreground relative z-10 px-2">
+        혹은
+      </span>
       <KakaoLoginButton onClick={kakaoLogin} />
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+      <div className="mt-4 text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </div>
