@@ -13,26 +13,22 @@ export async function SidebarWrapper({
   children: React.ReactNode;
 }) {
   const headersList = await headers();
-  const pathname = headersList.get("x-current-path");
+  const pathname = headersList.get("x-current-path") ?? "/";
 
-  if (pathname && !pathname.startsWith("/login")) {
-    // 쿠키에서 사이드바 열림/닫힘 상태 가져오기
-    const cookieStore = await cookies();
-    const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  // 로그인 페이지에서는 SidebarWrapper 감싸지 않음
+  if (pathname.startsWith("/login")) return <>{children}</>;
 
-    // SSR 환경에서 NextAuth Session 정보 가져오기
-    const session = await getServerSession(authOptions);
+  // 쿠키에서 사이드바 상태 가져오기
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
-    return (
-      <SidebarProvider defaultOpen={defaultOpen} className="mscreen">
-        <HomeSidebar session={session} />
-        <SidebarInset>
-          {/* <SidebarTrigger className="absolute z-1" /> */}
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
-    );
-  } else {
-    return <>{children}</>;
-  }
+  // 세션 가져오기
+  const session = await getServerSession(authOptions);
+
+  return (
+    <SidebarProvider defaultOpen={defaultOpen} className="mscreen">
+      <HomeSidebar session={session} />
+      <SidebarInset>{children}</SidebarInset>
+    </SidebarProvider>
+  );
 }

@@ -3,9 +3,12 @@
 import KakaoLoginButton from "@/components/kakao/kakaoLoginButton";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { LoginForm } from "./components/loginForm";
 
 const Login = () => {
+  const router = useRouter();
+
   async function kakaoLogin() {
     await signIn("kakao", {
       redirect: true,
@@ -22,7 +25,8 @@ const Login = () => {
           width={200}
           height={200}
           priority
-          className="rounded-full mobile drag-none"
+          className="rounded-full mobile drag-none cursor-pointer"
+          onClick={() => window.location.replace("/")}
         />
         <h3 className="text-center">잇고 모여서, 계속 이어지는 모임</h3>
         <h5 className="mb-4 italic">
