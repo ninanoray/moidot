@@ -219,7 +219,7 @@
 }
 
 @utility bg-layout {
-  @apply size-full p-0 px-2 sat flex flex-col;
+  @apply flex-1 p-0 px-2 sat flex flex-col;
 }
 
 @utility bg-moidot {
