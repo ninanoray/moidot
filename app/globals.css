@@ -219,10 +219,7 @@
 }
 
 @utility bg-layout {
-  @apply size-full px-2 sat flex flex-col;
-  @media all and (display-mode: fullscreen) : {
-    min-height: 100vh;
-  }
+  @apply size-full p-0 px-2 sat flex flex-col;
 }
 
 @utility bg-moidot {
