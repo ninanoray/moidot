@@ -198,10 +198,7 @@
   tap-highlight-color: "rgba(0, 0, 0, 0)";
 }
 @utility sat {
-  @apply py-1.5;
-  @media all and (display-mode: fullscreen) : {
-    @apply pt-[env(safe-area-inset-top)];
-  }
+  @apply pt-[env(safe-area-inset-top)];
 }
 @utility sab {
   @apply pt-[env(safe-area-inset-bottom)];
@@ -222,9 +219,9 @@
 }
 
 @utility bg-layout {
-  @apply size-full px-2 sat flex flex-col;
+  @apply flex-1 px-2 sat flex flex-col;
   @media all and (display-mode: fullscreen) : {
-    @apply h-screen;
+    @apply min-h-screen;
   }
 }
 
