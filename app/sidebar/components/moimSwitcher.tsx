@@ -3,6 +3,7 @@
 import { ChevronsUpDown, Plus } from "lucide-react";
 import { Session } from "next-auth";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { JSX } from "react";
@@ -48,12 +49,14 @@ export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
             size="lg"
             tooltip="홈"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
-            onClick={() => {
-              setOpenMobile(false);
-              router.push("/");
-            }}
           >
-            <div className="relative shrink-0 border-2 aspect-square size-8 rounded-md overflow-hidden">
+            <div
+              className="relative shrink-0 border-2 aspect-square size-8 rounded-md overflow-hidden"
+              onClick={() => {
+                setOpenMobile(false);
+                router.push("/");
+              }}
+            >
               <Image
                 src="/images/moidot/logo.png"
                 alt="icon"
@@ -63,7 +66,9 @@ export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
                 className="object-contain mobile"
               />
             </div>
-            <span className="font-semibold">모이닷</span>
+            <Link href="/" className="font-semibold whitespace-nowrap">
+              모이닷
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

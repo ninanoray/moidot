@@ -104,6 +104,7 @@ export default function RootLayout({
           href={META.base + "/manifest.webmanifest"}
           crossOrigin="use-credentials"
         ></link>
+        <JsonLdScript />
       </head>
       <body
         className={`${notoSansKr.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -118,7 +119,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
       </body>
-      <JsonLdScript />
+
       <KakaoScript />
       <GoogleTagManager gtmId={`${process.env.GTM_ID}`} />
       <GoogleAnalytics gaId={`${process.env.GA_ID}`} />

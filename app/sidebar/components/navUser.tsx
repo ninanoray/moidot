@@ -5,6 +5,7 @@ import { Bell, ChevronsUpDown, LogInIcon, LogOut, User2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,12 +36,16 @@ export function NavUser({ user }: Props) {
             size="lg"
             tooltip="시작하기"
             className="cursor-pointer"
-            onClick={() => window.location.replace("/login")}
           >
-            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg cursor-pointer [&>*]:size-4">
+            <div
+              onClick={() => window.location.replace("/login")}
+              className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg cursor-pointer [&>*]:size-4"
+            >
               <LogInIcon />
             </div>
-            <span>모이닷 시작하기</span>
+            <Link href="/login" className="whitespace-nowrap">
+              모이닷 시작하기
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
