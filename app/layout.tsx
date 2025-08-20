@@ -54,8 +54,6 @@ export const metadata: Metadata = {
     description: META.description,
     images: [{ url: META.ogImage, alt: META.title }],
     site: META.siteName,
-    creator: "김범수",
-    creatorId: "ninanoray",
   },
   appleWebApp: {
     capable: true,
