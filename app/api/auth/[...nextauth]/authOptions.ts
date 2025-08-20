@@ -1,7 +1,8 @@
 import { KAKAO_JAVASCRIPT_KEY } from "@/constants/keys";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { AuthOptions } from "next-auth";
 import KakaoProvider, { KakaoProfile } from "next-auth/providers/kakao";
+import { postSocialLogin } from "../postSocialLogin";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -56,37 +57,14 @@ export const authOptions: AuthOptions = {
     async signIn({ user, account, profile }) {
       if (user.email) {
         if (account) {
-          // try {
-          //   const data = await postSocialLogin({
-          //     accessToken: account.access_token, // 스푸핑 방지
-          //     provider: account.provider,
-          //   });
-          //   user.id = data.email;
-          // } catch (error) {
-          //   const axiosError = error as AxiosError;
-          //   console.log(error);
-          //   throw new Error(axiosError.status?.toString());
-          // }
           try {
-            // 브라우저에서 실행되도록 리다이렉트 후 API 호출
-            // SSR 환경에서는 쿠키 자동 저장 안 되므로 주의
-            const data = await axios.post(
-              `${process.env.NEXTAUTH_URL}/api/auth/socialLogin`,
-              {
-                provider: account?.provider,
-                accessToken: account.access_token, // 스푸핑 방지
-              },
-              {
-                withCredentials: true, // 쿠키 주고받기
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            user.id = (data as any).email;
+            const data = await postSocialLogin({
+              accessToken: account.access_token, // 스푸핑 방지
+              provider: account.provider,
+            });
+            user.id = data.email;
           } catch (error) {
             const axiosError = error as AxiosError;
-            console.log(error);
             throw new Error(axiosError.status?.toString());
           }
 
