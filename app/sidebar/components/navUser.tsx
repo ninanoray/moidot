@@ -5,7 +5,6 @@ import { Bell, ChevronsUpDown, LogInIcon, LogOut, User2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,9 +42,9 @@ export function NavUser({ user }: Props) {
             >
               <LogInIcon />
             </div>
-            <Link href="/login" className="whitespace-nowrap">
+            <a href="/login" className="whitespace-nowrap">
               모이닷 시작하기
-            </Link>
+            </a>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
