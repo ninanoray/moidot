@@ -8,9 +8,10 @@ const JsonLdScript = () => {
     "@context": "https://schema.org",
     "@type": "Organization",
     url: BASE_URL,
-    sameAs: ["https://moidot.com", "https://github.com/ninanoray/moidot"],
-    logo: BASE_URL + META.ogImage,
-    name: "Moidot",
+    sameAs: ["https://github.com/ninanoray/moidot"],
+    logo: META.icon,
+    image: BASE_URL + META.ogImage,
+    name: "모이닷",
     description: META.description,
     email: "hiru2128@gmail.com",
   };
