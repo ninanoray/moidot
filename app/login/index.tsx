@@ -18,7 +18,7 @@ const Login = () => {
       <div>
         <Image
           src="/images/moidot/moidot.png"
-          alt="moidot"
+          alt="모이닷"
           width={200}
           height={200}
           priority

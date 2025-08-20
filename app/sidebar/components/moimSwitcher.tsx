@@ -59,7 +59,7 @@ export function MoimSwitcher({ user, moims }: MoimSwitcherProps) {
             >
               <Image
                 src="/images/moidot/logo.png"
-                alt="icon"
+                alt="모이닷 아이콘"
                 priority
                 fill
                 sizes="20vw"

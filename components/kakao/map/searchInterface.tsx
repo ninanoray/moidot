@@ -377,7 +377,7 @@ const SearchedMarkers = ({
                   <div className="relative size-5 rounded-sm overflow-hidden">
                     <Image
                       src="/images/kakao-map/kakaomap-logo.png"
-                      alt="카카오맵"
+                      alt="모이닷 닷맵 카카오맵 아이콘"
                       sizes="30px"
                       fill
                       className="object-cover"
@@ -453,7 +453,7 @@ const SearchedMarkers = ({
                       <div className="relative size-5 rounded-sm overflow-hidden">
                         <Image
                           src="/images/kakao-map/kakaomap-logo.png"
-                          alt="카카오맵"
+                          alt="모이닷 닷맵 카카오맵 아이콘"
                           sizes="30px"
                           fill
                           className="object-cover"
