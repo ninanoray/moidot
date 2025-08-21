@@ -8,7 +8,7 @@ const JsonLdScript = () => {
     "@type": "Organization",
     url: BASE_URL,
     sameAs: ["https://github.com/ninanoray/moidot"],
-    logo: BASE_URL + META.ogImage,
+    logo: META.icon,
     name: "모이닷",
     description: META.description,
     email: "hiru2128@gmail.com",
