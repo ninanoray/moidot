@@ -1,6 +1,5 @@
 import { BASE_URL } from "@/constants/keys";
 import { META } from "@/constants/metadata";
-import Script from "next/script";
 import { Organization, WithContext } from "schema-dts";
 
 const JsonLdScript = () => {
@@ -15,15 +14,22 @@ const JsonLdScript = () => {
     email: "hiru2128@gmail.com",
   };
 
+  const structuredPersonData = {
+    "@context": "http://schema.org",
+    "@type": "Person",
+    name: "모이닷",
+    url: BASE_URL,
+    sameAs: ["https://github.com/ninanoray/moidot"],
+  };
+
   return (
-    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
-    <Script
+    <script
+      defer
       id="structured-data"
       type="application/ld+json"
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredOrgData).replace(/</g, "\\u003c"),
       }}
-      strategy="beforeInteractive"
     />
   );
 };
