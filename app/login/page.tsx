@@ -1,9 +1,16 @@
 import { ErrorFallback } from "@/providers/errorBoundary/ErrorFallback";
+import { Metadata } from "next";
 import Login from ".";
 
 interface Params {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }
+
+export const metadata: Metadata = {
+  title: "모이닷 - 로그인",
+  description: "모이닷 시작하기",
+};
+
 export default async function login({ searchParams }: Params) {
   const { error } = await searchParams;
   if (!error)
