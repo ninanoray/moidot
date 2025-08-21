@@ -16,21 +16,13 @@ const JsonLdScript = () => {
     email: "hiru2128@gmail.com",
   };
 
-  const structuredPersonData = {
-    "@context": "http://schema.org",
-    "@type": "Person",
-    name: "모이닷",
-    url: BASE_URL,
-    sameAs: ["https://github.com/ninanoray/moidot"],
-  };
-
   return (
     // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
     <Script
       id="structured-data"
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(structuredPersonData).replace(/</g, "\\u003c"),
+        __html: JSON.stringify(structuredOrgData).replace(/</g, "\\u003c"),
       }}
       strategy="beforeInteractive"
     />
