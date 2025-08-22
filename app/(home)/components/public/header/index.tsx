@@ -1,4 +1,6 @@
+import { CustomCategoryCode } from "@/app/dotmap/components/createMydotMarker";
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
+import { RotatingText } from "@/components/animate-ui/text/rotating";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -28,11 +30,20 @@ const PublicHomeHeader = ({
       >
         MOIDOT
       </h1>
-      <RippleButton variant="secondary" className="p-0">
-        <a href="/login" className="size-full px-4 py-2">
-          시작하기
-        </a>
-      </RippleButton>
+      <div className="flex gap-4 items-center">
+        <RotatingText
+          text={Object.keys(CustomCategoryCode)}
+          className={cn(
+            "text-lg font-medium",
+            scrollPosition > 0 ? "text-primary-foreground" : ""
+          )}
+        />
+        <RippleButton variant="secondary" className="p-0">
+          <a href="/login" className="size-full px-4 py-2 flex-center">
+            시작하기
+          </a>
+        </RippleButton>
+      </div>
     </header>
   );
 };

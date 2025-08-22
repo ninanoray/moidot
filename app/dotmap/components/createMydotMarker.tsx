@@ -52,10 +52,13 @@ export enum CategoryCode {
   카페 = "CE7",
   병원 = "HP8",
   약국 = "PM9",
+}
+
+export enum CustomCategoryCode {
   전시회 = "XH1",
   방탈출 = "RX2",
   보드게임 = "BG3",
-  "스포츠, 레져" = "SP4",
+  레져 = "SP4",
 }
 
 interface CreateMydotMarkerProps {
@@ -84,7 +87,10 @@ const CreateMydotMarker = ({
     (marker) => marker.value
   ) as unknown as readonly [string, ...string[]];
 
-  const categorySelection = Object.entries(CategoryCode).map((item) => ({
+  const categorySelection = Object.entries({
+    ...CategoryCode,
+    ...CustomCategoryCode,
+  }).map((item) => ({
     value: item[1],
     label: item[0],
   }));
@@ -93,7 +99,9 @@ const CreateMydotMarker = ({
     marker: z.enum(markerEnum, {
       required_error: "장소를 선택해주세요.",
     }),
-    category: z.nativeEnum(CategoryCode).optional(),
+    category: z
+      .nativeEnum({ ...CategoryCode, ...CustomCategoryCode })
+      .optional(),
   });
 
   const search = useCallback(
