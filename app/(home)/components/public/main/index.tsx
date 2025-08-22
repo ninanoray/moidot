@@ -8,12 +8,15 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
+import { useState } from "react";
 
 interface PublicHomeMainProps {
   scroll: number;
 }
 
 const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
+  const [autoSlide, setAutoSlide] = useState(true);
+
   return (
     <main className="p-2 flex-auto flex flex-col gap-2">
       <div className="size-full shrink-0 mb-1 flex flex-col justify-end gap-2">
@@ -28,8 +31,11 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           plugins={[
             Autoplay({
               delay: 3000,
+              stopOnInteraction: !autoSlide,
             }),
           ]}
+          onMouseOver={() => setAutoSlide(false)}
+          onMouseLeave={() => setAutoSlide(true)}
           className={cn(
             "relative size-full rounded-lg shadow-lg overflow-hidden mobile [&_div]:size-full",
             "[&_section]:size-full [&_section]:p-6 [&_section]:flex-center [&_section]:flex-col [&_section]:justify-around [&_section]:break-keep [&_section]:trans-300",
