@@ -191,7 +191,7 @@ function Sidebar({
         containerClassName={containerClassName}
         transition={transition}
       >
-        <div
+        <nav
           data-slot="sidebar"
           className={cn(
             "bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col",
@@ -200,7 +200,7 @@ function Sidebar({
           {...props}
         >
           {children}
-        </div>
+        </nav>
       </MotionHighlight>
     );
   }
@@ -240,7 +240,7 @@ function Sidebar({
   }
 
   return (
-    <div
+    <nav
       className="group peer text-sidebar-foreground hidden md:block"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
@@ -293,7 +293,7 @@ function Sidebar({
           </div>
         </MotionHighlight>
       </div>
-    </div>
+    </nav>
   );
 }
 
@@ -348,14 +348,14 @@ function SidebarRail({ className, ...props }: SidebarRailProps) {
   );
 }
 
-type SidebarInsetProps = React.ComponentProps<"main">;
+type SidebarInsetProps = React.ComponentProps<"div">;
 
 function SidebarInset({ className, ...props }: SidebarInsetProps) {
   const { setOpenMobile } = useSidebar();
 
   return (
     <SwipeProvider asChild onSwipeRight={() => setOpenMobile(true)}>
-      <main
+      <div
         data-slot="sidebar-inset"
         className={cn(
           "bg-background relative flex w-full flex-1 flex-col",
