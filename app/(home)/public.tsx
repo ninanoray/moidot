@@ -14,7 +14,10 @@ const Public = () => {
 
   useEffect(() => {
     updateScroll();
-    window.onscroll = () => updateScroll();
+    window.addEventListener("scroll", updateScroll);
+    return () => {
+      window.removeEventListener("scroll", updateScroll);
+    };
   }, [updateScroll]);
 
   return (
