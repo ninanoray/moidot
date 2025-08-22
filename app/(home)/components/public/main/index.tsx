@@ -3,6 +3,7 @@ import { WritingText } from "@/components/animate-ui/text/writing";
 import {
   Carousel,
   CarouselContent,
+  CarouselIndicator,
   CarouselItem,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
@@ -20,18 +21,18 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           text="Connect the Dots, draw the Dules, and gather into the Moim"
           split=","
           spacing={8}
-          className="md:text-3xl text-2xl text-foreground/60 font-semibold mb-2"
+          className="px-1 md:text-3xl text-2xl text-foreground/60 font-semibold mb-2"
         />
         <Carousel
           opts={{ loop: true }}
           plugins={[
             Autoplay({
-              delay: 3000,
+              delay: 5000,
               stopOnInteraction: false,
             }),
           ]}
           className={cn(
-            "size-full rounded-lg shadow-lg overflow-hidden mobile [&_div]:size-full",
+            "relative size-full rounded-lg shadow-lg overflow-hidden mobile [&_div]:size-full",
             "[&_section]:size-full [&_section]:p-6 [&_section]:flex-center [&_section]:flex-col [&_section]:justify-around [&_section]:break-keep [&_section]:trans-300",
             "[&_h1]:sm:text-4xl [&_h1]:text-3xl [&_h1]:text-inherit",
             "[&_h2]:sm:text-3xl [&_h2]:text-2xl [&_h2]:text-inherit"
@@ -58,6 +59,7 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
               </section>
             </CarouselItem>
           </CarouselContent>
+          <CarouselIndicator />
         </Carousel>
       </div>
       <div className="w-full h-60 pb-2 shrink-0 flex gap-2.5 md:flex-row flex-col">
