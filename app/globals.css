@@ -219,7 +219,7 @@
 }
 
 @utility bg-layout {
-  @apply mscreen w-full h-full p-0 px-2 flex flex-col;
+  @apply mscreen w-full h-full px-2 py-1.5 flex flex-col;
   padding-top: max(env(safe-area-inset-top), 6px);
 }
 
