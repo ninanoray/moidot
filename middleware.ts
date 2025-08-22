@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { PublicPages } from "./constants";
 
 export async function middleware(request: NextRequest) {
   const reqHeaders = new Headers(request.headers);
@@ -18,8 +19,8 @@ export async function middleware(request: NextRequest) {
     if (token) return NextResponse.redirect(new URL("/", request.url));
     return NextResponse.next({ headers: reqHeaders });
   }
-  // 2. 메인 페이지("/")는 로그인 없어도 허용
-  if (pathname === "/") {
+  // 2. 퍼블릭 페이지는 로그인 없어도 허용
+  if (PublicPages.includes(pathname)) {
     return NextResponse.next({ headers: reqHeaders });
   }
   // 3. 그 외 모든 페이지 → 로그인 필요
@@ -32,6 +33,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|error/*|_next/static|_next/image|favicon.ico|image|assets|manifest|sitemap|robots|.*\\.txt).*)",
+    "/((?!api|error/*|_next/static|_next/image|favicon.ico|image|assets|manifest|sitemap|robots.*\\.txt).*)",
   ],
 };

@@ -15,7 +15,7 @@ export const RegexPassword = {
 /**
  * 로그인을 하지 않아도 외부에 노출되는 메뉴(페이지) 목록
  */
-export const PublicPages = ["/dotmap"];
+export const PublicPages = ["/", "/dotmap"];
 /**
  * 스와이프 제스쳐를 가장자리(edge)에서만 실행하는 페이지 목록
  */
