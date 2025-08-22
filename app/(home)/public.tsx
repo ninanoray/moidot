@@ -1,13 +1,29 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
 import PublicHomeHeader from "./components/public/header";
 import PublicHomeMain from "./components/public/main";
 
 const Public = () => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  // Scroll 위치를 감지
+  const updateScroll = useCallback(() => {
+    setScrollPosition(window.scrollY || document.documentElement.scrollTop);
+  }, []);
+
+  useEffect(() => {
+    updateScroll();
+    window.addEventListener("scroll", updateScroll);
+    return () => {
+      window.removeEventListener("scroll", updateScroll);
+    };
+  }, [updateScroll]);
+
   return (
-    <div className="bg-layout p-0 bg-moidot bg-size-[200px] bg-no-repeat">
-      <PublicHomeHeader />
-      <PublicHomeMain />
+    <div className="bg-layout p-0">
+      <PublicHomeHeader scroll={scrollPosition} />
+      <PublicHomeMain scroll={scrollPosition} />
     </div>
   );
 };
