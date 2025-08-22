@@ -27,8 +27,7 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           opts={{ loop: true }}
           plugins={[
             Autoplay({
-              delay: 5000,
-              stopOnInteraction: false,
+              delay: 3000,
             }),
           ]}
           className={cn(
