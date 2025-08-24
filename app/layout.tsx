@@ -118,8 +118,12 @@ export default function RootLayout({
         <SpeedInsights />
       </body>
       <KakaoScript />
-      <GoogleTagManager gtmId={`${process.env.GTM_ID}`} />
-      <GoogleAnalytics gaId={`${process.env.GA_ID}`} />
+      {process.env.NODE_ENV === "production" && (
+        <>
+          <GoogleTagManager gtmId={`${process.env.NEXT_PUBLIC_GTM_ID}`} />
+          <GoogleAnalytics gaId={`${process.env.NEXT_PUBLIC_GA_ID}`} />
+        </>
+      )}
     </html>
   );
 }
