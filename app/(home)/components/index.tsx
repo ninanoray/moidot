@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import PublicHomeHeader from "./components/public/header";
-import PublicHomeMain from "./components/public/main";
+import PublicHomeHeader from "./public/header";
+import PublicHomeMain from "./public/main";
 
 const Public = () => {
   const [scrollPosition, setScrollPosition] = useState(0);

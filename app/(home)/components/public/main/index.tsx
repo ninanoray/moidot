@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
 import { useState } from "react";
 
 interface PublicHomeMainProps {
@@ -46,6 +47,17 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
         >
           <CarouselContent className="max-w-[calc(100vw-16px)] m-0 ">
             <CarouselItem className="p-0">
+              <section className="relative bg-white">
+                <Image
+                  src="/images/moidot/moidot-bg-white.png"
+                  alt="모이닷"
+                  sizes="80vw"
+                  fill
+                  className="object-contain"
+                />
+              </section>
+            </CarouselItem>
+            <CarouselItem className="p-0">
               <section className="bg-tertiary text-tertiary-foreground">
                 <h2>모임</h2>
                 <h1>&quot;잇고 모여서, 계속 이어지는 모임&quot;</h1>
@@ -70,20 +82,34 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
       <div className="w-full h-60 pb-2 shrink-0 flex gap-2.5 md:flex-row flex-col">
         <RippleButton
           size="lg"
-          className="flex-auto h-full p-0 md:text-3xl text-2xl rounded-lg shadow-lg active:scale-98"
+          className="group/button relative flex-auto h-full p-0 md:text-4xl text-3xl rounded-lg shadow-lg hover:brightness-100 active:scale-98"
         >
-          <a href="/dotmap" className="size-full grid items-center">
+          <a href="/dotmap" className="size-full grid items-center z-10">
             닷맵
           </a>
+          <Image
+            src="/images/banner/dotmap.png"
+            alt="닷맵"
+            sizes="50vw"
+            fill
+            className="absolute object-cover md:group-hover/button:scale-110 md:group-hover/button:brightness-50 group-active/button:scale-110 group-active/button:brightness-50 brightness-80 trans-300"
+          />
         </RippleButton>
         <RippleButton
           variant="secondary"
           size="lg"
-          className="flex-auto h-full p-0 md:text-3xl text-2xl rounded-lg shadow-lg active:scale-98"
+          className="group/button relative flex-auto h-full p-0 md:text-4xl text-3xl rounded-lg shadow-lg hover:brightness-100 active:scale-98"
         >
-          <a href="#" className="size-full grid items-center">
+          <a href="#" className="size-full grid items-center z-10">
             마이닷
           </a>
+          <Image
+            src="/images/banner/mydot.png"
+            alt="마이닷"
+            sizes="50vw"
+            fill
+            className="absolute object-cover md:group-hover/button:scale-110 md:group-hover/button:brightness-50 group-active/button:scale-110 group-active/button:brightness-50 brightness-80 trans-300"
+          />
         </RippleButton>
       </div>
     </main>
