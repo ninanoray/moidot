@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   keywords: [...META.keywords],
   applicationName: META.siteName,
   icons: {
-    icon: META.icon,
+    icon: { url: META.icon, type: "image/x-icon" },
     shortcut: META.favicon,
     apple: APPLE_ICONS,
   },
