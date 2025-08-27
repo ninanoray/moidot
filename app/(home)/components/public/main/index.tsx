@@ -40,8 +40,8 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           className={cn(
             "relative size-full rounded-lg shadow-lg overflow-hidden mobile [&_div]:size-full",
             "[&_section]:size-full [&_section]:p-6 [&_section]:flex-center [&_section]:flex-col [&_section]:justify-around [&_section]:break-keep [&_section]:trans-100",
-            "[&_h1]:sm:text-4xl [&_h1]:text-3xl [&_h1]:text-inherit",
-            "[&_h2]:sm:text-3xl [&_h2]:text-2xl [&_h2]:text-inherit"
+            "[&_h1]:md:text-4xl [&_h1]:text-3xl [&_h1]:text-inherit",
+            "[&_h2]:md:text-3xl [&_h2]:text-2xl [&_h2]:text-inherit"
           )}
           style={{ height: `calc(100% - ${scrollPosition}px)` }}
         >
