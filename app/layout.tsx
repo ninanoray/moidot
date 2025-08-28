@@ -60,6 +60,7 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     startupImage: STARTUP_IMAGES,
   },
+  other: { "apple-mobile-web-app-capable": "yes" },
   alternates: {
     canonical: "/",
   },
@@ -99,7 +100,6 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        {/* <meta name="mobile-web-app-capable" content="yes" /> */}
         <link
           rel="manifest"
           href={META.base + "/manifest.webmanifest"}
