@@ -1,3 +1,4 @@
+import { META } from "@/constants/metadata";
 import { ErrorFallback } from "@/providers/errorBoundary/ErrorFallback";
 import { Metadata } from "next";
 import Login from ".";
@@ -9,6 +10,10 @@ interface Params {
 export const metadata: Metadata = {
   title: "모이닷 - 로그인",
   description: "모이닷 시작하기",
+  metadataBase: new URL(META.base),
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default async function login({ searchParams }: Params) {

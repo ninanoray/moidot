@@ -60,6 +60,9 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     startupImage: STARTUP_IMAGES,
   },
+  alternates: {
+    canonical: "/",
+  },
   verification: {
     google: "2BOUz65gs1f9_eR-sFrM1pSVBwWzG5dpIBJvkefNtt0",
     other: {
