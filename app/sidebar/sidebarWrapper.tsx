@@ -15,9 +15,6 @@ export async function SidebarWrapper({
   const headersList = await headers();
   const pathname = headersList.get("x-current-path") ?? "/";
 
-  // 로그인 페이지에서는 SidebarWrapper 감싸지 않음
-  if (pathname.startsWith("/login")) return <>{children}</>;
-
   // 쿠키에서 사이드바 상태 가져오기
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
@@ -25,10 +22,19 @@ export async function SidebarWrapper({
   // 세션 가져오기
   const session = await getServerSession(authOptions);
 
+  // 로그인 페이지에서는 SidebarWrapper 감싸지 않음
+  // if (pathname.startsWith("/login")) return <>{children}</>;
+  if (!session)
+    return (
+      <div className="flex w-full mscreen">
+        <div className="flex-1">{children}</div>
+      </div>
+    );
+
   return (
     <SidebarProvider defaultOpen={defaultOpen} className="mscreen">
       <HomeSidebar session={session} />
-      <SidebarInset className="min-h-max">{children}</SidebarInset>
+      <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
 }
