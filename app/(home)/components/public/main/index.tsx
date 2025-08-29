@@ -19,13 +19,13 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
   const [autoSlide, setAutoSlide] = useState(true);
 
   return (
-    <main className="p-2 flex-auto flex flex-col gap-2">
-      <div className="size-full shrink-0 mb-1 flex flex-col justify-end gap-2">
+    <main className="flex-auto">
+      <div className="size-full p-2 flex flex-col justify-end gap-4">
         <WritingText
           text="Connect the Dots, draw the Dules, and gather into the Moim"
           split=","
           spacing={8}
-          className="px-1 md:text-3xl text-2xl text-foreground/60 font-semibold mb-2"
+          className="px-1 md:text-3xl text-2xl text-foreground/60 font-semibold"
         />
         <Carousel
           opts={{ loop: true }}
@@ -79,10 +79,10 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           <CarouselIndicator />
         </Carousel>
       </div>
-      <div className="w-full h-60 pb-2 shrink-0 flex gap-2.5 md:flex-row flex-col">
+      <div className="w-full h-60 p-2 pt-0 flex gap-2 md:flex-row flex-col">
         <RippleButton
           size="lg"
-          className="group/button relative flex-auto h-full p-0 md:text-4xl text-3xl rounded-lg shadow-lg hover:brightness-100 active:scale-98"
+          className="group/button relative flex-1 h-full p-0 md:text-4xl text-3xl rounded-lg shadow-lg hover:brightness-100 active:scale-98"
         >
           <a href="/dotmap" className="size-full grid items-center z-10">
             닷맵
@@ -98,7 +98,7 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
         <RippleButton
           variant="secondary"
           size="lg"
-          className="group/button relative flex-auto h-full p-0 md:text-4xl text-3xl rounded-lg shadow-lg hover:brightness-100 active:scale-98"
+          className="group/button relative flex-1 h-full p-0 md:text-4xl text-3xl rounded-lg shadow-lg hover:brightness-100 active:scale-98"
         >
           <a href="#" className="size-full grid items-center z-10">
             마이닷
@@ -112,6 +112,7 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           />
         </RippleButton>
       </div>
+      <div className="w-full h-10 md:not-sr-only sr-only"></div>
     </main>
   );
 };

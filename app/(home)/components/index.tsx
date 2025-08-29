@@ -21,7 +21,7 @@ const Public = () => {
   }, [updateScroll]);
 
   return (
-    <div className="bg-layout p-0">
+    <div className="size-full flex flex-col">
       <PublicHomeHeader scroll={scrollPosition} />
       <PublicHomeMain scroll={scrollPosition} />
     </div>
