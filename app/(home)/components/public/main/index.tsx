@@ -112,7 +112,6 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           />
         </RippleButton>
       </div>
-      <div className="w-full h-10 md:not-sr-only sr-only"></div>
     </main>
   );
 };

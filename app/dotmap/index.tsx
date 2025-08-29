@@ -12,7 +12,7 @@ const Dotmap = () => {
   const [search, setSearch] = useState<string>();
 
   return (
-    <div className="bg-layout md:p-2 p-0 gap-2 md:flex-col flex-col-reverse">
+    <div className="size-full md:p-2 p-0 flex gap-2 md:flex-col flex-col-reverse">
       <Forms
         schema={DotmapSchema}
         className="md:static absolute z-10 md:p-0 px-2 pb-6 h-fit flex-row"
