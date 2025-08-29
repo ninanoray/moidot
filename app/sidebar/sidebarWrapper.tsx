@@ -27,7 +27,7 @@ export async function SidebarWrapper({
   // if (pathname.startsWith("/login")) return <>{children}</>;
   if (!session)
     return (
-      <div className="flex w-full mscreen">
+      <div className="flex w-full mscreen p-0">
         <div className="flex-1 flex flex-col">
           {children}
           <FooterNavigation />
