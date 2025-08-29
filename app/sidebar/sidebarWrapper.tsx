@@ -3,6 +3,7 @@ import { HomeSidebar } from "@/app/sidebar/components/homeSidebar";
 import {
   SidebarInset,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/animate-ui/radix/sidebar";
 import { getServerSession } from "next-auth/next";
 import { cookies, headers } from "next/headers";
@@ -30,17 +31,23 @@ export async function SidebarWrapper({
       <div className="flex w-full mscreen p-0">
         <div className="flex-1 flex flex-col">
           {children}
-          <FooterNavigation />
+          {!pathname.startsWith("/login") && <FooterNavigation />}
         </div>
       </div>
     );
 
   return (
-    <SidebarProvider defaultOpen={defaultOpen} className="mscreen">
+    <SidebarProvider
+      defaultOpen={defaultOpen}
+      disableSwipe={true}
+      className="mscreen"
+    >
       <HomeSidebar session={session} />
       <SidebarInset>
         {children}
-        <FooterNavigation />
+        <FooterNavigation>
+          <SidebarTrigger />
+        </FooterNavigation>
       </SidebarInset>
     </SidebarProvider>
   );

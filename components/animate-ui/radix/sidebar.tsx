@@ -46,6 +46,7 @@ type SidebarContextProps = {
   setOpenMobile: (open: boolean) => void;
   isMobile: boolean;
   toggleSidebar: () => void;
+  disableSwipe?: boolean;
 };
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null);
@@ -63,12 +64,14 @@ type SidebarProviderProps = React.ComponentProps<"div"> & {
   defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  disableSwipe?: boolean;
 };
 
 function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
+  disableSwipe,
   className,
   style,
   children,
@@ -129,9 +132,10 @@ function SidebarProvider({
       isMobile,
       openMobile,
       setOpenMobile,
+      disableSwipe,
       toggleSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+    [state, open, setOpen, isMobile, openMobile, disableSwipe, toggleSidebar]
   );
 
   return (
@@ -351,10 +355,14 @@ function SidebarRail({ className, ...props }: SidebarRailProps) {
 type SidebarInsetProps = React.ComponentProps<"div">;
 
 function SidebarInset({ className, ...props }: SidebarInsetProps) {
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, disableSwipe } = useSidebar();
 
   return (
-    <SwipeProvider asChild onSwipeRight={() => setOpenMobile(true)}>
+    <SwipeProvider
+      asChild
+      disabled={disableSwipe}
+      onSwipeRight={() => setOpenMobile(true)}
+    >
       <div
         data-slot="sidebar-inset"
         className={cn(

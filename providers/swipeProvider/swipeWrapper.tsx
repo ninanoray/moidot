@@ -28,6 +28,7 @@ const useSwipe = (): SwipeContextType => {
 
 type SwipeProviderProps = {
   asChild?: boolean;
+  disabled?: boolean;
   children: React.ReactNode;
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
@@ -35,11 +36,14 @@ type SwipeProviderProps = {
 
 const SwipeProvider = ({
   asChild,
+  disabled,
   onSwipeLeft,
   onSwipeRight,
   children,
 }: SwipeProviderProps) => {
   const [edge, setEdge] = useState<number>();
+  if (disabled) return <>{children}</>;
+
   return (
     <SwipeContext.Provider value={{ edge, setEdge }}>
       <SwipeWrapper
