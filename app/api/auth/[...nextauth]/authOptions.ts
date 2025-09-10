@@ -59,10 +59,11 @@ export const authOptions: AuthOptions = {
         if (account) {
           try {
             const data = await postSocialLogin({
-              accessToken: account.access_token, // 스푸핑 방지
+              token: account.access_token, // 스푸핑 방지
               provider: account.provider,
             });
             user.id = data.email;
+            account.access_token = data.accessToken; // 토큰 발급
           } catch (error) {
             const axiosError = error as AxiosError;
             throw new Error(axiosError.status?.toString());
@@ -79,14 +80,10 @@ export const authOptions: AuthOptions = {
     },
     async jwt({ token, account, user, trigger }) {
       if (user && account) {
-        // OAuth 제공자로부터 받은 토큰 추출 (access_token 또는 id_token)
-        const oauthToken =
-          account.provider === "kakao"
-            ? account.access_token
-            : account.id_token;
+        token.accessToken = account.access_token;
 
         // 애플리케이션 전용 accessToken 발급 (내부 로직 또는 API 호출)
-        // const accessToken = await getAccessToken(account.provider, oauthToken);
+        // const accessToken = await getAccessToken(account.provider, account.access_token);
         // // 추가 사용자 정보 조회
         // const userInfo = await getUserInfo(accessToken);
       } else if (trigger === "update") {
@@ -101,6 +98,7 @@ export const authOptions: AuthOptions = {
       };
     },
     async session({ session, token: jwt }) {
+      session.accessToken = jwt.accessToken;
       session = jwt as any;
       // console.log("$$$ session: ", session);
       return session;

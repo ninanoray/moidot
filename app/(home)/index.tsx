@@ -4,9 +4,9 @@ import Test from "./components/test";
 
 const Home = () => {
   return (
-    <div className="flex-1 flex flex-col overflow-y-auto">
+    <main className="p-2 flex-1 flex flex-col ">
       <Test />
-    </div>
+    </main>
   );
 };
 

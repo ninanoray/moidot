@@ -3,12 +3,13 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 interface PostSocialLogin {
-  accessToken: string | undefined;
+  token: string | undefined;
   provider: string | undefined;
 }
 
 interface LoginResponse {
   email: string;
+  accessToken: string;
 }
 
 function parseSetCookie(setCookieStr: string): Record<string, string> {
@@ -30,13 +31,13 @@ function parseSetCookie(setCookieStr: string): Record<string, string> {
 }
 
 export async function postSocialLogin({
-  accessToken,
+  token,
   provider,
 }: PostSocialLogin): Promise<LoginResponse> {
   const url = SERVER_URL + "/api/auth/social-login";
   const data = {
     provider: provider,
-    accessToken: accessToken,
+    accessToken: token,
   };
 
   axios.defaults.withCredentials = true;
@@ -45,9 +46,11 @@ export async function postSocialLogin({
     headers: { "Content-Type": "application/json" },
   });
 
-  // access token
   const resHeaders = response.headers;
-  axios.defaults.headers.common["Authorization"] = resHeaders["authorization"];
+
+  // access token
+  const accessToken = resHeaders["authorization"];
+  axios.defaults.headers.common["Authorization"] = accessToken;
 
   // refresh token
   const setCookie = resHeaders["set-cookie"];
@@ -64,5 +67,5 @@ export async function postSocialLogin({
     });
   }
 
-  return response.data;
+  return { accessToken, ...response.data };
 }

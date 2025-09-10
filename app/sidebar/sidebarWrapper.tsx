@@ -28,7 +28,7 @@ export async function SidebarWrapper({
   // if (pathname.startsWith("/login")) return <>{children}</>;
   if (!session)
     return (
-      <div className="flex size-full mscreen p-0">
+      <div className="flex size-full mscreen">
         <div className="flex-1 flex flex-col">
           {children}
           {!pathname.startsWith("/login") && <FooterNavigation />}
@@ -37,13 +37,9 @@ export async function SidebarWrapper({
     );
 
   return (
-    <SidebarProvider
-      defaultOpen={defaultOpen}
-      disableSwipe={true}
-      className="mscreen"
-    >
+    <SidebarProvider defaultOpen={defaultOpen} disableSwipe={true}>
       <HomeSidebar session={session} />
-      <SidebarInset>
+      <SidebarInset className="mscreen overflow-y-auto">
         {children}
         <FooterNavigation>
           <SidebarTrigger />

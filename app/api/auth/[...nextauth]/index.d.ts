@@ -9,5 +9,14 @@ declare module "next-auth" {
       image: string;
       isDefaultImg?: boolean;
     };
+    accessToken?: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken?: string;
+    refreshToken?: string;
+    error?: string;
   }
 }

@@ -8,14 +8,40 @@ import {
   FormsTextArea,
 } from "@/components/forms";
 import FormsDateRangePicker from "@/components/forms/formsDateRangePicker";
+import apiAxios from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
 import { HomeSchema, TypeSelection } from "../schema";
 
 const Test = () => {
+  const { data, isError, isLoading, error, refetch } = useQuery({
+    queryKey: ["test"],
+    queryFn: async () => {
+      const res = await apiAxios.get("/sample");
+      return res.data;
+    },
+    enabled: false,
+  });
+
+  if (data) console.log(data);
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>{error.toString()}</div>;
+
   return (
     <>
       <div className="w-100 max-w-full">
         <Forms schema={HomeSchema}>
-          <FormsInput type="password" name="password" label="비밀번호" />
+          <FormsInput
+            type="email"
+            name="email"
+            label="이메일"
+            autoComplete="username email"
+          />
+          <FormsInput
+            type="password"
+            name="password"
+            label="비밀번호"
+            autoComplete="new-password"
+          />
           <FormsSelect name="type" label="타입" items={TypeSelection} />
           <FormsDatePicker name="date" label="날짜" useTime />
           <FormsDateRangePicker name="dateRange" label="기간" useTime />
@@ -25,7 +51,7 @@ const Test = () => {
         </Forms>
       </div>
       <div>
-        <RippleButton>버튼</RippleButton>
+        <RippleButton onClick={() => refetch()}>요청</RippleButton>
         <RippleButton variant="secondary">버튼</RippleButton>
         <RippleButton variant="destructive">버튼</RippleButton>
         <RippleButton variant="outline">버튼</RippleButton>
