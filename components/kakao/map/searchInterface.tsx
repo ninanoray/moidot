@@ -153,7 +153,7 @@ const SearchInterface = ({
         open={isListOpen}
         onOpenChange={setIsListOpen}
         className={cn(
-          "md:w-60 w-40 absolute md:top-1.5 bottom-16 left-2 z-1 trans-300",
+          "md:w-60 w-40 absolute md:top-12 bottom-16 left-2 z-1 trans-300",
           keyword ? "not-sr-only" : "sr-only"
         )}
       >

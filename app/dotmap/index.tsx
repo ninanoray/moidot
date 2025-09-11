@@ -15,7 +15,7 @@ const Dotmap = () => {
     <div className="size-full md:p-2 p-0 flex gap-2 md:flex-col flex-col-reverse">
       <Forms
         schema={DotmapSchema}
-        className="md:static absolute z-10 md:p-0 px-2 pb-6 h-fit flex-row"
+        className="absolute z-10 p-2 pb-6 h-fit md:w-fit flex-row"
         onSubmit={(value: typeof DotmapSchema._type) => {
           setSearch(value.keyword);
         }}
@@ -23,7 +23,7 @@ const Dotmap = () => {
         <FormsInput
           ref={inputRef}
           name="keyword"
-          className="md:bg-transparent bg-card/20 md:backdrop-blur-none backdrop-blur-xs md:shadow-none shadow-sm rounded-md md:border border-0 [&_*]:bg-transparent dark:[&_*]:bg-transparent"
+          className="md:w-60 bg-card/20 backdrop-blur-xs shadow-sm rounded-md border-0 [&_*]:bg-transparent dark:[&_*]:bg-transparent"
         />
         <RippleButton className="w-20" onClick={() => setSearch(undefined)}>
           검색
