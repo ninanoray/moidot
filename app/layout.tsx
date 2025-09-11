@@ -10,7 +10,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
-import LayoutContainer from "./container";
+import LayoutContainer from "./container/layoutContainer";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({

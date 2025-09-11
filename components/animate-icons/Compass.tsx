@@ -15,7 +15,7 @@ const Compass = ({ className, ...props }: CompassProps) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         className={cn(
-          "size-4 fill-none stroke-2 stroke-sidebar-foreground hover:[&_path]:animate-rotate hover:[&_circle]:animate-draw-circle",
+          "size-4 fill-none stroke-2 stroke-foreground hover:[&_path]:animate-rotate hover:[&_circle]:animate-draw-circle",
           "group-hover/menu-item:[&_path]:animate-rotate group-hover/menu-item:[&_circle]:animate-draw-circle",
           className
         )}

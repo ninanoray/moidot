@@ -14,7 +14,7 @@ const UserDot = ({ className, ...props }: UserDotProps) => {
         fill="none"
         viewBox="0 0 24 24"
         className={cn(
-          "size-4 fill-none stroke-2 stroke-sidebar-foreground hover:[&_circle]:animate-user-dot",
+          "size-4 fill-none stroke-2 stroke-foreground hover:[&_circle]:animate-user-dot",
           "group-hover/menu-item:[&_circle]:animate-user-dot",
           className
         )}

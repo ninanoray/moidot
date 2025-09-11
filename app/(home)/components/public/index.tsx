@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutContainer } from "@/app/container";
+import { useLayoutContainer } from "@/app/container/layoutContainerProvider";
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import { WritingText } from "@/components/animate-ui/text/writing";
 import {

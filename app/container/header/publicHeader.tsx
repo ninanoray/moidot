@@ -3,12 +3,11 @@ import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import { RotatingText } from "@/components/animate-ui/text/rotating";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useLayoutContainer } from "../layoutContainerProvider";
 
-interface PublicHeaderProps {
-  scrollPosition: number;
-}
+const PublicHeader = () => {
+  const { scrollY } = useLayoutContainer();
 
-const PublicHeader = ({ scrollPosition }: PublicHeaderProps) => {
   const router = useRouter();
 
   return (
@@ -16,9 +15,7 @@ const PublicHeader = ({ scrollPosition }: PublicHeaderProps) => {
       <h1
         onClick={() => router.push("/")}
         className={cn(
-          scrollPosition > 0
-            ? "text-primary-foreground dark:text-card-foreground"
-            : ""
+          scrollY > 0 ? "text-primary-foreground dark:text-card-foreground" : ""
         )}
       >
         MOIDOT
@@ -28,7 +25,7 @@ const PublicHeader = ({ scrollPosition }: PublicHeaderProps) => {
           text={Object.keys(CustomCategoryCode)}
           className={cn(
             "text-lg font-medium",
-            scrollPosition > 0 ? "text-primary-foreground" : ""
+            scrollY > 0 ? "text-primary-foreground" : ""
           )}
         />
         <RippleButton variant="secondary" className="p-0">

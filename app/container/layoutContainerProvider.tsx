@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Session } from "next-auth";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Footer from "./footer";
 import Header from "./header";
@@ -25,11 +26,15 @@ export function useLayoutContainer() {
 
 type LayoutContainerProps = React.ComponentProps<"div"> & {
   children: React.ReactNode;
+  session: Session | null;
+  disableHeadernFooter: boolean;
 };
 
-const LayoutContainer = ({
+const LayoutContainerProvider = ({
   children,
   className,
+  session,
+  disableHeadernFooter: disabled,
   ...props
 }: LayoutContainerProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -53,21 +58,19 @@ const LayoutContainer = ({
 
   return (
     <LayoutContainerContext.Provider value={contextValue}>
-      <div className="mscreen flex">
+      <div
+        ref={ref}
+        onScroll={() => updateScroll()}
+        className="mscreen flex overflow-y-auto"
+      >
         <div className="relative flex-1 flex flex-col" {...props}>
-          <Header scroll={scrollPosition} />
-          <main
-            ref={ref}
-            onScroll={() => updateScroll()}
-            className={cn("flex-1 overflow-y-auto", className)}
-          >
-            {children}
-          </main>
-          <Footer />
+          {!disabled && <Header session={session} />}
+          <main className={cn("flex-1", className)}>{children}</main>
+          {!disabled && <Footer />}
         </div>
       </div>
     </LayoutContainerContext.Provider>
   );
 };
 
-export default LayoutContainer;
+export default LayoutContainerProvider;

@@ -1,19 +1,26 @@
 import { cn } from "@/lib/utils";
+import { Session } from "next-auth";
+import { useLayoutContainer } from "../layoutContainerProvider";
+import AuthHeader from "./authHeader";
 import PublicHeader from "./publicHeader";
 
 interface HeaderProps {
-  scroll: number;
+  className?: string | undefined;
+  session: Session | null;
 }
 
-const Header = ({ scroll: scrollPosition }: HeaderProps) => {
+const Header = ({ className, session }: HeaderProps) => {
+  const { scrollY } = useLayoutContainer();
+
   return (
     <header
       className={cn(
         "w-full sat sticky top-0 z-50 trans-300 mobile",
-        scrollPosition > 0 ? "bg-primary shadow-md" : "bg-transparent"
+        scrollY > 0 ? "bg-primary shadow-md" : "bg-transparent",
+        className
       )}
     >
-      <PublicHeader scrollPosition={scrollPosition} />
+      {!!session ? <AuthHeader /> : <PublicHeader />}
     </header>
   );
 };

@@ -27,8 +27,8 @@ const Test = () => {
   if (isError) return <div>{error.toString()}</div>;
 
   return (
-    <>
-      <div className="w-100 max-w-full">
+    <div className="size-full p-2 flex flex-col">
+      <div className="max-w-100">
         <Forms schema={HomeSchema}>
           <FormsInput
             type="email"
@@ -64,7 +64,7 @@ const Test = () => {
         <h5>h5: 다람쥐 헌 쳇바퀴에 타고파</h5>
         <h6>h6: 다람쥐 헌 쳇바퀴에 타고파</h6>
       </div>
-    </>
+    </div>
   );
 };
 
