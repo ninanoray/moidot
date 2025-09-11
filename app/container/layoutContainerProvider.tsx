@@ -67,7 +67,7 @@ const LayoutContainerProvider = ({
           {!pathname.startsWith("/login") && (
             <Header
               session={session}
-              className={!session && pathname === "/" ? "" : "hidden md:block"}
+              className={!session ? "" : "hidden md:block"}
             />
           )}
           <main className={cn("flex-1", className)}>{children}</main>

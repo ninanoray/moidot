@@ -10,8 +10,6 @@ const LayoutContainer = async ({ children }: { children: React.ReactNode }) => {
   const headersList = await headers();
   const pathname = headersList.get("x-current-path") ?? "/";
 
-  const disabled = pathname.startsWith("/login");
-
   const session = await getServerSession(authOptions);
 
   return (

@@ -15,6 +15,7 @@ const PublicHeader = () => {
       <h1
         onClick={() => router.push("/")}
         className={cn(
+          "cursor-pointer",
           scrollY > 0 ? "text-primary-foreground dark:text-card-foreground" : ""
         )}
       >
