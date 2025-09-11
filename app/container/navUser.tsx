@@ -12,21 +12,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../../components/animate-ui/radix/dropdown-menu";
+} from "../../components/animate-ui/radix/dropdown-menu";
 
-export function NavUser() {
+export function NavUser({ children }: { children?: React.ReactNode }) {
   const { data: session } = useSession();
   const user = session?.user;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
-        <Avatar className="size-8 rounded-full">
-          <AvatarImage src={user?.image} alt={`모이닷 ${user?.name} 프로필`} />
-          <AvatarFallback className="rounded-lg">
-            {user?.name[0]}
-          </AvatarFallback>
-        </Avatar>
+        {children || (
+          <Avatar className="size-8 rounded-full">
+            <AvatarImage
+              src={user?.image}
+              alt={`모이닷 ${user?.name} 프로필`}
+            />
+            <AvatarFallback className="rounded-lg">
+              {user?.name[0]}
+            </AvatarFallback>
+          </Avatar>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"

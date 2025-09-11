@@ -1,5 +1,4 @@
-import UserDot from "@/components/animate-icons/UserDot";
-import { Compass, Settings } from "lucide-react";
+import { CircleCheckBig, Compass, Settings } from "lucide-react";
 
 export interface PageRoutes {
   title: string;
@@ -25,7 +24,7 @@ export const Menu: PageRoutes[] = [
       {
         title: "마이닷",
         url: "/dotmap",
-        icon: <UserDot />,
+        icon: <CircleCheckBig />,
       },
     ],
   },

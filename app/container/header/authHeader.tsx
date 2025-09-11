@@ -4,7 +4,7 @@ import { Menu } from "@/constants/pageRoutes";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useLayoutContainer } from "../layoutContainerProvider";
-import { NavUser } from "./navUser";
+import { NavUser } from "../navUser";
 
 const AuthHeader = () => {
   const { scrollY } = useLayoutContainer();

@@ -64,9 +64,9 @@ const LayoutContainerProvider = ({
         className="mscreen flex overflow-y-auto"
       >
         <div className="relative flex-1 flex flex-col" {...props}>
-          {!disabled && <Header session={session} />}
+          {!disabled && !!!session && <Header session={session} />}
           <main className={cn("flex-1", className)}>{children}</main>
-          {!disabled && <Footer />}
+          {!!session && <Footer />}
         </div>
       </div>
     </LayoutContainerContext.Provider>
