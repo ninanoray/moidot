@@ -13,11 +13,11 @@ const Footer = ({ className }: FooterProps) => {
   return (
     <footer
       className={cn(
-        "shrink-0 md:hidden w-full h-10 p-1 sab flex items-center justify-evenly bg-background text-foreground/50 [&_svg]:size-5",
+        "shrink-0 md:hidden w-full h-12 p-px sab flex items-center justify-evenly bg-background text-[10px] text-foreground/50 [&_svg]:size-5 [&_svg]:stroke-1",
         className
       )}
     >
-      <Link href="/" className="text-xs flex-center flex-col">
+      <Link href="/" className="flex-center flex-col gap-px">
         <Home />홈
       </Link>
       {Menu[0].pages.map((page) => {
@@ -25,7 +25,7 @@ const Footer = ({ className }: FooterProps) => {
           <a
             key={page.title}
             href={page.url}
-            className="text-xs flex-center flex-col gap-px"
+            className="flex-center flex-col gap-px"
           >
             {page.icon}
             {page.title}
@@ -33,7 +33,7 @@ const Footer = ({ className }: FooterProps) => {
         );
       })}
       <NavUser>
-        <div className="text-xs flex-center flex-col gap-px">
+        <div className="flex-center flex-col gap-px">
           <UserCircle2 />
           사용자
         </div>
