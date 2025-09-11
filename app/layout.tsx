@@ -10,8 +10,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
+import LayoutContainer from "./container";
 import "./globals.css";
-import { SidebarWrapper } from "./sidebar/sidebarWrapper";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -113,7 +113,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <QueryProvider>
             <ThemeProvider>
-              <SidebarWrapper>{children}</SidebarWrapper>
+              <LayoutContainer>{children}</LayoutContainer>
             </ThemeProvider>
           </QueryProvider>
         </NextAuthProvider>

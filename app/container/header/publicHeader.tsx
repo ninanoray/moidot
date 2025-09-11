@@ -4,22 +4,15 @@ import { RotatingText } from "@/components/animate-ui/text/rotating";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-interface PublicHomeHeaderProps {
-  scroll: number;
+interface PublicHeaderProps {
+  scrollPosition: number;
 }
 
-const PublicHomeHeader = ({
-  scroll: scrollPosition,
-}: PublicHomeHeaderProps) => {
+const PublicHeader = ({ scrollPosition }: PublicHeaderProps) => {
   const router = useRouter();
 
   return (
-    <header
-      className={cn(
-        "w-full px-3 sat sticky top-0 z-50 flex justify-between items-center trans-300 mobile",
-        scrollPosition > 0 ? "bg-primary shadow-md" : "bg-transparent"
-      )}
-    >
+    <div className="px-3 flex justify-between items-center">
       <h1
         onClick={() => router.push("/")}
         className={cn(
@@ -44,8 +37,8 @@ const PublicHomeHeader = ({
           </a>
         </RippleButton>
       </div>
-    </header>
+    </div>
   );
 };
 
-export default PublicHomeHeader;
+export default PublicHeader;

@@ -7,7 +7,7 @@ import {
 } from "@/components/animate-ui/radix/sidebar";
 import { getServerSession } from "next-auth/next";
 import { cookies, headers } from "next/headers";
-import FooterNavigation from "./components/footerNavigation";
+import Footer from "../container/footer";
 
 export async function SidebarWrapper({
   children,
@@ -31,7 +31,7 @@ export async function SidebarWrapper({
       <div className="flex size-full mscreen">
         <div className="flex-1 flex flex-col">
           {children}
-          {!pathname.startsWith("/login") && <FooterNavigation />}
+          {!pathname.startsWith("/login") && <Footer />}
         </div>
       </div>
     );
@@ -41,9 +41,9 @@ export async function SidebarWrapper({
       <HomeSidebar session={session} />
       <SidebarInset className="mscreen overflow-y-auto">
         {children}
-        <FooterNavigation>
+        <Footer>
           <SidebarTrigger />
-        </FooterNavigation>
+        </Footer>
       </SidebarInset>
     </SidebarProvider>
   );

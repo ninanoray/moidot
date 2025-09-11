@@ -1,3 +1,6 @@
+"use client";
+
+import { useLayoutContainer } from "@/app/container";
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import { WritingText } from "@/components/animate-ui/text/writing";
 import {
@@ -11,15 +14,12 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { useState } from "react";
 
-interface PublicHomeMainProps {
-  scroll: number;
-}
-
-const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
+const Public = () => {
+  const { scrollY } = useLayoutContainer();
   const [autoSlide, setAutoSlide] = useState(true);
 
   return (
-    <main className="flex-auto">
+    <>
       <div className="size-full p-2 flex flex-col justify-end gap-4">
         <WritingText
           text="Connect the Dots, draw the Dules, and gather into the Moim"
@@ -43,7 +43,7 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
             "[&_h1]:md:text-4xl [&_h1]:text-3xl [&_h1]:text-inherit",
             "[&_h2]:md:text-3xl [&_h2]:text-2xl [&_h2]:text-inherit"
           )}
-          style={{ height: `calc(100% - ${scrollPosition}px)` }}
+          style={{ height: `calc(100% - ${scrollY}px)` }}
         >
           <CarouselContent className="max-w-[calc(100vw-16px)] m-0 ">
             <CarouselItem className="p-0">
@@ -112,8 +112,8 @@ const PublicHomeMain = ({ scroll: scrollPosition }: PublicHomeMainProps) => {
           />
         </RippleButton>
       </div>
-    </main>
+    </>
   );
 };
 
-export default PublicHomeMain;
+export default Public;
