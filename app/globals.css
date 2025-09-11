@@ -183,7 +183,7 @@
   @apply pt-[env(safe-area-inset-top)];
 }
 @utility sab {
-  @apply pt-[env(safe-area-inset-bottom)];
+  @apply pb-[env(safe-area-inset-bottom)];
 }
 
 @utility flex-center {

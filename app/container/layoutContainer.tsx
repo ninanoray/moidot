@@ -15,7 +15,7 @@ const LayoutContainer = async ({ children }: { children: React.ReactNode }) => {
   const session = await getServerSession(authOptions);
 
   return (
-    <LayoutContainerProvider session={session} disableHeadernFooter={disabled}>
+    <LayoutContainerProvider session={session} pathname={pathname}>
       {children}
     </LayoutContainerProvider>
   );

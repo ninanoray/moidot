@@ -27,14 +27,14 @@ export function useLayoutContainer() {
 type LayoutContainerProps = React.ComponentProps<"div"> & {
   children: React.ReactNode;
   session: Session | null;
-  disableHeadernFooter: boolean;
+  pathname: string;
 };
 
 const LayoutContainerProvider = ({
   children,
   className,
   session,
-  disableHeadernFooter: disabled,
+  pathname,
   ...props
 }: LayoutContainerProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -64,9 +64,14 @@ const LayoutContainerProvider = ({
         className="mscreen flex overflow-y-auto"
       >
         <div className="relative flex-1 flex flex-col" {...props}>
-          {!disabled && !!!session && <Header session={session} />}
+          {!pathname.startsWith("/login") && (
+            <Header
+              session={session}
+              className={!session && pathname === "/" ? "" : "hidden md:block"}
+            />
+          )}
           <main className={cn("flex-1", className)}>{children}</main>
-          {!!session && <Footer />}
+          {!!session && <Footer className="md:hidden" />}
         </div>
       </div>
     </LayoutContainerContext.Provider>
