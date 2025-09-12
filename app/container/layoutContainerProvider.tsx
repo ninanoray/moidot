@@ -5,6 +5,7 @@ import { Session } from "next-auth";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Footer from "./footer";
 import Header from "./header";
+import PullToRefreshWrapper from "./pullToRefreshWrapper";
 
 type LayoutContainerContextProps = {
   scrollY: number;
@@ -75,23 +76,32 @@ const LayoutContainerProvider = ({
         onScroll={() => updateScroll()}
         className="mscreen flex overflow-y-auto"
       >
-        <div
-          className={cn("relative flex-1 flex flex-col", isLogin ? "sat" : "")}
-          {...props}
-        >
-          {!isLoginPage && (
-            <Header
-              session={session}
-              className={isLogin ? "hidden md:block" : ""}
-            />
-          )}
-          <main
-            className={cn("flex-1 md:pb-0", isLogin ? "pb-13" : "", className)}
+        <PullToRefreshWrapper maxDistance={60}>
+          <div
+            className={cn(
+              "relative flex-1 flex flex-col",
+              isLogin ? "sat" : ""
+            )}
+            {...props}
           >
-            {children}
-          </main>
-          {isLogin && <Footer className="md:hidden" />}
-        </div>
+            {!isLoginPage && (
+              <Header
+                session={session}
+                className={isLogin ? "hidden md:block" : ""}
+              />
+            )}
+            <main
+              className={cn(
+                "flex-1 md:pb-0",
+                isLogin ? "pb-13" : "",
+                className
+              )}
+            >
+              {children}
+            </main>
+            {isLogin && <Footer className="md:hidden" />}
+          </div>
+        </PullToRefreshWrapper>
       </div>
     </LayoutContainerContext.Provider>
   );

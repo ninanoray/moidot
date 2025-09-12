@@ -20,3 +20,8 @@ export const PublicPages = ["/", "/dotmap"];
  * 스와이프 제스쳐를 가장자리(edge)에서만 실행하는 페이지 목록
  */
 export const EdgeSwipePages = ["/dotmap"];
+
+/**
+ * 화면 당겨서 새로 고침기능의 당겨짐 민감도
+ */
+export const PULL_SENSITIVITY = 0.8;
