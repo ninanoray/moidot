@@ -62,7 +62,8 @@ const LayoutContainerProvider = ({
     [scrollPosition]
   );
 
-  const isLogin = React.useMemo(
+  const isLogin = React.useMemo(() => !!session, [session]);
+  const isLoginPage = React.useMemo(
     () => pathname.startsWith("/login"),
     [pathname]
   );
@@ -78,22 +79,18 @@ const LayoutContainerProvider = ({
           className={cn("relative flex-1 flex flex-col", isLogin ? "sat" : "")}
           {...props}
         >
-          {!isLogin && (
+          {!isLoginPage && (
             <Header
               session={session}
-              className={!session ? "" : "hidden md:block"}
+              className={isLogin ? "hidden md:block" : ""}
             />
           )}
           <main
-            className={cn(
-              "flex-1 md:pb-0",
-              !!session ? "pb-13" : "",
-              className
-            )}
+            className={cn("flex-1 md:pb-0", isLogin ? "pb-13" : "", className)}
           >
             {children}
           </main>
-          {!!session && <Footer className="md:hidden" />}
+          {isLogin && <Footer className="md:hidden" />}
         </div>
       </div>
     </LayoutContainerContext.Provider>
