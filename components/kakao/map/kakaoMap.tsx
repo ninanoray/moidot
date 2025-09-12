@@ -79,7 +79,7 @@ const KakaoMap = ({ keyword, className, ...props }: KakaoMapProps) => {
   //   libraries: ["clusterer", "services"],
   // });
   const isMobile = useIsMobile();
-  const { disablePull2Refresh } = useLayoutContainer();
+  const { disablePull2Refresh } = useLayoutContainer(); // 당겨서 새로고침 비활성화
 
   const mapRef = useRef<kakao.maps.Map>(null);
   const [mapType, setMapType] = useState<MapType>("ROADMAP");

@@ -90,17 +90,17 @@ const LayoutContainerProvider = ({
           )}
           {...props}
         >
+          {!loginPage && (
+            <Header
+              session={session}
+              className={isLogin ? "hidden md:block" : ""}
+            />
+          )}
           <PullToRefreshWrapper
             maxDistance={60}
             scrollPosition={scrollPosition}
             disabled={disablePull2Refresh}
           >
-            {!loginPage && (
-              <Header
-                session={session}
-                className={isLogin ? "hidden md:block" : ""}
-              />
-            )}
             <main
               className={cn(
                 "flex-1 md:pb-0",
@@ -110,8 +110,8 @@ const LayoutContainerProvider = ({
             >
               {children}
             </main>
-            {isLogin && <Footer className="md:hidden" />}
           </PullToRefreshWrapper>
+          {isLogin && <Footer className="md:hidden" />}
         </div>
       </div>
     </LayoutContainerContext.Provider>
