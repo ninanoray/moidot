@@ -11,9 +11,10 @@ import FormsDateRangePicker from "@/components/forms/formsDateRangePicker";
 import apiAxios from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { HomeSchema, TypeSelection } from "../schema";
+import ApiButton from "./apiButton";
 
 const Test = () => {
-  const { data, isError, isLoading, error, refetch } = useQuery({
+  const { data, isSuccess, isLoading, error, refetch } = useQuery({
     queryKey: ["test"],
     queryFn: async () => {
       const res = await apiAxios.get("/sample");
@@ -21,10 +22,6 @@ const Test = () => {
     },
     enabled: false,
   });
-
-  if (data) console.log(data);
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>{error.toString()}</div>;
 
   return (
     <div className="size-full p-2 flex flex-col">
@@ -51,7 +48,14 @@ const Test = () => {
         </Forms>
       </div>
       <div>
-        <RippleButton onClick={() => refetch()}>요청</RippleButton>
+        <ApiButton
+          isSuccess={isSuccess}
+          isLoading={isLoading}
+          error={error}
+          onClick={() => refetch()}
+        >
+          요청
+        </ApiButton>
         <RippleButton variant="secondary">버튼</RippleButton>
         <RippleButton variant="destructive">버튼</RippleButton>
         <RippleButton variant="outline">버튼</RippleButton>
