@@ -16,6 +16,7 @@ interface PullToRefreshProps {
   onRefresh?: () => void;
   maxDistance: number;
   scrollPosition: number;
+  disabled?: boolean;
 }
 
 const PullToRefreshWrapper = ({
@@ -23,6 +24,7 @@ const PullToRefreshWrapper = ({
   onRefresh = () => window.location.reload(),
   maxDistance,
   scrollPosition,
+  disabled = false,
 }: PullToRefreshProps) => {
   const refreshRef = useRef<HTMLDivElement>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -103,13 +105,17 @@ const PullToRefreshWrapper = ({
   }, [isRefreshing, onRefresh, pulled, resetToInitial]);
 
   useEffect(() => {
-    const touchMoveListener = (e: TouchEvent) => {
-      if (isTouch && pulled) onMove(e.touches[0].clientY);
-    };
+    if (disabled) {
+      resetToInitial();
+    } else {
+      const touchMoveListener = (e: TouchEvent) => {
+        if (isTouch && pulled) onMove(e.touches[0].clientY);
+      };
 
-    document.addEventListener("touchmove", touchMoveListener);
-    return () => document.removeEventListener("touchmove", touchMoveListener);
-  }, [isTouch, onMove, pulled]);
+      document.addEventListener("touchmove", touchMoveListener);
+      return () => document.removeEventListener("touchmove", touchMoveListener);
+    }
+  }, [disabled, isTouch, onMove, pulled, resetToInitial]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (scrollPosition === 0) onStart(e.touches[0].clientY, true);

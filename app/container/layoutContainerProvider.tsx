@@ -9,6 +9,7 @@ import PullToRefreshWrapper from "./pullToRefreshWrapper";
 
 type LayoutContainerContextProps = {
   scrollY: number;
+  disablePull2Refresh: (disalbe: boolean) => void;
 };
 
 const LayoutContainerContext =
@@ -46,6 +47,7 @@ const LayoutContainerProvider = ({
 }: LayoutContainerProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [disablePull2Refresh, setDisablePull2Refresh] = useState(false);
 
   // Scroll 위치를 감지
   const updateScroll = useCallback(() => {
@@ -59,13 +61,18 @@ const LayoutContainerProvider = ({
   const contextValue = React.useMemo<LayoutContainerContextProps>(
     () => ({
       scrollY: scrollPosition,
+      disablePull2Refresh: setDisablePull2Refresh,
     }),
     [scrollPosition]
   );
 
   const isLogin = React.useMemo(() => !!session, [session]);
-  const isLoginPage = React.useMemo(
+  const loginPage = React.useMemo(
     () => pathname.startsWith("/login"),
+    [pathname]
+  );
+  const fullScreenPage = React.useMemo(
+    () => pathname.startsWith("/dotmap"),
     [pathname]
   );
 
@@ -77,14 +84,18 @@ const LayoutContainerProvider = ({
         className="mscreen flex overflow-y-auto"
       >
         <div
-          className={cn("relative flex-1 flex flex-col", isLogin ? "sat" : "")}
+          className={cn(
+            "relative flex-1 flex flex-col",
+            isLogin && !fullScreenPage ? "sat" : ""
+          )}
           {...props}
         >
           <PullToRefreshWrapper
-            scrollPosition={scrollPosition}
             maxDistance={60}
+            scrollPosition={scrollPosition}
+            disabled={disablePull2Refresh}
           >
-            {!isLoginPage && (
+            {!loginPage && (
               <Header
                 session={session}
                 className={isLogin ? "hidden md:block" : ""}

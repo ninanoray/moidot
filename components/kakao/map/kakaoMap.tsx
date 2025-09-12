@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutContainer } from "@/app/container/layoutContainerProvider";
 import CreateMydotMarker from "@/app/dotmap/components/createMydotMarker";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -78,6 +79,7 @@ const KakaoMap = ({ keyword, className, ...props }: KakaoMapProps) => {
   //   libraries: ["clusterer", "services"],
   // });
   const isMobile = useIsMobile();
+  const { disablePull2Refresh } = useLayoutContainer();
 
   const mapRef = useRef<kakao.maps.Map>(null);
   const [mapType, setMapType] = useState<MapType>("ROADMAP");
@@ -135,6 +137,8 @@ const KakaoMap = ({ keyword, className, ...props }: KakaoMapProps) => {
             positionToAdress(mouseEvent.latLng);
           }
         }}
+        onTouchStart={() => disablePull2Refresh(true)}
+        onTouchEnd={() => disablePull2Refresh(false)}
       >
         <MapController mapRef={mapRef} type={mapType} setType={setMapType} />
         <SearchInterface
