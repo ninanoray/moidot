@@ -69,14 +69,6 @@ const PullToRefreshWrapper = ({
         if (pulledDistance > 0) {
           preventBodyScroll();
           refreshRef.current.style.height = `${pulledDistance}px`;
-          // if (pulledDistance < maxDistance * 0.7) {
-          //   // 절반은 여백 적용 없이 당겨짐(살짝만 당겨도 여백이 튀어나오는 문제)
-          //   refreshRef.current.style.height = `${pulledDistance}px`;
-          // } else {
-          //   // 아이폰 여백 적용
-          //   refreshRef.current.style.paddingTop = "env(safe-area-inset-top)";
-          //   refreshRef.current.style.height = `calc(${pulledDistance}px + env(safe-area-inset-top))`;
-          // }
 
           if (pulledDistance >= maxDistance) setIsRefreshing(true);
           else setIsRefreshing(false);
@@ -120,7 +112,7 @@ const PullToRefreshWrapper = ({
   }, [isTouch, onMove, pulled]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (window.scrollY === 0) onStart(e.touches[0].clientY, true);
+    if (scrollPosition === 0) onStart(e.touches[0].clientY, true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -140,7 +132,7 @@ const PullToRefreshWrapper = ({
       <div className="size-full">
         <div
           ref={refreshRef}
-          className="sat h-0 bg-primary text-primary-foreground flex-center"
+          className="h-0 bg-background text-foreground/75 text-sm flex-center overflow-hidden"
         >
           {isRefreshing ? (
             <Loader2 className="animate-rotate repeat-infinite" />

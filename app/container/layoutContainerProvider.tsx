@@ -76,13 +76,13 @@ const LayoutContainerProvider = ({
         onScroll={() => updateScroll()}
         className="mscreen flex overflow-y-auto"
       >
-        <PullToRefreshWrapper scrollPosition={scrollPosition} maxDistance={60}>
-          <div
-            className={cn(
-              "relative flex-1 flex flex-col"
-              // isLogin ? "sat" : ""
-            )}
-            {...props}
+        <div
+          className={cn("relative flex-1 flex flex-col", isLogin ? "sat" : "")}
+          {...props}
+        >
+          <PullToRefreshWrapper
+            scrollPosition={scrollPosition}
+            maxDistance={60}
           >
             {!isLoginPage && (
               <Header
@@ -100,8 +100,8 @@ const LayoutContainerProvider = ({
               {children}
             </main>
             {isLogin && <Footer className="md:hidden" />}
-          </div>
-        </PullToRefreshWrapper>
+          </PullToRefreshWrapper>
+        </div>
       </div>
     </LayoutContainerContext.Provider>
   );

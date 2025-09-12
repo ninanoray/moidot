@@ -15,7 +15,7 @@ const Footer = ({ className }: FooterProps) => {
   return (
     <footer
       className={cn(
-        "mobile fixed bottom-0 w-full h-13 px-3 flex items-center justify-between bg-background/30 backdrop-blur-md text-[10px] text-foreground/65 font-light [&_svg]:size-5 [&_svg]:stroke-1",
+        "mobile fixed bottom-0 z-10 w-full h-13 px-3 flex items-center justify-between bg-background/30 backdrop-blur-md text-[10px] text-foreground/65 font-light [&_svg]:size-5 [&_svg]:stroke-1",
         className
       )}
     >
