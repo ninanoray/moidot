@@ -86,7 +86,7 @@ const LayoutContainerProvider = ({
         <div
           className={cn(
             "relative flex-1 flex flex-col",
-            loginPage && isLogin && !fullScreenPage ? "sat" : ""
+            (isLogin || loginPage) && !fullScreenPage ? "sat" : ""
           )}
           {...props}
         >
