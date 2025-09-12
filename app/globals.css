@@ -183,7 +183,10 @@
   @apply pt-[env(safe-area-inset-top)];
 }
 @utility sab {
-  @apply pb-[env(safe-area-inset-bottom)];
+  padding-bottom: max(env(safe-area-inset-bottom), 8px);
+  @media all and (display-mode: fullscreen) {
+    @apply pb-2;
+  }
 }
 
 @utility flex-center {

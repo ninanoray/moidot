@@ -1,42 +1,42 @@
 "use client";
 
-import { Menu } from "@/constants/pageRoutes";
+import Ripple from "@/components/animate-ui/effects/motion-ripple";
+import { Menu, PageRoutesItem } from "@/constants/pageRoutes";
 import { cn } from "@/lib/utils";
 import { Home, UserCircle2 } from "lucide-react";
-import Link from "next/link";
 import { NavUser } from "../navUser";
 
 interface FooterProps {
   className?: string | undefined;
 }
 const Footer = ({ className }: FooterProps) => {
+  const pageRouteHome = { title: "홈", url: "/", icon: <Home /> };
+  const menu = [pageRouteHome, ...Menu[0].pages] as PageRoutesItem[];
+
   return (
     <footer
       className={cn(
-        "shrink-0 w-full h-fit flex items-center justify-evenly bg-background text-[10px] text-foreground/65 font-light [&_svg]:size-5 [&_svg]:stroke-1 [&>*]:p-1 [&>*]:sab",
+        "mobile fixed bottom-0 w-full h-13 px-3 flex items-center justify-between bg-background/30 backdrop-blur-md text-[10px] text-foreground/65 font-light [&_svg]:size-5 [&_svg]:stroke-1",
         className
       )}
     >
-      <Link href="/" className="flex-center flex-col gap-px">
-        <Home />홈
-      </Link>
-      {Menu[0].pages.map((page) => {
+      {menu.map((page) => {
         return (
-          <a
-            key={page.title}
-            href={page.url}
-            className="flex-center flex-col gap-px"
-          >
-            {page.icon}
-            {page.title}
-          </a>
+          <Ripple key={page.title} className="mx-2 flex-1 rounded-full">
+            <a href={""} className="flex-center flex-col gap-px">
+              {page.icon}
+              {page.title}
+            </a>
+          </Ripple>
         );
       })}
       <NavUser>
-        <div className="flex-center flex-col gap-px">
-          <UserCircle2 />
-          사용자
-        </div>
+        <Ripple className="mx-2 flex-1 rounded-full">
+          <div className="flex-center flex-col gap-px">
+            <UserCircle2 />
+            사용자
+          </div>
+        </Ripple>
       </NavUser>
     </footer>
   );

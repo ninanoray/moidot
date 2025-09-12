@@ -70,7 +70,15 @@ const LayoutContainerProvider = ({
               className={!session ? "" : "hidden md:block"}
             />
           )}
-          <main className={cn("flex-1", className)}>{children}</main>
+          <main
+            className={cn(
+              "flex-1 md:pb-0",
+              !!session ? "pb-13" : "",
+              className
+            )}
+          >
+            {children}
+          </main>
           {!!session && <Footer className="md:hidden" />}
         </div>
       </div>

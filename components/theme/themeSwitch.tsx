@@ -5,7 +5,6 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useState } from "react";
 import { Switch } from "../animate-ui/radix/switch";
-import { Label } from "../ui/label";
 
 const THEME_LIGHT = "light";
 const THEME_DARK = "dark";
@@ -42,20 +41,20 @@ export default function ThemeSwitch({ className }: { className?: string }) {
   useEffect(() => initTheme(), [initTheme]);
 
   return (
-    <div className={cn("@container flex", className)}>
+    <div className={cn("flex gap-1", className)}>
       <Switch
         id="theme-switch"
         checked={isLight}
         onCheckedChange={handleThemeChange}
         thumbIcon={isLight ? <Sun /> : <Moon />}
-        className="w-fit mx-auto @[50px]:w-10 @[50px]:mx-0 shrink-1 data-[state=checked]:bg-secondary"
+        className="w-10 data-[state=checked]:bg-secondary"
       />
-      <Label
+      {/* <Label
         htmlFor="theme-switch"
-        className="w-0 @[50px]:w-auto @[50px]:mx-1.5 text-xs font-normal whitespace-nowrap overflow-hidden cursor-pointer trans-200"
+        className="text-xs font-normal whitespace-nowrap overflow-hidden cursor-pointer trans-200"
       >
         {isLight ? "라이트 모드" : "다크 모드"}
-      </Label>
+      </Label> */}
     </div>
   );
 }

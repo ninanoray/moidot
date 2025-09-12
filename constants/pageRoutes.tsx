@@ -23,7 +23,7 @@ export const Menu: PageRoutes[] = [
       },
       {
         title: "마이닷",
-        url: "/dotmap",
+        url: "/mydot",
         icon: <CircleCheckBig />,
       },
     ],

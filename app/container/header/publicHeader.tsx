@@ -2,25 +2,15 @@ import { CustomCategoryCode } from "@/app/dotmap/components/createMydotMarker";
 import { RippleButton } from "@/components/animate-ui/buttons/ripple";
 import { RotatingText } from "@/components/animate-ui/text/rotating";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { useLayoutContainer } from "../layoutContainerProvider";
+import Logo from "./logo";
 
 const PublicHeader = () => {
   const { scrollY } = useLayoutContainer();
 
-  const router = useRouter();
-
   return (
     <div className="px-3 flex justify-between items-center">
-      <h1
-        onClick={() => router.push("/")}
-        className={cn(
-          "cursor-pointer",
-          scrollY > 0 ? "text-primary-foreground dark:text-card-foreground" : ""
-        )}
-      >
-        MOIDOT
-      </h1>
+      <Logo />
       <div className="flex gap-4 items-center">
         <RotatingText
           text={Object.keys(CustomCategoryCode)}
