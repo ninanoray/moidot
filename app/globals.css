@@ -128,10 +128,10 @@
     @apply border-border outline-ring/50;
   }
   html {
-    @apply overflow-hidden;
+    @apply overscroll-none overflow-hidden;
   }
   body {
-    @apply m-0 p-0 bg-background text-foreground overscroll-contain overflow-hidden;
+    @apply m-0 p-0 bg-background text-foreground;
   }
   h1 {
     @apply md:text-3xl text-2xl my-2 font-bold text-foreground;
