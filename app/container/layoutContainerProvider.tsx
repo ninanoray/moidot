@@ -81,7 +81,7 @@ const LayoutContainerProvider = ({
       <div
         ref={ref}
         onScroll={() => updateScroll()}
-        className="mscreen flex overflow-y-auto"
+        className="mscreen flex overscroll-none overflow-y-auto"
       >
         <div
           className={cn(
