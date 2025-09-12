@@ -1,6 +1,5 @@
 "use client";
 
-import Ripple from "@/components/animate-ui/effects/motion-ripple";
 import { Menu, PageRoutesItem } from "@/constants/pageRoutes";
 import { cn } from "@/lib/utils";
 import { Home, UserCircle2 } from "lucide-react";
@@ -22,28 +21,21 @@ const Footer = ({ className }: FooterProps) => {
     >
       {menu.map((page) => {
         return (
-          <Ripple
+          <a
             key={page.title}
-            rippleClassName="bg-foreground/80"
-            className="mx-2 flex-1 rounded-full active:scale-90 transition-transform duration-200"
+            href={page.url}
+            className="mx-1 size-full flex-center flex-col gap-px rounded-full active:scale-90 active:bg-foreground/10 transition-all duration-200"
           >
-            <a
-              href={page.url}
-              className="size-full flex-center flex-col gap-px"
-            >
-              {page.icon}
-              {page.title}
-            </a>
-          </Ripple>
+            {page.icon}
+            {page.title}
+          </a>
         );
       })}
       <NavUser>
-        <Ripple className="mx-2 flex-1 rounded-full">
-          <div className="flex-center flex-col gap-px">
-            <UserCircle2 />
-            사용자
-          </div>
-        </Ripple>
+        <div className="mx-1 size-full rounded-full flex-center flex-col gap-px">
+          <UserCircle2 />
+          사용자
+        </div>
       </NavUser>
     </footer>
   );
