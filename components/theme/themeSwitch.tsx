@@ -41,20 +41,12 @@ export default function ThemeSwitch({ className }: { className?: string }) {
   useEffect(() => initTheme(), [initTheme]);
 
   return (
-    <div className={cn("flex gap-1", className)}>
-      <Switch
-        id="theme-switch"
-        checked={isLight}
-        onCheckedChange={handleThemeChange}
-        thumbIcon={isLight ? <Sun /> : <Moon />}
-        className="w-10 data-[state=checked]:bg-secondary"
-      />
-      {/* <Label
-        htmlFor="theme-switch"
-        className="text-xs font-normal whitespace-nowrap overflow-hidden cursor-pointer trans-200"
-      >
-        {isLight ? "라이트 모드" : "다크 모드"}
-      </Label> */}
-    </div>
+    <Switch
+      id="theme-switch"
+      checked={isLight}
+      onCheckedChange={handleThemeChange}
+      thumbIcon={isLight ? <Sun /> : <Moon />}
+      className={cn("w-10 data-[state=checked]:bg-secondary", className)}
+    />
   );
 }

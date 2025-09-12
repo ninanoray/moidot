@@ -2,6 +2,7 @@
 
 import { Bell, LogOut, User2 } from "lucide-react";
 
+import ThemeSwitch from "@/components/theme/themeSwitch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
 import {
@@ -49,6 +50,7 @@ export function NavUser({ children }: { children?: React.ReactNode }) {
               <span className="truncate font-medium">{user?.name} 님</span>
               <span className="truncate text-xs">{user?.email}</span>
             </div>
+            <ThemeSwitch className="w-fit md:hidden" />
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
