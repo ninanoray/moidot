@@ -15,12 +15,14 @@ interface PullToRefreshProps {
   children: ReactNode;
   onRefresh?: () => void;
   maxDistance: number;
+  scrollPosition: number;
 }
 
 const PullToRefreshWrapper = ({
   children,
   onRefresh = () => window.location.reload(),
   maxDistance,
+  scrollPosition,
 }: PullToRefreshProps) => {
   const refreshRef = useRef<HTMLDivElement>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -121,16 +123,8 @@ const PullToRefreshWrapper = ({
     if (window.scrollY === 0) onStart(e.touches[0].clientY, true);
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (window.scrollY === 0) onStart(e.clientY, false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isTouch && pulled) onMove(e.clientY);
-  };
-
-  const handleMouseUp = () => {
-    if (!isTouch) onEnd();
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isTouch && pulled) onMove(e.touches[0].clientY);
   };
 
   const handleTouchEnd = () => {
@@ -146,7 +140,7 @@ const PullToRefreshWrapper = ({
       <div className="size-full">
         <div
           ref={refreshRef}
-          className="h-0 bg-primary text-primary-foreground flex-center"
+          className="sat h-0 bg-primary text-primary-foreground flex-center"
         >
           {isRefreshing ? (
             <Loader2 className="animate-rotate repeat-infinite" />
@@ -158,9 +152,7 @@ const PullToRefreshWrapper = ({
         </div>
         <div
           onTouchStart={handleTouchStart}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           className="size-full flex flex-col"
         >

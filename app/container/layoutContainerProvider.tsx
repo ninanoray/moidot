@@ -76,11 +76,11 @@ const LayoutContainerProvider = ({
         onScroll={() => updateScroll()}
         className="mscreen flex overflow-y-auto"
       >
-        <PullToRefreshWrapper maxDistance={60}>
+        <PullToRefreshWrapper scrollPosition={scrollPosition} maxDistance={60}>
           <div
             className={cn(
-              "relative flex-1 flex flex-col",
-              isLogin ? "sat" : ""
+              "relative flex-1 flex flex-col"
+              // isLogin ? "sat" : ""
             )}
             {...props}
           >
