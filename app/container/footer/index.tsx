@@ -24,9 +24,13 @@ const Footer = ({ className }: FooterProps) => {
         return (
           <Ripple
             key={page.title}
+            rippleClassName="bg-foreground/80"
             className="mx-2 flex-1 rounded-full active:scale-90 transition-transform duration-200"
           >
-            <a href={page.url} className="flex-center flex-col gap-px">
+            <a
+              href={page.url}
+              className="size-full flex-center flex-col gap-px"
+            >
               {page.icon}
               {page.title}
             </a>
@@ -34,7 +38,7 @@ const Footer = ({ className }: FooterProps) => {
         );
       })}
       <NavUser>
-        <Ripple className="mx-2 flex-1 rounded-full active:scale-90 transition-transform duration-200">
+        <Ripple className="mx-2 flex-1 rounded-full">
           <div className="flex-center flex-col gap-px">
             <UserCircle2 />
             사용자
