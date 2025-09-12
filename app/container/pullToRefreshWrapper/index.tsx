@@ -2,6 +2,7 @@
 
 import { PULL_SENSITIVITY } from "@/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import React, {
   ReactNode,
@@ -17,6 +18,7 @@ interface PullToRefreshProps {
   maxDistance: number;
   scrollPosition: number;
   disabled?: boolean;
+  className?: string | undefined;
 }
 
 const PullToRefreshWrapper = ({
@@ -25,6 +27,7 @@ const PullToRefreshWrapper = ({
   maxDistance,
   scrollPosition,
   disabled = false,
+  className,
 }: PullToRefreshProps) => {
   const refreshRef = useRef<HTMLDivElement>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -135,7 +138,7 @@ const PullToRefreshWrapper = ({
     return <>{children}</>;
   } else {
     return (
-      <div className="size-full">
+      <div className={cn("size-full", className)}>
         <div
           ref={refreshRef}
           className="h-0 bg-background text-foreground/75 text-sm flex-center overflow-hidden"
