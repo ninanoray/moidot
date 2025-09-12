@@ -30,6 +30,12 @@ type LayoutContainerProps = React.ComponentProps<"div"> & {
   pathname: string;
 };
 
+/*
+ * 로그인 화면에서는 푸터 헤더 없음
+ * pc 환경에서는 푸터 없고 헤더만
+ * 모바일 화면에서는 헤더 없고 푸터만
+ * 단 로그인하지 않은 모바일 메인 화면에서는 푸터 없이 헤더만
+ */
 const LayoutContainerProvider = ({
   children,
   className,
@@ -56,6 +62,11 @@ const LayoutContainerProvider = ({
     [scrollPosition]
   );
 
+  const isLogin = React.useMemo(
+    () => pathname.startsWith("/login"),
+    [pathname]
+  );
+
   return (
     <LayoutContainerContext.Provider value={contextValue}>
       <div
@@ -63,8 +74,11 @@ const LayoutContainerProvider = ({
         onScroll={() => updateScroll()}
         className="mscreen flex overflow-y-auto"
       >
-        <div className="relative flex-1 flex flex-col" {...props}>
-          {!pathname.startsWith("/login") && (
+        <div
+          className={cn("relative flex-1 flex flex-col", isLogin ? "sat" : "")}
+          {...props}
+        >
+          {!isLogin && (
             <Header
               session={session}
               className={!session ? "" : "hidden md:block"}
