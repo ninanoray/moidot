@@ -35,8 +35,8 @@ export const metadata: Metadata = {
   keywords: [...META.keywords],
   applicationName: META.siteName,
   icons: {
-    // icon: { url: META.favicon, type: "image/x-icon" },
-    // shortcut: META.favicon,
+    icon: META.favicon,
+    shortcut: META.favicon,
     apple: APPLE_ICONS,
   },
   openGraph: {
