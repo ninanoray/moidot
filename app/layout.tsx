@@ -1,4 +1,4 @@
-import { APPLE_ICONS, META, STARTUP_IMAGES } from "@/constants/metadata";
+import { META, STARTUP_IMAGES } from "@/constants/metadata";
 import NextAuthProvider from "@/providers/nexthAuthProvider";
 import QueryProvider from "@/providers/reactQuery/queryProvider";
 import { ThemeProvider } from "@/providers/themeProvider";
@@ -32,28 +32,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(META.base),
   title: META.title,
   description: META.description,
-  keywords: [...META.keywords],
-  applicationName: META.siteName,
-  icons: {
-    icon: META.favicon,
-    shortcut: META.favicon,
-    apple: APPLE_ICONS,
-  },
   openGraph: {
+    type: "website",
     title: META.title,
     description: META.description,
-    siteName: META.siteName,
+    images: [META.ogImage],
     locale: "ko_KR",
-    type: "website",
-    url: META.url,
-    images: [{ url: META.ogImage, alt: META.title }],
   },
   twitter: {
     card: "summary",
     title: META.title,
     description: META.description,
-    images: [{ url: META.ogImage, alt: META.title }],
-    site: META.siteName,
+    images: [META.ogImage],
   },
   appleWebApp: {
     capable: true,
